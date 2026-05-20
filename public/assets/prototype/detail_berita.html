@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detail Berita - Beacon Daily</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Work+Sans:wght@600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f8f9ff",
+                      "tertiary": "#943700",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-variant": "#d3e4fe",
+                      "surface-dim": "#cbdbf5",
+                      "on-tertiary-container": "#ffede6",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "inverse-primary": "#b4c5ff",
+                      "on-background": "#0b1c30",
+                      "on-secondary": "#ffffff",
+                      "on-primary-container": "#eeefff",
+                      "error": "#ba1a1a",
+                      "secondary-container": "#dae2fd",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#e5eeff",
+                      "tertiary-fixed": "#ffdbcd",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "outline": "#737686",
+                      "surface-container-high": "#dce9ff",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "inverse-surface": "#213145",
+                      "background": "#f8f9ff",
+                      "primary": "#004ac6",
+                      "on-secondary-container": "#5c647a",
+                      "inverse-on-surface": "#eaf1ff",
+                      "primary-fixed": "#dbe1ff",
+                      "outline-variant": "#c3c6d7",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "on-error": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary": "#565e74",
+                      "on-secondary-fixed": "#131b2e",
+                      "surface": "#f8f9ff",
+                      "secondary-fixed": "#dae2fd",
+                      "on-surface-variant": "#434655",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed": "#360f00",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "surface-tint": "#0053db",
+                      "surface-container-low": "#eff4ff",
+                      "surface-container-highest": "#d3e4fe",
+                      "tertiary-container": "#bc4800",
+                      "on-surface": "#0b1c30",
+                      "on-primary-fixed": "#00174b",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "primary-container": "#2563eb"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "stack-md": "16px",
+                      "section-gap": "64px",
+                      "gutter": "24px",
+                      "stack-lg": "24px",
+                      "margin-mobile": "16px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-xl-mobile": [
+                              "Work Sans"
+                      ],
+                      "caption": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Work Sans"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Work Sans"
+                      ],
+                      "display-lg": [
+                              "Work Sans"
+                      ],
+                      "headline-xl": [
+                              "Work Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-xl-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.7",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "30px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface-bright text-on-surface font-body-md antialiased">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm full-width top-0 sticky z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-6">
+<a class="font-headline-md text-headline-md font-black tracking-tight text-on-surface dark:text-on-primary-fixed" href="#">BEACON DAILY</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-2 hover:bg-surface-container-low dark:hover:bg-surface-container transition-all duration-200" href="#">World</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container duration-200" href="#">Politics</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container duration-200" href="#">Finance</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container duration-200" href="#">Technology</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container duration-200" href="#">Science</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-container duration-200" href="#">Culture</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="bg-primary-container text-on-primary font-label-md text-label-md px-4 py-2 rounded font-semibold hover:opacity-90 transition-opacity">
+                    Subscribe
+                </button>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-gutter py-stack-lg">
+<!-- Back Navigation -->
+<div class="mb-stack-lg">
+<a class="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                Kembali ke Berita
+            </a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Article Canvas (8 Columns) -->
+<article class="col-span-1 md:col-span-8 bg-surface-container-lowest p-6 md:p-8 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
+<!-- Category Chip -->
+<div class="mb-stack-md">
+<span class="inline-block bg-surface-container-high text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full uppercase tracking-wider">World</span>
+</div>
+<!-- Headline -->
+<h1 class="font-display-lg text-display-lg text-on-surface mb-stack-md leading-tight">Global Summit Reaches Unprecedented Agreement on Climate Action Goals</h1>
+<!-- Metadata -->
+<div class="flex items-center gap-4 text-on-surface-variant font-caption text-caption mb-stack-lg pb-stack-sm border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person</span>
+<span class="font-semibold">By Sarah Jenkins</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span>October 24, 2024</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>5 min read</span>
+</div>
+</div>
+<!-- Main Image -->
+<figure class="mb-stack-lg rounded-lg overflow-hidden relative aspect-video bg-surface-dim">
+<img alt="Global leaders gathered in a modern conference hall, shaking hands in front of a massive blue screen displaying digital global maps. The lighting is bright and professional, highlighting the diverse group of delegates. The atmosphere is tense yet optimistic, representing a significant diplomatic breakthrough in a corporate, high-end news style." class="w-full h-full object-cover" data-alt="Global leaders gathered in a modern conference hall, shaking hands in front of a massive blue screen displaying digital global maps. The lighting is bright and professional, highlighting the diverse group of delegates. The atmosphere is tense yet optimistic, representing a significant diplomatic breakthrough in a corporate, high-end news style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUHWZodzTiVIY51iAA7wPNbe29YzKNSac9XhzwuTe3UNAQC1PnMZqd3ZFl_4InAxEpba5FdJZKPC3Pbwsvy4gubJx52o02ALOe5DX5Z0V5RKaR6XfVshX8ofgcGsf9SmhmBNOzQhyy34GbhvIxtkwbUoszy7rv7x1jaQMOUrYq6OsBWpQJzR6BX1XUYtJsEIyZDJuv4X6ecH-8eKiSRM6EVCMHO69yxCGMT9MyYIn4n8QvJyHg74_LuCVAvoO9jvGql4Mg0mfcDDon"/>
+<figcaption class="absolute bottom-0 left-0 right-0 bg-inverse-surface/80 text-on-secondary p-3 font-caption text-caption">
+                        Delegates from over 190 nations applaud as the final draft is ratified in Geneva. (Photo: Beacon Media)
+                    </figcaption>
+</figure>
+<!-- Article Body -->
+<div class="prose prose-lg max-w-none font-body-lg text-body-lg text-on-surface-variant space-y-6">
+<p class="font-bold text-on-surface text-xl">GENEVA — In a historic turn of events, representatives from 195 nations have unanimously agreed to accelerate their carbon reduction targets by an entire decade, capping off a grueling two-week summit that many feared would end in gridlock.</p>
+<p>The new framework, dubbed the 'Geneva Accord,' mandates that industrialized nations cut emissions by 60% relative to 1990 levels by the year 2030. This represents a significant leap from previous commitments and signals a unified global acknowledgment of the worsening climate crisis.</p>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-stack-lg mb-stack-md">A Shift in Economic Strategy</h3>
+<p>Perhaps the most surprising development was the strong backing from major fossil fuel producers. Analysts suggest this reflects a broader economic pivot towards green technologies, which are rapidly becoming more profitable than legacy energy systems.</p>
+<blockquote class="border-l-4 border-primary pl-4 my-8 italic font-headline-md text-headline-md text-on-surface">
+                        "We are no longer debating whether to act. We are debating how fast we can deploy the solutions we already have. The era of hesitation is officially over."
+                        <span class="block text-sm font-normal text-on-surface-variant mt-2 non-italic">— Dr. Aris Thorne, UN Climate Envoy</span>
+</blockquote>
+<p>The agreement also establishes a robust $500 billion 'Transition Fund' designed to assist developing nations in leapfrogging carbon-intensive industrialization phases straight into renewable infrastructure. However, critics point out that the enforcement mechanisms remain vague, relying heavily on self-reporting and diplomatic peer pressure rather than binding economic sanctions.</p>
+</div>
+<!-- Sharing Section -->
+<div class="mt-section-gap pt-stack-lg border-t border-outline-variant">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-stack-md">Bagikan Artikel</h4>
+<div class="flex flex-wrap gap-4">
+<button class="flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"></path></svg>
+                            Kirim ke WhatsApp
+                        </button>
+<button class="flex items-center gap-2 bg-surface-bright border border-outline hover:border-primary text-on-surface hover:text-primary px-4 py-2 rounded-lg font-label-md text-label-md transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm">link</span>
+                            Salin URL
+                        </button>
+</div>
+</div>
+</article>
+<!-- Sidebar (4 Columns) -->
+<aside class="col-span-1 md:col-span-4 space-y-stack-lg">
+<!-- Berita Terbaru Widget -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-md flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-primary">schedule</span>
+                        Berita Terbaru
+                    </h3>
+<ul class="space-y-4">
+<li class="group">
+<a class="block" href="#">
+<span class="font-caption text-caption text-primary font-semibold mb-1 block">10 mins ago</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Tech Giant Unveils Revolutionary Quantum Processor</h4>
+</a>
+</li>
+<li class="group">
+<a class="block" href="#">
+<span class="font-caption text-caption text-primary font-semibold mb-1 block">45 mins ago</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Markets Rally Following Better-Than-Expected Inflation Data</h4>
+</a>
+</li>
+<li class="group">
+<a class="block" href="#">
+<span class="font-caption text-caption text-primary font-semibold mb-1 block">2 hours ago</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Local Elections Yield Surprising Results in Key Districts</h4>
+</a>
+</li>
+<li class="group">
+<a class="block" href="#">
+<span class="font-caption text-caption text-primary font-semibold mb-1 block">3 hours ago</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">New Medical Breakthrough Could Halt Progression of Rare Disease</h4>
+</a>
+</li>
+<li class="group">
+<a class="block" href="#">
+<span class="font-caption text-caption text-primary font-semibold mb-1 block">5 hours ago</span>
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">International Space Station Receives Critical Supply Delivery</h4>
+</a>
+</li>
+</ul>
+</div>
+<!-- Berita Terpopuler Widget -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-stack-md flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-primary">trending_up</span>
+                        Berita Terpopuler
+                    </h3>
+<ul class="space-y-4 counter-list" style="counter-reset: pop-counter;">
+<li class="group relative pl-8">
+<span class="absolute left-0 top-0 font-headline-md text-headline-md text-outline-variant group-hover:text-primary transition-colors font-bold" style="counter-increment: pop-counter; content: counter(pop-counter);">1</span>
+<a class="block" href="#">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">The Hidden Costs of Remote Work Re-evaluations</h4>
+<span class="font-caption text-caption text-on-surface-variant mt-1 block">Business • 120k views</span>
+</a>
+</li>
+<li class="group relative pl-8">
+<span class="absolute left-0 top-0 font-headline-md text-headline-md text-outline-variant group-hover:text-primary transition-colors font-bold" style="counter-increment: pop-counter; content: counter(pop-counter);">2</span>
+<a class="block" href="#">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Top 10 Travel Destinations for the Upcoming Season</h4>
+<span class="font-caption text-caption text-on-surface-variant mt-1 block">Lifestyle • 98k views</span>
+</a>
+</li>
+<li class="group relative pl-8">
+<span class="absolute left-0 top-0 font-headline-md text-headline-md text-outline-variant group-hover:text-primary transition-colors font-bold" style="counter-increment: pop-counter; content: counter(pop-counter);">3</span>
+<a class="block" href="#">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Exclusive Interview with Award-Winning Director</h4>
+<span class="font-caption text-caption text-on-surface-variant mt-1 block">Entertainment • 85k views</span>
+</a>
+</li>
+<li class="group relative pl-8">
+<span class="absolute left-0 top-0 font-headline-md text-headline-md text-outline-variant group-hover:text-primary transition-colors font-bold" style="counter-increment: pop-counter; content: counter(pop-counter);">4</span>
+<a class="block" href="#">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">How AI is Reshaping Modern Education Systems</h4>
+<span class="font-caption text-caption text-on-surface-variant mt-1 block">Technology • 72k views</span>
+</a>
+</li>
+<li class="group relative pl-8">
+<span class="absolute left-0 top-0 font-headline-md text-headline-md text-outline-variant group-hover:text-primary transition-colors font-bold" style="counter-increment: pop-counter; content: counter(pop-counter);">5</span>
+<a class="block" href="#">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Nutritionists Debunk Common Diet Myths</h4>
+<span class="font-caption text-caption text-on-surface-variant mt-1 block">Health • 65k views</span>
+</a>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-section-gap full-width">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-gutter py-stack-lg max-w-container-max mx-auto">
+<div class="mb-4 md:mb-0 text-center md:text-left">
+<a class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-primary-fixed block mb-2" href="#">BEACON DAILY</a>
+<p class="font-caption text-caption text-on-surface-variant dark:text-on-surface-variant">© 2024 Beacon News Media. Investigative journalism for a global audience.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-4">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">About</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">Newsletters</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">Privacy</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">Accessibility</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors duration-300" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>

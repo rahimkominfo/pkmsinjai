@@ -1,0 +1,659 @@
+<html lang="id"><head></head><body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PKM Balangnipa - Beranda</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Work+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-surface-variant": "#434655",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9ff",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#dae2fd",
+                        "secondary": "#565e74",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#dce9ff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "surface-container": "#e5eeff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#eeefff",
+                        "on-error": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "tertiary-fixed": "#ffdbcd",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-secondary-container": "#5c647a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary": "#943700",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-container": "#ffede6",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "secondary-fixed": "#dae2fd",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-variant": "#d3e4fe",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#bc4800",
+                        "primary": "#004ac6",
+                        "on-primary-fixed": "#00174b",
+                        "primary-container": "#2563eb",
+                        "on-secondary-fixed": "#131b2e",
+                        "surface-tint": "#0053db",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "outline": "#737686",
+                        "background": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "stack-sm": "8px",
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "section-gap": "64px",
+                        "gutter": "24px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Work Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-xl-mobile": ["Work Sans"],
+                        "headline-lg": ["Work Sans"],
+                        "headline-xl": ["Work Sans"],
+                        "caption": ["Inter"],
+                        "display-lg": ["Work Sans"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.7", "fontWeight": "400"}],
+                        "headline-xl-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-xl": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+  @keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  }
+  .animate-pulse-green {
+    animation: pulse-green 2s infinite;
+  }
+</style>
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-6">
+<a class="font-headline-md text-headline-md font-black tracking-tight text-on-surface dark:text-on-primary-fixed" href="#">PKM BALANGNIPA</a>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-2 font-label-md text-label-md" href="#">Beranda</a>
+
+<!-- Menu Profil -->
+<div class="relative group">
+<button class="flex items-center gap-1 text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md py-2">
+Profil
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<div class="absolute left-0 mt-0 w-48 bg-white dark:bg-inverse-surface border border-outline-variant dark:border-outline rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+<a href="#" class="block px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-primary">Visi dan Misi</a>
+<a href="#" class="block px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-primary">Struktur Organisasi</a>
+</div>
+</div>
+
+<!-- Menu Capaian Program Kesehatan -->
+<div class="relative group">
+<button class="flex items-center gap-1 text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md py-2 text-left">
+Capaian Program Kesehatan
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<div class="absolute left-0 mt-0 w-56 bg-white dark:bg-inverse-surface border border-outline-variant dark:border-outline rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+<a href="#" class="block px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-primary">Cakupan Imunisasi</a>
+<a href="#" class="block px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container-low hover:text-primary">Data Stunting</a>
+</div>
+</div>
+
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Berita</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Galeri</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Edukasi Kesehatan Digital</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200 hidden md:block">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</div>
+</nav><section class="bg-surface-container-low border-b border-outline-variant/30 py-4">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter">
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-xl font-bold text-on-surface">Status Antrian Hari Ini</h2>
+<div class="flex items-center gap-2 bg-white/50 px-3 py-1 rounded-full border border-outline-variant/50">
+<span class="relative flex h-2 w-2">
+<span class="animate-pulse-green absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-green-600"></span>
+</span>
+<span class="text-caption font-label-md text-on-surface-variant">Live Update: 11:32 AM</span>
+</div>
+</div>
+<p class="text-caption text-on-surface-variant hidden md:block italic">Nomor antrian yang sedang dilayani saat ini</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Pendaftaran -->
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant/50 overflow-hidden flex flex-col">
+<div class="bg-blue-50 border-b border-blue-100 p-4 flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-blue-900 text-lg font-bold">Pendaftaran</h3>
+<p class="text-blue-700 font-label-md text-sm">Loket 01</p>
+</div>
+<div class="bg-blue-100 text-blue-800 p-2 rounded-lg">
+<span class="material-symbols-outlined">app_registration</span>
+</div>
+</div>
+<div class="p-6 flex flex-col items-center justify-center border-b border-outline-variant/30 relative">
+<span class="absolute top-2 right-2 text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-1 rounded-full animate-pulse">Melayani</span>
+<p class="text-on-surface-variant font-label-md mb-1">Nomor Antrian</p>
+<div class="text-5xl font-black text-blue-600 tracking-tight">A-042</div>
+</div>
+<div class="p-4 bg-blue-50/50 flex items-center gap-3 mt-auto">
+<div class="w-10 h-10 rounded-full bg-blue-200 overflow-hidden border-2 border-white shadow-sm flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600 text-lg">person</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium">Petugas Pendaftaran</p>
+<p class="font-semibold text-sm text-on-surface">Budi Santoso</p>
+</div>
+</div>
+</div>
+<!-- Poli Umum -->
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant/50 overflow-hidden flex flex-col">
+<div class="bg-emerald-50 border-b border-emerald-100 p-4 flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-emerald-900 text-lg font-bold">Poli Umum</h3>
+<p class="text-emerald-700 font-label-md text-sm">Ruang 01</p>
+</div>
+<div class="bg-emerald-100 text-emerald-800 p-2 rounded-lg">
+<span class="material-symbols-outlined">stethoscope</span>
+</div>
+</div>
+<div class="p-6 flex flex-col items-center justify-center border-b border-outline-variant/30 relative">
+<span class="absolute top-2 right-2 text-xs font-semibold bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full animate-pulse">Melayani</span>
+<p class="text-on-surface-variant font-label-md mb-1">Nomor Antrian</p>
+<div class="text-5xl font-black text-emerald-600 tracking-tight">B-015</div>
+</div>
+<div class="p-4 bg-emerald-50/50 flex items-center gap-3 mt-auto">
+<div class="w-10 h-10 rounded-full bg-emerald-200 overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+<img alt="dr. Andi Wijaya" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPBgA4vQAgmXyI-uvjGCOS1fsZ7suFYwjgk57geGwdWbKm3q2WuN_lMJ2xMAXuPnKjPl3GRniS0rXgYVw1mLc61l9DuvSMwOxm70EPZwuT78dLMXYy25EW_fkJuEeaffUQi9zYB2y7hwtJELmgwLnUC_wnxzZrQDknAC4D4KB4KW7yDP1fls67uzSgz1SbFpBbaKi3xkU_aKuQU7YwUiYsSqd9ZjV_P5l3HJPcydIbCbf8Zm7-PzqYP041YEEjwP9LdikV6ByECF8Z"/>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium">Dokter Pemeriksa</p>
+<p class="font-semibold text-sm text-on-surface">dr. Andi Wijaya</p>
+</div>
+</div>
+</div>
+<!-- Poli Gigi -->
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant/50 overflow-hidden flex flex-col">
+<div class="bg-indigo-50 border-b border-indigo-100 p-4 flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-indigo-900 text-lg font-bold">Poli Gigi</h3>
+<p class="text-indigo-700 font-label-md text-sm">Ruang 04</p>
+</div>
+<div class="bg-indigo-100 text-indigo-800 p-2 rounded-lg">
+<span class="material-symbols-outlined">dentistry</span>
+</div>
+</div>
+<div class="p-6 flex flex-col items-center justify-center border-b border-outline-variant/30 relative">
+<span class="absolute top-2 right-2 text-xs font-semibold bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full animate-pulse">Melayani</span>
+<p class="text-on-surface-variant font-label-md mb-1">Nomor Antrian</p>
+<div class="text-5xl font-black text-indigo-600 tracking-tight">C-009</div>
+</div>
+<div class="p-4 bg-indigo-50/50 flex items-center gap-3 mt-auto">
+<div class="w-10 h-10 rounded-full bg-indigo-200 overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+<img alt="drg. Siti Aminah" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAswqt5rwhvnmcW9H51omYD_4iFU-BU4MRPGcd9TfqAe-GUXWg3gr0WjDe3eVo4-gnXKLyyrPJ6F0vpPYTg74qqwtvq-QYN5Nln59s-MwXSvXbM5Q6Loa27ymSaLFr2rKFo4rym0ZPA_UBmh-wiOhnxFvVIYrGh5MTAh-XGv6xKgCE0C-wY1rAnsw9rkWAOuSfoA7iIfXF_6rit7ktPPcSjaK1GtDu5uJcuuhude5im4fyEqdg9RrlQq2SIrWWPSnAq7tx69DOtIAt-"/>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium">Dokter Pemeriksa</p>
+<p class="font-semibold text-sm text-on-surface">drg. Siti Aminah</p>
+</div>
+</div>
+</div>
+<!-- Apotek / Farmasi -->
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant/50 overflow-hidden flex flex-col">
+<div class="bg-orange-50 border-b border-orange-100 p-4 flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-orange-900 text-lg font-bold">Apotek / Farmasi</h3>
+<p class="text-orange-700 font-label-md text-sm">Loket 1</p>
+</div>
+<div class="bg-orange-100 text-orange-800 p-2 rounded-lg">
+<span class="material-symbols-outlined">medication</span>
+</div>
+</div>
+<div class="p-6 flex flex-col items-center justify-center border-b border-outline-variant/30 relative">
+<span class="absolute top-2 right-2 text-xs font-semibold bg-orange-100 text-orange-700 px-2 py-1 rounded-full animate-pulse">Melayani</span>
+<p class="text-on-surface-variant font-label-md mb-1">Nomor Antrian</p>
+<div class="text-5xl font-black text-orange-600 tracking-tight">D-038</div>
+</div>
+<div class="p-4 bg-orange-50/50 flex items-center gap-3 mt-auto">
+<div class="w-10 h-10 rounded-full bg-orange-200 overflow-hidden border-2 border-white shadow-sm flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-600 text-lg">local_pharmacy</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-medium">Petugas Farmasi</p>
+<p class="font-semibold text-sm text-on-surface">Tim Farmasi Puskesmas</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section class="relative h-[450px] md:h-[600px] w-full overflow-hidden bg-surface-dim">
+<!-- Carousel Slide (Active) -->
+<div class="absolute inset-0">
+<img alt="Hero News" class="w-full h-full object-cover" data-alt="A breathtaking panoramic view of a modern city skyline at dusk, with lights beginning to twinkle and a vibrant purple and orange sky. This high-resolution photo represents urban development and future growth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl9lBDZGj4FMKYjn8qNjMMXKLrsn2yarly_C7FkwYi91u8pi_0fzrCkeqFusCTDW8LSLG67jA91XFDXlpS8ZQG3n95aZ1Jkst2ONGDWdcfa4Xb2P-U-ity3rBIW6-rrqUKpJQfS0KVjpizvkfeu2sd18n_Qyd1vdFP2fVuxEk8InA9H59wa-4iO0cMfKKT8Qtv3NgDzFOrgoZGE7Ij9cUpr_BePChJnoqF6586JTyPH8jwcYlcKYogOPMBPLOYz4mT_JlqaS07LdwP"/>
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+<!-- Content Overlay -->
+<div class="absolute inset-0 flex flex-col justify-end pb-16 md:pb-24">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter w-full">
+<div class="max-w-3xl">
+<span class="inline-block bg-primary text-on-primary px-3 py-1 rounded-full text-label-md font-label-md mb-4 shadow-lg">Headline Utama</span>
+<h1 class="text-white font-headline-xl text-3xl md:text-5xl mb-4 leading-tight drop-shadow-md">
+            Strategi Baru Transformasi Digital Nasional Menuju Indonesia Emas 2045
+          </h1>
+<p class="text-white/90 font-body-lg text-lg hidden md:block mb-6 line-clamp-2 drop-shadow-sm">
+            Pemerintah pusat resmi mengumumkan peta jalan komprehensif untuk mempercepat integrasi teknologi di seluruh sektor publik dan swasta guna meningkatkan daya saing global.
+          </p>
+<button class="bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors shadow-md">
+            Baca Selengkapnya
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Navigation Arrows -->
+<div class="absolute inset-0 flex items-center justify-between px-4 md:px-8">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md text-white transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md text-white transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<!-- Pagination Dots -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+<span class="w-3 h-3 rounded-full bg-white shadow-sm"></span>
+<span class="w-3 h-3 rounded-full bg-white/40 shadow-sm"></span>
+<span class="w-3 h-3 rounded-full bg-white/40 shadow-sm"></span>
+<span class="w-3 h-3 rounded-full bg-white/40 shadow-sm"></span>
+</div>
+</section>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-gutter pt-12 pb-section-gap">
+<!-- Statistik Kesehatan Section -->
+<section class="mb-section-gap bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/50">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-stack-lg gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg mb-1 border-b-2 border-primary inline-block pb-2">Grafik Penyakit Terbanyak</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">Data Jumlah Pasien Terdiagnosa</p>
+</div>
+<div class="flex items-center gap-3">
+<select class="form-select bg-surface border border-outline-variant rounded-md text-label-md font-label-md py-2 pl-3 pr-8 focus:border-primary focus:ring-1 focus:ring-primary">
+<option value="mingguan">Mingguan</option>
+<option value="bulanan">Bulanan</option>
+</select>
+<div class="relative group">
+<button class="bg-surface-container-low hover:bg-surface-container text-primary border border-primary/20 px-4 py-2 rounded-md font-label-md text-label-md flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+                    Export Data
+                </button>
+<div class="absolute right-0 mt-2 w-32 bg-surface-container-lowest rounded-md shadow-lg border border-outline-variant opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+<a class="block px-4 py-2 text-label-md font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition-colors" href="#">PDF</a>
+<a class="block px-4 py-2 text-label-md font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition-colors" href="#">Excel</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Bar Chart -->
+<div class="w-full h-64 mb-8 flex items-end justify-between gap-2 md:gap-4 relative px-4">
+<!-- Y-axis scale lines -->
+<div class="absolute inset-0 flex flex-col justify-between z-0 pointer-events-none opacity-20">
+<div class="w-full border-t border-outline-variant h-0"></div>
+<div class="w-full border-t border-outline-variant h-0"></div>
+<div class="w-full border-t border-outline-variant h-0"></div>
+<div class="w-full border-t border-outline-variant h-0"></div>
+<div class="w-full border-t border-outline-variant h-0"></div>
+</div>
+<!-- Y-axis labels -->
+<div class="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between text-caption font-caption text-on-surface-variant -ml-6 py-1">
+<span>12</span><span>9</span><span>6</span><span>3</span><span>0</span>
+</div>
+<!-- Bars -->
+<!-- Max value is 11, setting max height to represent 12 (100%) -->
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary rounded-t-sm hover:bg-primary/80 transition-colors cursor-pointer" style="height: 91.6%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">K05</span>
+<!-- Tooltip -->
+<div class="absolute bottom-[calc(91.6%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Gingivitis dan penyakit periodontal</div>
+<div>Jumlah: 11</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/90 rounded-t-sm hover:bg-primary/70 transition-colors cursor-pointer" style="height: 75%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">I10</span>
+<div class="absolute bottom-[calc(75%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Hipertensi esensial (primer)</div>
+<div>Jumlah: 9</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/80 rounded-t-sm hover:bg-primary/60 transition-colors cursor-pointer" style="height: 41.6%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">E78.0</span>
+<div class="absolute bottom-[calc(41.6%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Hiperkolesterolemia murni</div>
+<div>Jumlah: 5</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/70 rounded-t-sm hover:bg-primary/50 transition-colors cursor-pointer" style="height: 33.3%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">E11</span>
+<div class="absolute bottom-[calc(33.3%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Diabetes melitus tipe 2</div>
+<div>Jumlah: 4</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/70 rounded-t-sm hover:bg-primary/50 transition-colors cursor-pointer" style="height: 33.3%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">K00</span>
+<div class="absolute bottom-[calc(33.3%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Gangguan perkembangan gigi</div>
+<div>Jumlah: 4</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/70 rounded-t-sm hover:bg-primary/50 transition-colors cursor-pointer" style="height: 33.3%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">J03</span>
+<div class="absolute bottom-[calc(33.3%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Tonsilitis akut</div>
+<div>Jumlah: 4</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/70 rounded-t-sm hover:bg-primary/50 transition-colors cursor-pointer" style="height: 33.3%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">E79.0</span>
+<div class="absolute bottom-[calc(33.3%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Hiperurisemia tanpa tanda artritis</div>
+<div>Jumlah: 4</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/60 rounded-t-sm hover:bg-primary/40 transition-colors cursor-pointer" style="height: 25%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">J00</span>
+<div class="absolute bottom-[calc(25%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Nasofaringitis akut [common cold]</div>
+<div>Jumlah: 3</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/50 rounded-t-sm hover:bg-primary/30 transition-colors cursor-pointer" style="height: 16.6%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">M10</span>
+<div class="absolute bottom-[calc(16.6%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Gout</div>
+<div>Jumlah: 2</div>
+</div>
+</div>
+<div class="relative group w-full flex flex-col items-center justify-end h-full z-10">
+<div class="w-full max-w-[40px] bg-primary/50 rounded-t-sm hover:bg-primary/30 transition-colors cursor-pointer" style="height: 16.6%;"></div>
+<span class="mt-2 text-caption font-caption text-on-surface font-semibold">K02</span>
+<div class="absolute bottom-[calc(16.6%+8px)] left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-caption font-caption px-3 py-2 rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-20 pointer-events-none">
+<div class="font-bold">Karies gigi</div>
+<div>Jumlah: 2</div>
+</div>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant">
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface">Kode</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface">Nama Penyakit</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface text-right">Jumlah Pasien</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface">
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">K05</td>
+<td class="py-3 px-4">Gingivitis dan penyakit periodontal</td>
+<td class="py-3 px-4 text-right">11</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors bg-surface-bright">
+<td class="py-3 px-4 font-semibold text-primary">I10</td>
+<td class="py-3 px-4">Hipertensi esensial (primer)</td>
+<td class="py-3 px-4 text-right">9</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">E78.0</td>
+<td class="py-3 px-4">Hiperkolesterolemia murni</td>
+<td class="py-3 px-4 text-right">5</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors bg-surface-bright">
+<td class="py-3 px-4 font-semibold text-primary">E11</td>
+<td class="py-3 px-4">Diabetes melitus tipe 2</td>
+<td class="py-3 px-4 text-right">4</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">K00</td>
+<td class="py-3 px-4">Gangguan perkembangan dan erupsi gigi</td>
+<td class="py-3 px-4 text-right">4</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors bg-surface-bright">
+<td class="py-3 px-4 font-semibold text-primary">J03</td>
+<td class="py-3 px-4">Tonsilitis akut</td>
+<td class="py-3 px-4 text-right">4</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">E79.0</td>
+<td class="py-3 px-4">Hiperurisemia tanpa tanda artritis inflamasi</td>
+<td class="py-3 px-4 text-right">4</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors bg-surface-bright">
+<td class="py-3 px-4 font-semibold text-primary">J00</td>
+<td class="py-3 px-4">Nasofaringitis akut [common cold]</td>
+<td class="py-3 px-4 text-right">3</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-lowest transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">M10</td>
+<td class="py-3 px-4">Gout</td>
+<td class="py-3 px-4 text-right">2</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors bg-surface-bright">
+<td class="py-3 px-4 font-semibold text-primary">K02</td>
+<td class="py-3 px-4">Karies gigi</td>
+<td class="py-3 px-4 text-right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- News Grid Section -->
+<section class="mb-section-gap">
+<h2 class="font-headline-lg text-headline-lg mb-stack-lg border-b-2 border-primary inline-block pb-2">Berita Terpopuler</h2>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Featured News -->
+<article class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-[0px_10px_30px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-300 border border-outline-variant/50">
+<div class="aspect-video w-full overflow-hidden relative">
+<img alt="Featured News" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A modern, high-tech server room with glowing blue indicator lights representing advanced regional information systems. The space is vast and slightly dark, illuminated by the cool, high-contrast light emitting from the digital infrastructure. The composition conveys a sense of rapid data processing and technological innovation, perfect for a corporate technology news context. The color palette emphasizes deep navy blues and bright cyan accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzDdYpLefQYDVWdfCL-ZdpsrLIvSnQZfjbGd5C01UKL9kVqEEex6IavgHM_xu11ciEGXWi7zOaVRPmUmvfxhk526QD6Q_tYclkvyl5uAV-LRUnrWln5YAIGl3n6-qZlkXNqsG7tTjbWw14Jf0AF8dU_Bp6L9COssFuvxkHP9ifEzgVn--pOp9uzlNVIQsKjk21dFLmx-b2bnN4eK3hLUk9pAVh03krHJHYVt28uKYOcQ6pzdpF1GVPBhJiii9LFTxnN-ce2h-RDMEG"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary font-label-md text-label-md px-3 py-1 rounded-full shadow-md">
+                            Teknologi
+                        </div>
+</div>
+<div class="p-6">
+<p class="font-caption text-caption text-on-surface-variant mb-2">2 Jam yang lalu • Oleh Tim Redaksi</p>
+<h3 class="font-headline-xl text-headline-xl mb-4 group-hover:text-primary transition-colors line-clamp-2">
+                            Inovasi Terbaru dalam Pengembangan Sistem Informasi Daerah
+                        </h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant line-clamp-3">
+                            Pemerintah meluncurkan inisiatif baru untuk mendigitalisasi layanan publik di berbagai daerah, bertujuan untuk meningkatkan efisiensi dan transparansi. Langkah ini diharapkan dapat mempercepat respons birokrasi terhadap kebutuhan masyarakat.
+                        </p>
+</div>
+</article>
+<!-- Secondary News List -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<article class="flex gap-4 group cursor-pointer">
+<div class="w-1/3 aspect-square rounded-lg overflow-hidden shrink-0">
+<img alt="Secondary News 1" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" data-alt="A close-up shot of a modern financial dashboard displayed on a sleek laptop screen, featuring rising bar charts and line graphs in vibrant green and blue hues. The background is slightly blurred, showing a bright, contemporary office environment with high-contrast corporate lighting. The visual tone implies economic growth and sharp financial analysis, aligning with a reliable news aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPNCgJ4daHKMR8s-jOYqZoiYS_kdFFE1pW2sSiP49ox5_9dud45ijwHCVryJeZ4WeCIGb1Kv1bI7AqsBZNqbyilwJvKkS5TfMjuHGsC6A4a10BwRHrkA5_5jjq7sg1rHRPphOgqHrsjAKYSOVIk3DsH2JP6-izjECNvG9Rl2bnCaZfx_HmYTm_sUnXP4myOMwIwchrMaByQxlzOrWtd7SfkXws4DKSHjcIMSNdyTeMvxVtah-YmZD1RopRWBqRbw5b5hmJMEUcFr7t"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="font-caption text-caption text-primary font-semibold mb-1">Ekonomi</span>
+<h4 class="font-headline-md text-headline-md text-base leading-tight group-hover:text-primary transition-colors line-clamp-3">
+                                Pertumbuhan Ekonomi Kuartal Ketiga Lampaui Proyeksi Analis
+                            </h4>
+</div>
+</article>
+<article class="flex gap-4 group cursor-pointer">
+<div class="w-1/3 aspect-square rounded-lg overflow-hidden shrink-0">
+<img alt="Secondary News 2" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" data-alt="A dynamic, wide-angle photograph of a political assembly or parliamentary session in a grand, modern building. Delegates are seated in rows, bathed in warm, diffused light coming from large architectural windows. The scene conveys serious deliberation and authoritative discourse, featuring a refined palette of rich wood tones and stark white light, typical of high-end political journalism imagery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5RTelyj6U_b5OhbTSmJ0w_s284a84xf8JrrwZt2Cick0DvCx7qfn8Kmmt5rBIYMdiEGY1MzXaSsrVeXKgTUUmHgQL_YY2Tx1CBojFAsQeV8nRkXwfGAokqR_DCvb5jZXMwbVjST5NFcRUGbz-LBoLwmKFSxASIVEiOjyBWGOL2OmzdPrDJaltHD-WWH_Q3wugKJTZm74yWywSzawLO0-ociZqDhFMK_w4XQEkIC_mqKtVSk-pkfOD3sSxLg0eBAUzjXVvg-sI29TF"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="font-caption text-caption text-tertiary font-semibold mb-1">Politik</span>
+<h4 class="font-headline-md text-headline-md text-base leading-tight group-hover:text-primary transition-colors line-clamp-3">
+                                Debat Kandidat Pemilihan Umum Fokus Pada Kebijakan Iklim
+                            </h4>
+</div>
+</article>
+<article class="flex gap-4 group cursor-pointer">
+<div class="w-1/3 aspect-square rounded-lg overflow-hidden shrink-0">
+<img alt="Secondary News 3" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" data-alt="A focused, macro shot of hands typing on a glowing, modern mechanical keyboard in a dimly lit, high-contrast tech environment. The surrounding space hints at a sophisticated software development setup with multiple monitors in the background displaying code. The overall mood is intense, modern, and perfectly suited for a cutting-edge technology news article." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu9cLSUWWOJ-N0DCWaQcRB1yuBokLNhFSjS-_taUk9LNooHgY4lJveFL74eMYMKRCaLP8WL_Fvl_e1tjY12ZSXfaaCr8sQhz7cHXjhPzGgCqtdeN31CFoYxl0TPqoNJmnhXtfEA_at9u5rz7f0nWp53vBQRxDBhC0dQsXos9pGxgp3cBxAGtJAfuy1m4_RbCAv1aO5c3xHTz2iPzaoMg_fQGtxHgjuZOvp0U5K5WodenN4TQbM5VrRX0x8PDYP7MRBZ-gHF560juVJ"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="font-caption text-caption text-secondary font-semibold mb-1">Teknologi</span>
+<h4 class="font-headline-md text-headline-md text-base leading-tight group-hover:text-primary transition-colors line-clamp-3">
+                                Raksasa Tech Umumkan Pembaruan Keamanan Skala Besar
+                            </h4>
+</div>
+</article>
+<button class="mt-auto py-3 px-4 w-full bg-surface-container-low hover:bg-surface-container transition-colors text-primary font-label-md text-label-md rounded border border-outline-variant/30 text-center">
+                        Lihat Semua Berita Terkini
+                    </button>
+</div>
+</div>
+</section>
+<!-- Gallery Section -->
+<section class="mb-section-gap">
+<div class="flex justify-between items-end mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg border-b-2 border-primary inline-block pb-2">Galeri Foto</h2>
+<a class="text-primary hover:text-on-primary-fixed-variant transition-colors font-label-md text-label-md flex items-center gap-1" href="#">
+                    Lebih Banyak
+                    <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Gallery Card 1 -->
+<div class="group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300">
+<div class="aspect-[4/3] w-full">
+<img alt="Gallery 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A wide, dynamic shot capturing a massive crowd at a national cultural event or festival. Bright, celebratory lighting illuminates the scene, highlighting colorful banners and a large central stage in the distance. The mood is energetic and patriotic, rendered in a high-contrast style typical of professional photojournalism. The image effectively conveys a major public gathering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl9lBDZGj4FMKYjn8qNjMMXKLrsn2yarly_C7FkwYi91u8pi_0fzrCkeqFusCTDW8LSLG67jA91XFDXlpS8ZQG3n95aZ1Jkst2ONGDWdcfa4Xb2P-U-ity3rBIW6-rrqUKpJQfS0KVjpizvkfeu2sd18n_Qyd1vdFP2fVuxEk8InA9H59wa-4iO0cMfKKT8Qtv3NgDzFOrgoZGE7Ij9cUpr_BePChJnoqF6586JTyPH8jwcYlcKYogOPMBPLOYz4mT_JlqaS07LdwP"/>
+</div>
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 w-full p-6 text-on-primary">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-on-primary" style="font-size: 16px;">photo_library</span>
+<span class="font-caption text-caption opacity-90">12 Foto</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-lg leading-tight group-hover:underline underline-offset-4">
+                            Dokumentasi Event Nasional 2024
+                        </h3>
+</div>
+</div>
+<!-- Gallery Card 2 -->
+<div class="group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] transition-all duration-300">
+<div class="aspect-[4/3] w-full">
+<img alt="Gallery 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A sleek, modern aerial view of a developing smart city landscape. Tall glass skyscrapers reflect the vibrant golden hour sunlight, contrasting with structured green spaces and advanced infrastructure below. The lighting creates deep, dramatic shadows and bright highlights, emphasizing a sophisticated, corporate urban aesthetic suitable for economic and development news." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA9-yJRFuTTLFSYmrGfI1bDmOkUXETkcp5kyBmauu7CH_24t1RMvTECkZAzo7xiTAIUJE9qhqhYp3zno9aT2vWpvnWEkc4sGBbXfNbPEJwjTAuhuvxgrIR4q7upAQMCA6UAg4-RKmeQdmE61FXOnU__uT0JDyfga2u0sfFkmNI6i-ELGJqDH_ZxZ9z_6NgxU0PvbVgJ8HVT0dKAT2YybOqrl9LQsqSifDrTrmCDXxO0_6T-LMi4xOuXtjmNOMU1H1MAtrcNVvNbVMW"/>
+</div>
+</div></div></section></main>
+<footer class="bg-inverse-surface text-inverse-on-surface py-12">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter grid grid-cols-1 md:grid-cols-2 gap-12">
+        <!-- Info Kontak & Sosial Media -->
+        <div class="space-y-8">
+            <div>
+                <h3 class="font-headline-md text-2xl font-bold mb-6 text-primary-fixed">Hubungi Kami</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4">
+                        <span class="material-symbols-outlined text-primary-fixed mt-1">location_on</span>
+                        <div>
+                            <p class="font-label-md text-label-md uppercase opacity-60 mb-1">Alamat</p>
+                            <p class="font-body-md">Jl. Persatuan Raya No. 1, Balangnipa, Kec. Sinjai Utara, Kabupaten Sinjai, Sulawesi Selatan 92611</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="material-symbols-outlined text-primary-fixed mt-1">mail</span>
+                        <div>
+                            <p class="font-label-md text-label-md uppercase opacity-60 mb-1">Email</p>
+                            <p class="font-body-md">pkmbalangnipa.sinjai@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="font-label-md text-label-md uppercase tracking-widest mb-4 opacity-70">Media Sosial</h4>
+                <div class="flex gap-4">
+                    <!-- Facebook -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all group" title="Facebook">
+                        <svg class="w-6 h-6 fill-current text-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all group" title="Instagram">
+                        <svg class="w-6 h-6 fill-current text-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c.796 0 1.441.645 1.441 1.44s-.645 1.44-1.441 1.44c-.795 0-1.439-.645-1.439-1.44s.644-1.44 1.439-1.44z"/></svg>
+                    </a>
+                    <!-- Youtube -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all group" title="Youtube">
+                        <svg class="w-6 h-6 fill-current text-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Peta Lokasi -->
+        <div class="h-80 md:h-full min-h-[350px] rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.915373741415!2d120.25834207365284!3d-5.117339494859703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbc25dc53a298f3%3A0xfbe2b4f428752cd7!2sPuskesmas%20Balangnipa!5e0!3m2!1sid!2sid!4v1778578528163!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 opacity-60">
+        <p class="font-caption text-caption text-center md:text-left">&copy; 2024 Puskesmas Balangnipa. Hak Cipta Dilindungi.</p>
+        <div class="flex gap-6 font-caption text-caption">
+            <a href="#" class="hover:text-white transition-colors">Kebijakan Privasi</a>
+            <a href="#" class="hover:text-white transition-colors">Syarat & Ketentuan</a>
+        </div>
+    </div>
+</footer>
+</body></html>
