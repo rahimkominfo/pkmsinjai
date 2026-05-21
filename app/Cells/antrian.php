@@ -26,9 +26,15 @@
                     </div>
                 </div>
                 <div class="p-6 flex flex-col items-center justify-center border-b border-outline-variant/30 relative">
-                    <span class="absolute top-2 right-2 text-xs font-semibold bg-<?= $item['color'] ?>-100 text-<?= $item['color'] ?>-700 px-2 py-1 rounded-full animate-pulse">Melayani</span>
-                    <p class="text-on-surface-variant font-label-md mb-1">Nomor Antrian</p>
-                    <div class="text-5xl font-black text-<?= $item['color'] ?>-600 tracking-tight"><?= $item['nomor'] ?></div>
+                    <?php if (isset($item['is_idle']) && $item['is_idle']): ?>
+                        <span class="absolute top-2 right-2 text-xs font-semibold bg-surface-container-high text-on-surface-variant px-2 py-1 rounded-full">Selesai</span>
+                        <p class="text-on-surface-variant font-label-md mb-1 text-center">Jumlah Peserta<br>Dilayani</p>
+                        <div class="text-5xl font-black text-on-surface-variant tracking-tight mt-1"><?= (int) preg_replace('/[^0-9]/', '', $item['nomor']) ?></div>
+                    <?php else: ?>
+                        <span class="absolute top-2 right-2 text-xs font-semibold bg-<?= $item['color'] ?>-100 text-<?= $item['color'] ?>-700 px-2 py-1 rounded-full animate-pulse">Melayani</span>
+                        <p class="text-on-surface-variant font-label-md mb-1">Nomor Antrian</p>
+                        <div class="text-5xl font-black text-<?= $item['color'] ?>-600 tracking-tight"><?= $item['nomor'] ?></div>
+                    <?php endif; ?>
                 </div>
                 <div class="p-4 bg-<?= $item['color'] ?>-50/50 flex items-center gap-3 mt-auto">
                     <div class="w-10 h-10 rounded-full bg-<?= $item['color'] ?>-200 overflow-hidden border-2 border-white shadow-sm flex-shrink-0 flex items-center justify-center">

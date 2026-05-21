@@ -15,43 +15,30 @@
         <article class="col-span-1 md:col-span-8 bg-surface-container-lowest p-6 md:p-8 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
             <!-- Category Chip -->
             <div class="mb-stack-md">
-                <span class="inline-block bg-surface-container-high text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full uppercase tracking-wider">Gizi & KIA</span>
+                <span class="inline-block bg-surface-container-high text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full uppercase tracking-wider">Informasi</span>
             </div>
             <!-- Headline -->
-            <h1 class="font-display-lg text-display-lg text-on-surface mb-stack-md leading-tight">Puskesmas Balangnipa Sukses Turunkan Angka Stunting 10% Melalui Program PMT</h1>
+            <h1 class="font-display-lg text-display-lg text-on-surface mb-stack-md leading-tight"><?= esc($artikel['judul']) ?></h1>
             <!-- Metadata -->
             <div class="flex items-center gap-4 text-on-surface-variant font-caption text-caption mb-stack-lg pb-stack-sm border-b border-outline-variant">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">person</span>
-                    <span class="font-semibold">Oleh Tim Promkes</span>
+                    <span class="font-semibold">Admin</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">calendar_today</span>
-                    <span>October 24, 2024</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">schedule</span>
-                    <span>5 min read</span>
+                    <span><?= date('F d, Y', strtotime($artikel['tanggal_publikasi'])) ?></span>
                 </div>
             </div>
             <!-- Main Image -->
+            <?php if(!empty($artikel['gambar_utama'])): ?>
             <figure class="mb-stack-lg rounded-lg overflow-hidden relative aspect-video bg-surface-dim">
-                <img alt="Global leaders gathered in a modern conference hall" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUHWZodzTiVIY51iAA7wPNbe29YzKNSac9XhzwuTe3UNAQC1PnMZqd3ZFl_4InAxEpba5FdJZKPC3Pbwsvy4gubJx52o02ALOe5DX5Z0V5RKaR6XfVshX8ofgcGsf9SmhmBNOzQhyy34GbhvIxtkwbUoszy7rv7x1jaQMOUrYq6OsBWpQJzR6BX1XUYtJsEIyZDJuv4X6ecH-8eKiSRM6EVCMHO69yxCGMT9MyYIn4n8QvJyHg74_LuCVAvoO9jvGql4Mg0mfcDDon"/>
-                <figcaption class="absolute bottom-0 left-0 right-0 bg-inverse-surface/80 text-on-secondary p-3 font-caption text-caption">
-                    Kader posyandu sedang memberikan penyuluhan gizi dan makanan tambahan kepada ibu balita. (Foto: Dok. Puskesmas)
-                </figcaption>
+                <img alt="<?= esc($artikel['judul']) ?>" class="w-full h-full object-cover" src="<?= esc($artikel['gambar_utama']) ?>"/>
             </figure>
+            <?php endif; ?>
             <!-- Article Body -->
             <div class="prose prose-lg max-w-none font-body-lg text-body-lg text-on-surface-variant space-y-6">
-                <p class="font-bold text-on-surface text-xl">SINJAI — Puskesmas Balangnipa mencatat keberhasilan signifikan dalam program pengentasan gizi buruk dan stunting. Sepanjang tahun ini, tercatat penurunan prevalensi angka stunting hingga 10% di seluruh wilayah kerja puskesmas.</p>
-                <p>Pencapaian ini tidak lepas dari kolaborasi intensif antara bidan desa, kader posyandu, dan perangkat desa melalui program Pemberian Makanan Tambahan (PMT) berbahan pangan lokal yang rutin dilaksanakan setiap minggu.</p>
-                <h3 class="font-headline-md text-headline-md text-on-surface mt-stack-lg mb-stack-md">Fokus pada Gizi Ibu Hamil dan Balita</h3>
-                <p>Strategi utama dari program ini adalah edukasi berkesinambungan kepada ibu hamil mengenai pentingnya Asupan Gizi Seimbang dan pemeriksaan kehamilan secara rutin (ANC). Selain itu, pemantauan tumbuh kembang anak di 1000 Hari Pertama Kehidupan (HPK) diperketat di setiap posyandu.</p>
-                <blockquote class="border-l-4 border-primary pl-4 my-8 italic font-headline-md text-headline-md text-on-surface">
-                    "Stunting bukan hanya masalah tinggi badan, tetapi juga perkembangan otak anak. Dengan PMT lokal, kami mengedukasi ibu-ibu bahwa makanan bergizi tidak harus mahal."
-                    <span class="block text-sm font-normal text-on-surface-variant mt-2 non-italic">— dr. Andi, Kepala Puskesmas Balangnipa</span>
-                </blockquote>
-                <p>Program ini juga menyiapkan posko konsultasi gizi yang beroperasi setiap jam kerja, memungkinkan warga yang memiliki keluhan terkait pola asuh dan nutrisi anak untuk langsung berkonsultasi dengan ahli gizi puskesmas. Langkah ini diharapkan mampu mewujudkan generasi emas bebas stunting di masa mendatang.</p>
+                <?= esc($artikel['konten']) ?>
             </div>
             <!-- Sharing Section -->
             <div class="mt-section-gap pt-stack-lg border-t border-outline-variant">
@@ -77,48 +64,31 @@
                     Berita Terbaru
                 </h3>
                 <ul class="space-y-4">
-                    <li class="group">
-                        <a class="block" href="#">
-                            <span class="font-caption text-caption text-primary font-semibold mb-1 block">10 mins ago</span>
-                            <h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Jadwal Imunisasi Polio Bulan November</h4>
-                        </a>
-                    </li>
-                    <li class="group">
-                        <a class="block" href="#">
-                            <span class="font-caption text-caption text-primary font-semibold mb-1 block">45 mins ago</span>
-                            <h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Waspada Gejala DBD di Musim Hujan</h4>
-                        </a>
-                    </li>
-                    <li class="group">
-                        <a class="block" href="#">
-                            <span class="font-caption text-caption text-primary font-semibold mb-1 block">2 hours ago</span>
-                            <h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Pendaftaran Online Kini Tersedia via WhatsApp</h4>
-                        </a>
-                    </li>
+                    <?php if(!empty($berita_terbaru)): ?>
+                        <?php foreach($berita_terbaru as $bt): ?>
+                        <li class="group">
+                            <a class="block" href="<?= base_url('berita/detail/' . esc($bt['slug'])) ?>">
+                                <span class="font-caption text-caption text-primary font-semibold mb-1 block">
+                                    <?= date('d M Y', strtotime($bt['tanggal_publikasi'])) ?>
+                                </span>
+                                <h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">
+                                    <?= esc($bt['judul']) ?>
+                                </h4>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </ul>
             </div>
+            
             <!-- Berita Terpopuler Widget -->
+            <!-- Placeholder for popular news if needed -->
             <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
                 <h3 class="font-headline-md text-headline-md text-on-surface mb-stack-md flex items-center gap-2 border-b border-outline-variant pb-2">
                     <span class="material-symbols-outlined text-primary">trending_up</span>
                     Berita Terpopuler
                 </h3>
-                <ul class="space-y-4 counter-list" style="counter-reset: pop-counter;">
-                    <li class="group relative pl-8">
-                        <span class="absolute left-0 top-0 font-headline-md text-headline-md text-outline-variant group-hover:text-primary transition-colors font-bold" style="counter-increment: pop-counter; content: counter(pop-counter);">1</span>
-                        <a class="block" href="#">
-                            <h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Tips Menjaga Asupan Gizi Balita</h4>
-                            <span class="font-caption text-caption text-on-surface-variant mt-1 block">Edukasi • 120k views</span>
-                        </a>
-                    </li>
-                    <li class="group relative pl-8">
-                        <span class="absolute left-0 top-0 font-headline-md text-headline-md text-outline-variant group-hover:text-primary transition-colors font-bold" style="counter-increment: pop-counter; content: counter(pop-counter);">2</span>
-                        <a class="block" href="#">
-                            <h4 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-2">Pentingnya Pemeriksaan Kehamilan (ANC) Rutin</h4>
-                            <span class="font-caption text-caption text-on-surface-variant mt-1 block">Kesehatan Ibu • 98k views</span>
-                        </a>
-                    </li>
-                </ul>
+                <p class="text-body-md font-body-md text-on-surface-variant">Belum ada data cukup.</p>
             </div>
         </aside>
     </div>

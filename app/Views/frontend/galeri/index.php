@@ -14,78 +14,194 @@
         <h1 class="font-display-lg text-display-lg text-on-surface mb-stack-sm">Galeri Foto</h1>
         <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Arsip visual dokumentasi pelayanan kesehatan, kegiatan posyandu, dan infrastruktur Puskesmas Balangnipa.</p>
     </header>
-    <!-- Filters & Search -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md mb-stack-lg border-b border-outline-variant pb-stack-sm">
-        <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-            <button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-4 py-2 rounded-full whitespace-nowrap">Semua</button>
-            <button class="bg-surface-container text-on-surface font-label-md text-label-md px-4 py-2 rounded-full whitespace-nowrap hover:bg-surface-variant transition-colors border border-outline-variant">Pelayanan Medis</button>
-            <button class="bg-surface-container text-on-surface font-label-md text-label-md px-4 py-2 rounded-full whitespace-nowrap hover:bg-surface-variant transition-colors border border-outline-variant">Posyandu</button>
-            <button class="bg-surface-container text-on-surface font-label-md text-label-md px-4 py-2 rounded-full whitespace-nowrap hover:bg-surface-variant transition-colors border border-outline-variant">Infrastruktur</button>
-            <button class="bg-surface-container text-on-surface font-label-md text-label-md px-4 py-2 rounded-full whitespace-nowrap hover:bg-surface-variant transition-colors border border-outline-variant">Promkes</button>
-        </div>
-        <div class="relative w-full md:w-64">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-            <input class="w-full pl-10 pr-4 py-2 rounded border border-outline-variant bg-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant" placeholder="Cari album..." type="text"/>
-        </div>
-    </div>
+    
     <!-- Gallery Grid (Bento/Card Layout) -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter mb-section-gap">
-        <!-- Card 1 -->
-        <article class="group cursor-pointer bg-surface rounded-xl overflow-hidden border border-outline-variant shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div class="relative aspect-video overflow-hidden">
-                <img alt="Pelayanan Pengobatan Gratis di Desa Terpencil" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYi9eUkHKALdybg2sAfzw8JDUA12IxCwRAFnVYxDoXEtqTtXPnhCwAVJaIb1_phXo7n11pBdSAkuoSFArtWDLcbxphXkqvw9vk1_uWnQekIUq5_eSg_TQuLPrZ2uNjTJz0nwub7lpbCiV3UZzE7dsp1JA2n_RcPOmPz4zslEEvK1k4miMxvQqQ3L70Hv1yCDV5RhsAv8NMMKeTHXUGo4hApRvTgwigWV3UV5YChGWzJLRvHJj1wey1rK7QPOgERB9OZBwlX9i6e-q8"/>
-                <div class="absolute top-4 left-4 bg-primary text-on-primary font-caption text-caption px-2 py-1 rounded">12 Foto</div>
-            </div>
-            <div class="p-stack-md">
-                <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-sm group-hover:text-primary transition-colors line-clamp-2">Pelayanan Pengobatan Gratis di Desa Terpencil</h2>
-                <div class="flex items-center text-on-surface-variant font-caption text-caption gap-2">
-                    <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                    <time datetime="2024-10-24">24 Okt 2024</time>
+        <?php if(!empty($list_galeri)): ?>
+            <?php foreach($list_galeri as $galeri): ?>
+            <!-- Add data-images attribute to store JSON encoded images -->
+            <article class="group cursor-pointer bg-surface rounded-xl overflow-hidden border border-outline-variant shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 gallery-card"
+                     data-title="<?= esc($galeri['judul'], 'attr') ?>"
+                     data-images="<?= esc(json_encode($galeri['images']), 'attr') ?>">
+                <div class="relative aspect-video overflow-hidden">
+                    <img alt="<?= esc($galeri['judul']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="<?= esc($galeri['sampul_url']) ?>"/>
+                    <div class="absolute top-4 left-4 bg-primary text-on-primary font-caption text-caption px-2 py-1 rounded shadow">
+                        <?= esc($galeri['jumlah_foto']) ?> Foto
+                    </div>
                 </div>
-            </div>
-        </article>
-        <!-- Card 2 -->
-        <article class="group cursor-pointer bg-surface rounded-xl overflow-hidden border border-outline-variant shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div class="relative aspect-video overflow-hidden">
-                <img alt="Peresmian Poli Gigi dan KIA Baru" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlkdQ2XyicL3A3VnrMp4ttnjaJvQmYXXe9FTFHH9KUSP8Gt86zVZ76ltlik36_0R3ZIzb8EzmIMjahDwaZzmO3zZle77G4JksaRTD6VLEEtr1TSNnrzUo3CBVDvnU0Xb8FsgS22nuA-ZMH3aNYid9TU_5DT0RJhKi5tGPTKSYMBGoiATHAMnlhluKTzWA2utW1tUA_Uj42q0sjQt2P3fPbv1tFAAXgXD9brxaQvc_ywc8WfZmeFNzrQrYLBqmP_kIbV2fePmg97sDU"/>
-                <div class="absolute top-4 left-4 bg-surface-container-high text-on-surface font-caption text-caption px-2 py-1 rounded shadow-sm">24 Foto</div>
-            </div>
-            <div class="p-stack-md">
-                <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-sm group-hover:text-primary transition-colors line-clamp-2">Peresmian Gedung Poli Gigi dan KIA Baru</h2>
-                <div class="flex items-center text-on-surface-variant font-caption text-caption gap-2">
-                    <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                    <time datetime="2024-10-20">20 Okt 2024</time>
+                <div class="p-stack-md">
+                    <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-sm group-hover:text-primary transition-colors line-clamp-2">
+                        <?= esc($galeri['judul']) ?>
+                    </h2>
+                    <div class="flex items-center text-on-surface-variant font-caption text-caption gap-2">
+                        <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                        <time datetime="<?= date('Y-m-d', strtotime($galeri['created_at'])) ?>">
+                            <?= date('d M Y', strtotime($galeri['created_at'])) ?>
+                        </time>
+                    </div>
                 </div>
-            </div>
-        </article>
-        <!-- Card 3 -->
-        <article class="group cursor-pointer bg-surface rounded-xl overflow-hidden border border-outline-variant shadow-[0px_4px_20px_rgba(0,0,0,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div class="relative aspect-video overflow-hidden">
-                <img alt="Kegiatan Posyandu Balita Melati" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5iWHRNMdZr9AxL1qL1Xz_-mffIEQ2_kOPf8Ezuw9A7rsYXJ6VEfW0I7uCwNq7wQGPlMdu_N2DKRD27m78BR-0eb1_DtAUZ0QLUYHRrt3cmejY41xOqkQyY1nrn1B5tPeRKDe0jFoX6wTZh8VvBjpG80XDs9H_Lqa6ZEa4f91nL-lnbn5Zm5JsKuvmy-TEQdqC2NsX62OMDyOn8vewSi-N5hAfhQQNhB_ZKtKZCseDxA-wtPWBIhJlCs2TU9UnfMANsW_aB8S5PM_Z"/>
-                <div class="absolute top-4 left-4 bg-surface-container-high text-on-surface font-caption text-caption px-2 py-1 rounded shadow-sm">18 Foto</div>
-            </div>
-            <div class="p-stack-md">
-                <h2 class="font-headline-md text-headline-md text-on-surface mb-stack-sm group-hover:text-primary transition-colors line-clamp-2">Kegiatan Posyandu Balita Melati Desa Suka Maju</h2>
-                <div class="flex items-center text-on-surface-variant font-caption text-caption gap-2">
-                    <span class="material-symbols-outlined text-[16px]">calendar_today</span>
-                    <time datetime="2024-10-15">15 Okt 2024</time>
-                </div>
-            </div>
-        </article>
-    </div>
-    <!-- Pagination -->
-    <div class="flex justify-center items-center gap-2 mb-section-gap font-label-md text-label-md">
-        <button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-50" disabled="">
-            <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button class="w-10 h-10 flex items-center justify-center rounded bg-primary text-on-primary font-bold">1</button>
-        <button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container transition-colors">2</button>
-        <button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container transition-colors">3</button>
-        <span class="text-on-surface-variant px-2">...</span>
-        <button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container transition-colors">12</button>
-        <button class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container transition-colors">
-            <span class="material-symbols-outlined">chevron_right</span>
-        </button>
+            </article>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Belum ada galeri.</p>
+        <?php endif; ?>
     </div>
 </main>
+
+<!-- Lightbox Modal -->
+<div id="galleryModal" style="display: none; opacity: 0;" class="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md transition-opacity duration-300">
+    <!-- Header -->
+    <div class="absolute top-0 left-0 right-0 flex justify-between items-center p-4 text-white z-50">
+        <h3 id="modalTitle" class="font-headline-md text-lg truncate pr-4">Judul Galeri</h3>
+        <button id="closeModal" class="p-2 hover:bg-white/20 rounded-full transition-colors flex items-center justify-center">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+    </div>
+    
+    <!-- Prev Button -->
+    <button id="prevBtn" class="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-50 p-2 md:p-3 bg-black/50 hover:bg-black/80 rounded-full text-white transition-all items-center justify-center cursor-pointer" style="display: none;">
+        <span class="material-symbols-outlined text-3xl">chevron_left</span>
+    </button>
+    
+    <!-- Next Button -->
+    <button id="nextBtn" class="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-50 p-2 md:p-3 bg-black/50 hover:bg-black/80 rounded-full text-white transition-all items-center justify-center cursor-pointer" style="display: none;">
+        <span class="material-symbols-outlined text-3xl">chevron_right</span>
+    </button>
+
+    <!-- Main Content Area (Image container) -->
+    <div id="modalContentArea" class="w-full h-full flex flex-col items-center justify-center pt-16 pb-24 px-12 md:px-24">
+        <img id="modalImage" src="" alt="Gallery Image" class="max-w-full max-h-full object-contain rounded drop-shadow-2xl select-none" />
+    </div>
+    
+    <!-- Footer Counter & Caption -->
+    <div class="absolute bottom-0 left-0 right-0 p-4 text-center text-white z-50 bg-gradient-to-t from-black/90 to-transparent">
+        <p id="modalCaption" class="text-white/90 font-body-md mb-2 min-h-[1.5rem]"></p>
+        <div class="text-white/70 font-caption text-sm bg-black/50 inline-block px-3 py-1 rounded-full">
+            <span id="currentImageIndex">1</span> / <span id="totalImages">1</span>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const galleryCards = document.querySelectorAll('.gallery-card');
+    const modal = document.getElementById('galleryModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    const modalImage = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    const modalTitle = document.getElementById('modalTitle');
+    const currentImageIndexEl = document.getElementById('currentImageIndex');
+    const totalImagesEl = document.getElementById('totalImages');
+    
+    let currentImages = [];
+    let currentIndex = 0;
+
+    function openModal(title, images) {
+        if (!images || images.length === 0) {
+            alert('Belum ada gambar pada galeri ini.');
+            return;
+        }
+        
+        currentImages = images;
+        currentIndex = 0;
+        
+        modalTitle.textContent = title;
+        totalImagesEl.textContent = images.length;
+        
+        updateModalContent();
+        
+        // Show modal
+        modal.style.display = 'block';
+        
+        // Allow browser to render display:flex before fading in
+        setTimeout(() => {
+            modal.style.opacity = '1';
+        }, 50);
+        
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+    
+    function closeModal() {
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = ''; // Restore scrolling
+        }, 300);
+    }
+    
+    function updateModalContent() {
+        const imgData = currentImages[currentIndex];
+        if (!imgData) return;
+        
+        modalImage.src = imgData.gambar_url;
+        modalCaption.textContent = imgData.caption || '';
+        currentImageIndexEl.textContent = currentIndex + 1;
+        
+        if (currentImages.length <= 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+        }
+    }
+    
+    function showNext(e) {
+        if (e) e.stopPropagation();
+        if (currentImages.length <= 1) return;
+        currentIndex = (currentIndex + 1) % currentImages.length;
+        updateModalContent();
+    }
+    
+    function showPrev(e) {
+        if (e) e.stopPropagation();
+        if (currentImages.length <= 1) return;
+        currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+        updateModalContent();
+    }
+    
+    galleryCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const title = this.getAttribute('data-title');
+            const imagesJson = this.getAttribute('data-images');
+            
+            if (imagesJson) {
+                try {
+                    const images = JSON.parse(imagesJson);
+                    openModal(title, images);
+                } catch (err) {
+                    console.error('JSON Parse Error:', err);
+                    alert('Gagal memuat data gambar.');
+                }
+            }
+        });
+    });
+    
+    closeModalBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeModal();
+    });
+    
+    nextBtn.addEventListener('click', showNext);
+    prevBtn.addEventListener('click', showPrev);
+    
+    modal.addEventListener('click', function(e) {
+        // Close if clicking outside the image or buttons
+        if (e.target === modal || e.target.id === 'modalContentArea') {
+            closeModal();
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (modal.style.display === 'none') return;
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'ArrowLeft') showPrev();
+    });
+});
+</script>
 <?= $this->endSection() ?>

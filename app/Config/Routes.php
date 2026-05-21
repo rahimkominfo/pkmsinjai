@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Dashboard::index');
-$routes->get('berita', 'Berita::index');
-$routes->get('berita/detail', 'Berita::detail');
-$routes->get('galeri', 'Galeri::index');
+$routes->get('/', 'Frontend\Dashboard::index');
+$routes->get('berita', 'Frontend\Berita::index');
+$routes->get('berita/detail/(:segment)', 'Frontend\Berita::detail/$1');
+$routes->get('galeri', 'Frontend\Galeri::index');
