@@ -16,12 +16,12 @@
         <div class="absolute inset-0 flex flex-col justify-end pb-16 md:pb-24">
             <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter w-full">
                 <div class="max-w-3xl">
-                    <span class="inline-block bg-primary text-on-primary px-3 py-1 rounded-full text-label-md font-label-md mb-4 shadow-lg">Headline Utama</span>
+                    <span class="inline-block bg-primary text-on-primary px-3 py-1 rounded-full text-label-md font-label-md mb-4 shadow-lg">Layanan Unggulan</span>
                     <h1 class="text-white font-headline-xl text-3xl md:text-5xl mb-4 leading-tight drop-shadow-md">
-                        Strategi Baru Transformasi Digital Nasional Menuju Indonesia Emas 2045
+                        Puskesmas Balangnipa Hadirkan Layanan Kesehatan Digital Terpadu
                     </h1>
                     <p class="text-white/90 font-body-lg text-lg hidden md:block mb-6 line-clamp-2 drop-shadow-sm">
-                        Pemerintah pusat resmi mengumumkan peta jalan komprehensif untuk mempercepat integrasi teknologi di seluruh sektor publik dan swasta guna meningkatkan daya saing global.
+                        Kami berkomitmen memberikan pelayanan prima. Kini daftar antrean dan cek riwayat kesehatan dapat dilakukan dengan mudah dari rumah.
                     </p>
                     <button class="bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors shadow-md">
                         Baca Selengkapnya
@@ -48,23 +48,23 @@
 
     <!-- News Grid Section -->
     <section class="mb-section-gap">
-        <h2 class="font-headline-lg text-headline-lg mb-stack-lg border-b-2 border-primary inline-block pb-2">Berita Terpopuler</h2>
+        <h2 class="font-headline-lg text-headline-lg mb-stack-lg border-b-2 border-primary inline-block pb-2">Kabar & Edukasi Kesehatan</h2>
         <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
             <!-- Featured News -->
             <article class="md:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-[0px_10px_30px_rgba(0,0,0,0.1)] hover:-translate-y-1 transition-all duration-300 border border-outline-variant/50">
                 <div class="aspect-video w-full overflow-hidden relative">
                     <img alt="Featured News" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzDdYpLefQYDVWdfCL-ZdpsrLIvSnQZfjbGd5C01UKL9kVqEEex6IavgHM_xu11ciEGXWi7zOaVRPmUmvfxhk526QD6Q_tYclkvyl5uAV-LRUnrWln5YAIGl3n6-qZlkXNqsG7tTjbWw14Jf0AF8dU_Bp6L9COssFuvxkHP9ifEzgVn--pOp9uzlNVIQsKjk21dFLmx-b2bnN4eK3hLUk9pAVh03krHJHYVt28uKYOcQ6pzdpF1GVPBhJiii9LFTxnN-ce2h-RDMEG"/>
                     <div class="absolute top-4 left-4 bg-primary text-on-primary font-label-md text-label-md px-3 py-1 rounded-full shadow-md">
-                        Teknologi
+                        Edukasi
                     </div>
                 </div>
                 <div class="p-6">
-                    <p class="font-caption text-caption text-on-surface-variant mb-2">2 Jam yang lalu • Oleh Tim Redaksi</p>
+                    <p class="font-caption text-caption text-on-surface-variant mb-2">2 Jam yang lalu • Oleh Tim Promkes</p>
                     <h3 class="font-headline-xl text-headline-xl mb-4 group-hover:text-primary transition-colors line-clamp-2">
-                        Inovasi Terbaru dalam Pengembangan Sistem Informasi Daerah
+                        Pentingnya Asupan Gizi Seimbang untuk Mencegah Stunting pada Balita
                     </h3>
                     <p class="font-body-lg text-body-lg text-on-surface-variant line-clamp-3">
-                        Pemerintah meluncurkan inisiatif baru untuk mendigitalisasi layanan publik di berbagai daerah, bertujuan untuk meningkatkan efisiensi dan transparansi. Langkah ini diharapkan dapat mempercepat respons birokrasi terhadap kebutuhan masyarakat.
+                        Puskesmas Balangnipa kembali mengadakan penyuluhan gizi seimbang di berbagai posyandu. Langkah ini diambil sebagai upaya percepatan penurunan angka stunting di wilayah kerja kami.
                     </p>
                 </div>
             </article>
@@ -75,9 +75,9 @@
                         <img alt="Secondary News 1" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPNCgJ4daHKMR8s-jOYqZoiYS_kdFFE1pW2sSiP49ox5_9dud45ijwHCVryJeZ4WeCIGb1Kv1bI7AqsBZNqbyilwJvKkS5TfMjuHGsC6A4a10BwRHrkA5_5jjq7sg1rHRPphOgqHrsjAKYSOVIk3DsH2JP6-izjECNvG9Rl2bnCaZfx_HmYTm_sUnXP4myOMwIwchrMaByQxlzOrWtd7SfkXws4DKSHjcIMSNdyTeMvxVtah-YmZD1RopRWBqRbw5b5hmJMEUcFr7t"/>
                     </div>
                     <div class="flex flex-col justify-center">
-                        <span class="font-caption text-caption text-primary font-semibold mb-1">Ekonomi</span>
+                        <span class="font-caption text-caption text-primary font-semibold mb-1">Informasi Layanan</span>
                         <h4 class="font-headline-md text-headline-md text-base leading-tight group-hover:text-primary transition-colors line-clamp-3">
-                            Pertumbuhan Ekonomi Kuartal Ketiga Lampaui Proyeksi Analis
+                            Jadwal Pelayanan Imunisasi Dasar Lengkap Bulan Ini
                         </h4>
                     </div>
                 </article>
@@ -112,7 +112,7 @@
                         <span class="font-caption text-caption opacity-90">12 Foto</span>
                     </div>
                     <h3 class="font-headline-md text-headline-md text-lg leading-tight group-hover:underline underline-offset-4">
-                        Dokumentasi Event Nasional 2024
+                        Dokumentasi Kegiatan Posyandu Balita & Lansia
                     </h3>
                 </div>
             </div>

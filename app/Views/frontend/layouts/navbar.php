@@ -30,8 +30,8 @@
                     </div>
                 </div>
 
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Berita</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Galeri</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="<?= base_url('berita') ?>">Berita</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="<?= base_url('galeri') ?>">Galeri</a>
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Edukasi Kesehatan Digital</a>
             </div>
         </div>
