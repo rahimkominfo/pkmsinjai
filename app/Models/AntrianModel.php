@@ -12,9 +12,18 @@ class AntrianModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
+    
     protected $allowedFields    = [
-        'pkm_id', 'title', 'loket', 'nomor', 'petugas', 
-        'color', 'icon', 'img', 'status', 'tanggal'
+        'pkm_id', 
+        'title', 
+        'loket', 
+        'nomor', 
+        'petugas', 
+        'color', 
+        'icon', 
+        'img', 
+        'status', 
+        'tanggal'
     ];
 
     // Dates
@@ -24,20 +33,11 @@ class AntrianModel extends Model
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
-    protected $skipValidation       = false;
-    protected $cleanValidationRules = true;
-
-    // Callbacks
-    protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
-    protected $beforeFind     = [];
-    protected $afterFind      = [];
-    protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    public function getAntrianHariIni($pkm_id)
+    {
+        return $this->where('pkm_id', $pkm_id)
+                    ->where('tanggal', date('Y-m-d'))
+                    ->orderBy('id', 'DESC')
+                    ->findAll();
+    }
 }

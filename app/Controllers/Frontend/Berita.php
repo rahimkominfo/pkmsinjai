@@ -2,18 +2,16 @@
 
 namespace App\Controllers\Frontend;
 
-use App\Controllers\BaseController;
-
-class Berita extends BaseController
+class Berita extends BaseTenantController
 {
-    public function index(): string
+    public function index()
     {
-        $pkm_id = 1;
+        $pkm_id = tenant()->pkm_id;
         $artikelModel = new \App\Models\ArtikelModel();
 
         // simple pagination or just list all
         $data = [
-            'title' => 'Berita Terkini - PKM Balangnipa',
+            'title' => 'Berita Terkini - ' . tenant()->pkm_nama,
             'list_berita' => $artikelModel->getPublished($pkm_id)
         ];
         return view('frontend/berita/index', $data);
@@ -21,7 +19,7 @@ class Berita extends BaseController
 
     public function detail($slug = null)
     {
-        $pkm_id = 1;
+        $pkm_id = tenant()->pkm_id;
         $artikelModel = new \App\Models\ArtikelModel();
         
         $artikel = $artikelModel->getBySlug($slug, $pkm_id);
@@ -30,7 +28,7 @@ class Berita extends BaseController
         }
 
         $data = [
-            'title' => esc($artikel['judul']) . ' - PKM Balangnipa',
+            'title' => esc($artikel['judul']) . ' - ' . tenant()->pkm_nama,
             'artikel' => $artikel,
             'berita_terbaru' => $artikelModel->getPublished($pkm_id, 3)
         ];

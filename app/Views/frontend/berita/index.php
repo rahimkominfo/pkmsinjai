@@ -4,7 +4,7 @@
 <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter py-8">
     <!-- Breadcrumbs -->
     <nav class="flex items-center gap-2 mb-8 text-on-surface-variant font-label-md text-label-md">
-        <a class="hover:text-primary" href="<?= base_url() ?>">Beranda</a>
+        <a class="hover:text-primary" href="<?= base_url(tenant()->pkm_slug) ?>">Beranda</a>
         <span class="material-symbols-outlined text-sm">chevron_right</span>
         <span class="text-primary font-bold">Berita Terkini</span>
     </nav>
@@ -30,7 +30,7 @@
         <?php if(!empty($list_berita)): ?>
             <?php foreach($list_berita as $berita): ?>
             <article class="group bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <a href="<?= base_url('berita/detail/' . esc($berita['slug'])) ?>" class="block">
+                <a href="<?= base_url(tenant()->pkm_slug . '/berita/detail/' . esc($berita['slug'])) ?>" class="block">
                     <div class="relative aspect-video overflow-hidden">
                         <img alt="<?= esc($berita['judul']) ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="<?= esc($berita['gambar_utama']) ?>"/>
                         <span class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 rounded-full font-label-md text-label-md">Informasi</span>

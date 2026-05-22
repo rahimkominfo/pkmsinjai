@@ -1,0 +1,45 @@
+diff --git a/app/Views/admin/dashboard.php b/app/Views/admin/dashboard.php
+index 97eda12..d3ff246 100644
+--- a/app/Views/admin/dashboard.php
++++ b/app/Views/admin/dashboard.php
+@@ -1,31 +1,6 @@
+-<?= $this->include('admin/layout/header') ?>
+-<!-- Main Wrapper -->
+-<div class="flex-1 ml-[280px] md:ml-sidebar_width flex flex-col h-screen relative">
+-<!-- TopNavBar (Shared Component JSON Mapping) -->
+-<header class="bg-surface fixed top-0 w-full md:w-[calc(100%-theme(spacing.sidebar_width))] h-16 border-b border-outline-variant flex justify-between items-center px-gutter z-10">
+-<!-- Left: Brand & Search -->
+-<div class="flex items-center gap-6">
+-<span class="hidden md:block text-headline-sm font-headline-sm text-on-surface">PKM Balangnipa</span>
+-<div class="relative group">
+-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-[20px]">search</span>
+-<input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface w-48 md:w-64 transition-all" placeholder="Search..." type="text"/>
+-</div>
+-</div>
+-<!-- Right: Actions -->
+-<div class="flex items-center gap-4">
+-<button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors flex items-center justify-center">
+-<span class="material-symbols-outlined">notifications</span>
+-</button>
+-<button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors flex items-center justify-center">
+-<span class="material-symbols-outlined">settings</span>
+-</button>
+-<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer ml-2 hover:opacity-80 transition-opacity">
+-<img alt="Administrator Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANBBr6wQMkq7K0dSIy0wUJ05OB6MUm5so6M9L6b_yy4GOAYg_R2Tj7gDRNivcqqXVKLwcm5be2qB08J2rr1Sx1bQ9qtT5Eh1RaOn_DmdqkHHWaKuo-mbkW6i9QncAsql4DV6Td33UkeQFwDDa7fZGnfFJ-LBClQQFO-Bb4FFKRHv0OKKxuiVu1EPZEEE5FJlVk5Z3gXB4EvqpyGcjIRHJbKRrI9Yxr9vtsktcUQ8TiEQG0Kzrs8zmMeLhrMPtc4XuK6jsC2hhyJ4A"/>
+-</div>
+-</div>
+-</header>
+-<!-- Main Content Canvas -->
+-<main class="flex-1 overflow-y-auto pt-16 px-gutter py-margin_desktop bg-background">
++<?= $this->extend('admin/layout/main') ?>
++
++<?= $this->section('content') ?>
+ <div class="max-w-container_max_width mx-auto">
+ <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+ <h2 class="font-headline-lg text-headline-lg text-on-surface">Ringkasan Portal Berita</h2>
+@@ -216,4 +191,4 @@
+ </div>
+ </div>
+ </div>
+-<?= $this->include('admin/layout/footer') ?>
++<?= $this->endSection() ?>

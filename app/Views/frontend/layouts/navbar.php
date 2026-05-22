@@ -2,9 +2,9 @@
 <nav class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm docked full-width top-0 sticky z-50">
     <div class="flex justify-between items-center w-full px-6 py-4 max-w-container-max mx-auto">
         <div class="flex items-center gap-6">
-            <a class="font-headline-md text-headline-md font-black tracking-tight text-on-surface dark:text-on-primary-fixed" href="<?= base_url() ?>">PKM BALANGNIPA</a>
+            <a class="font-headline-md text-headline-md font-black tracking-tight text-on-surface dark:text-on-primary-fixed" href="<?= base_url(tenant()->pkm_slug) ?>"><?= mb_strtoupper(tenant()->pkm_nama) ?></a>
             <div class="hidden md:flex gap-6 items-center">
-                <a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-2 font-label-md text-label-md" href="<?= base_url() ?>">Beranda</a>
+                <a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-2 font-label-md text-label-md" href="<?= base_url(tenant()->pkm_slug) ?>">Beranda</a>
 
                 <!-- Menu Profil -->
                 <div class="relative group">
@@ -30,8 +30,8 @@
                     </div>
                 </div>
 
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="<?= base_url('berita') ?>">Berita</a>
-                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="<?= base_url('galeri') ?>">Galeri</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="<?= base_url(tenant()->pkm_slug . '/berita') ?>">Berita</a>
+                <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="<?= base_url(tenant()->pkm_slug . '/galeri') ?>">Galeri</a>
                 <a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Edukasi Kesehatan Digital</a>
             </div>
         </div>

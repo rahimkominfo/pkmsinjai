@@ -5,7 +5,7 @@
 <main class="max-w-container-max mx-auto px-margin-mobile md:px-gutter py-stack-lg">
     <!-- Back Navigation -->
     <div class="mb-stack-lg">
-        <a class="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors" href="<?= base_url('berita') ?>">
+        <a class="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors" href="<?= base_url(tenant()->pkm_slug . '/berita') ?>">
             <span class="material-symbols-outlined text-sm">arrow_back</span>
             Kembali ke Berita
         </a>
@@ -67,7 +67,7 @@
                     <?php if(!empty($berita_terbaru)): ?>
                         <?php foreach($berita_terbaru as $bt): ?>
                         <li class="group">
-                            <a class="block" href="<?= base_url('berita/detail/' . esc($bt['slug'])) ?>">
+                            <a class="block" href="<?= base_url(tenant()->pkm_slug . '/berita/detail/' . esc($bt['slug'])) ?>">
                                 <span class="font-caption text-caption text-primary font-semibold mb-1 block">
                                     <?= date('d M Y', strtotime($bt['tanggal_publikasi'])) ?>
                                 </span>

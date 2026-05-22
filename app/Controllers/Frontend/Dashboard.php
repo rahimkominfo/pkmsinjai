@@ -2,21 +2,18 @@
 
 namespace App\Controllers\Frontend;
 
-use App\Controllers\BaseController;
-
-class Dashboard extends BaseController
+class Dashboard extends BaseTenantController
 {
-    public function index(): string
+    public function index()
     {
-        // For multi-tenant, typically pkm_id is obtained from session/middleware.
-        // Hardcoding to 1 for now as per single tenant fallback or adjust as needed.
-        $pkm_id = 1; 
+        // Ambil pkm_id dari helper tenant global (sudah di-set otomatis di BaseTenantController)
+        $pkm_id = tenant()->pkm_id;
 
         $artikelModel = new \App\Models\ArtikelModel();
         $galeriModel = new \App\Models\GaleriModel();
 
         $data = [
-            'title' => 'PKM Balangnipa - Beranda',
+            'title' => tenant()->pkm_nama . ' - Beranda',
             'hero_artikel' => $artikelModel->getPublished($pkm_id, 1),
             'berita_terbaru' => $artikelModel->getPublished($pkm_id, 4), // 1 featured + 3 list
             'galeri_terbaru' => $galeriModel->getGaleriWithCount($pkm_id)

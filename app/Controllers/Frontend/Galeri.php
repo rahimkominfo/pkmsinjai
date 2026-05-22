@@ -2,13 +2,11 @@
 
 namespace App\Controllers\Frontend;
 
-use App\Controllers\BaseController;
-
-class Galeri extends BaseController
+class Galeri extends BaseTenantController
 {
-    public function index(): string
+    public function index()
     {
-        $pkm_id = 1;
+        $pkm_id = tenant()->pkm_id;
         $galeriModel = new \App\Models\GaleriModel();
         $gambarModel = new \App\Models\GaleriGambarModel();
 
@@ -21,7 +19,7 @@ class Galeri extends BaseController
         }
 
         $data = [
-            'title' => 'Galeri Foto - PKM Balangnipa',
+            'title' => 'Galeri Foto - ' . tenant()->pkm_nama,
             'list_galeri' => $listGaleri
         ];
         return view('frontend/galeri/index', $data);

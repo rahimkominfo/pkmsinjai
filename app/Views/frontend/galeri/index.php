@@ -5,7 +5,7 @@
 <main class="max-w-container-max mx-auto px-margin-mobile md:px-gutter py-stack-lg">
     <!-- Breadcrumb -->
     <nav aria-label="Breadcrumb" class="flex items-center text-on-surface-variant font-caption text-caption mb-stack-md">
-        <a class="hover:text-primary transition-colors" href="<?= base_url() ?>">Beranda</a>
+        <a class="hover:text-primary transition-colors" href="<?= base_url(tenant()->pkm_slug) ?>">Beranda</a>
         <span class="material-symbols-outlined mx-2 text-[14px]">chevron_right</span>
         <span class="text-on-surface">Galeri Foto</span>
     </nav>
