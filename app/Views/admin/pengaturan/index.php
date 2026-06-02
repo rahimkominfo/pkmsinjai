@@ -3,10 +3,12 @@
 <div class="max-w-container_max_width mx-auto">
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h2 class="font-headline-lg text-headline-lg text-on-surface"><?= esc($title) ?></h2>
+        <?php if (session()->get('peran') === 'Admin Dinkes'): ?>
         <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/pengaturan/create') ?>" class="bg-primary text-on-primary px-4 py-2 rounded font-data-table text-data-table hover:shadow-sm hover:-translate-y-[1px] transition-all flex items-center gap-2 self-start md:self-auto">
             <span class="material-symbols-outlined text-[18px]">add</span>
             Tambah PKM
         </a>
+        <?php endif; ?>
     </div>
 
     <?php if (session()->getFlashdata('message')): ?>
@@ -60,9 +62,11 @@
                             <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/pengaturan/edit/' . $row['pkm_id']) ?>" class="text-primary hover:text-primary-container transition-colors p-1 inline-block" title="Edit Identitas">
                                 <span class="material-symbols-outlined text-[20px]">edit</span>
                             </a>
+                            <?php if (session()->get('peran') === 'Admin Dinkes'): ?>
                             <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/pengaturan/delete/' . $row['pkm_id']) ?>" onclick="return confirm('Peringatan: Menghapus PKM akan mempengaruhi seluruh data (artikel, galeri) yang terkait. Lanjutkan?')" class="text-error hover:text-error-container transition-colors p-1 ml-2 inline-block" title="Hapus PKM">
                                 <span class="material-symbols-outlined text-[20px]">delete</span>
                             </a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

@@ -49,11 +49,62 @@
                     <div class="flex items-center gap-3">
                         <input type="color" id="primary_color" name="primary_color" value="<?= old('primary_color', $pkm['primary_color'] ?? '#006c4a') ?>"
                             class="w-12 h-10 bg-surface border border-surface-variant rounded focus:border-primary outline-none cursor-pointer p-1">
-                        <p class="text-[12px] text-outline">Warna ini akan mendominasi desain UI bagian depan (Tenant).</p>
+                        <p class="text-[12px] text-outline">Warna dominan untuk desain (seperti latar sidebar).</p>
+                    </div>
+                </div>
+
+                <!-- Warna Teks Utama -->
+                <div>
+                    <label for="on_primary_color" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Warna Teks Utama (On Primary Color)</label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="on_primary_color" name="on_primary_color" value="<?= old('on_primary_color', $pkm['on_primary_color'] ?? '#ffffff') ?>"
+                            class="w-12 h-10 bg-surface border border-surface-variant rounded focus:border-primary outline-none cursor-pointer p-1">
+                        <p class="text-[12px] text-outline">Warna teks agar kontras dengan Warna Utama di atas.</p>
                     </div>
                 </div>
             </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-surface-variant pb-6 pt-4">
+                <div class="md:col-span-2">
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Kontak & Media Sosial</h3>
+                </div>
 
+                <div class="md:col-span-2">
+                    <label for="alamat" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Alamat Lengkap</label>
+                    <textarea id="alamat" name="alamat" rows="2" class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all"><?= old('alamat', $pkm['alamat'] ?? '') ?></textarea>
+                </div>
+
+                <div>
+                    <label for="email" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Alamat Email</label>
+                    <input type="email" id="email" name="email" value="<?= old('email', $pkm['email'] ?? '') ?>" placeholder="contoh@gmail.com" class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
+                </div>
+
+                <div>
+                    <label for="telepon" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Telepon / WhatsApp</label>
+                    <input type="text" id="telepon" name="telepon" value="<?= old('telepon', $pkm['telepon'] ?? '') ?>" placeholder="08123456789" class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
+                </div>
+
+                <div>
+                    <label for="facebook" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Link Facebook</label>
+                    <input type="url" id="facebook" name="facebook" value="<?= old('facebook', $pkm['facebook'] ?? '') ?>" placeholder="https://facebook.com/..." class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
+                </div>
+
+                <div>
+                    <label for="instagram" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Link Instagram</label>
+                    <input type="url" id="instagram" name="instagram" value="<?= old('instagram', $pkm['instagram'] ?? '') ?>" placeholder="https://instagram.com/..." class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
+                </div>
+
+                <div>
+                    <label for="youtube" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Link YouTube</label>
+                    <input type="url" id="youtube" name="youtube" value="<?= old('youtube', $pkm['youtube'] ?? '') ?>" placeholder="https://youtube.com/..." class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="google_maps" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Google Maps (URL Embed)</label>
+                    <textarea id="google_maps" name="google_maps" rows="3" placeholder='https://www.google.com/maps/embed?pb=...' class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all"><?= old('google_maps', $pkm['google_maps'] ?? '') ?></textarea>
+                    <p class="text-[12px] text-outline mt-1">Salin hanya URL sumber (src) dari iframe Google Maps.</p>
+                </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                 <div class="md:col-span-2">
                     <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Aset Media</h3>

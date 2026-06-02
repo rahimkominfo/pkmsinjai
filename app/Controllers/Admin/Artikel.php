@@ -43,19 +43,30 @@ class Artikel extends BaseAdminController
 
     public function store()
     {
+        if ($this->request->getMethod() === 'POST' && empty($_POST) && isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 0) {
+            return redirect()->back()->withInput()->with('errors', ['Ukuran total data/file yang diunggah terlalu besar melebihi batas server (' . ini_get('post_max_size') . '). Silakan kompres ukuran gambar Anda.']);
+        }
+
+        $sumberGambar = $this->request->getPost('sumber_gambar');
+
         $rules = [
             'judul'  => 'required|min_length[5]',
             'konten' => 'required|min_length[10]',
-            'status' => 'required|in_list[Draf,Ditayangkan,Diarsipkan]',
-            'gambar_utama' => 'uploaded[gambar_utama]|is_image[gambar_utama]|mime_in[gambar_utama,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_utama,2048]'
+            'status' => 'required|in_list[Draf,Ditayangkan,Diarsipkan]'
         ];
+
+        if ($sumberGambar === 'upload') {
+            $rules['gambar_utama'] = 'uploaded[gambar_utama]|is_image[gambar_utama]|mime_in[gambar_utama,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_utama,2048]';
+        } else {
+            $rules['gambar_utama_link'] = 'required|valid_url';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $pkm_id = tenant()->pkm_id;
-        $user_id = 1; // Dummy session user_id
+        $user_id = session()->get('user_id');
         
         helper('text');
         $judul = $this->request->getPost('judul');
@@ -67,25 +78,39 @@ class Artikel extends BaseAdminController
             $slug = $slug . '-' . time();
         }
 
-        // Handle Upload Gambar
-        $fileGambar = $this->request->getFile('gambar_utama');
-        $namaGambar = null;
-        
-        if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
-            $pkm_slug = tenant()->pkm_slug;
-            $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/artikel/';
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0775, true);
-            }
+        // Handle Gambar Utama
+        $gambarUrlFinal = null;
+        if ($sumberGambar === 'upload') {
+            $fileGambar = $this->request->getFile('gambar_utama');
+            if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
+                $pkm_slug = tenant()->pkm_slug;
+                $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/media/';
+                if (!is_dir($uploadPath)) {
+                    mkdir($uploadPath, 0775, true);
+                }
 
-            $namaGambar = $fileGambar->getRandomName();
-            $namaGambarWebp = pathinfo($namaGambar, PATHINFO_FILENAME) . '.webp';
-            
-            \Config\Services::image()
-                ->withFile($fileGambar->getTempName())
-                ->save($uploadPath . $namaGambarWebp, 80);
-            
-            $namaGambar = $namaGambarWebp;
+                $namaGambar = $fileGambar->getRandomName();
+                $namaGambarWebp = pathinfo($namaGambar, PATHINFO_FILENAME) . '.webp';
+                
+                \Config\Services::image()
+                    ->withFile($fileGambar->getTempName())
+                    ->save($uploadPath . $namaGambarWebp, 80);
+                
+                $mediaPath = 'uploads/' . $pkm_slug . '/media/' . $namaGambarWebp;
+                $gambarUrlFinal = $mediaPath;
+
+                // Simpan ke tabel media
+                $mediaModel = new \App\Models\MediaModel();
+                $mediaModel->insert([
+                    'pkm_id'    => $pkm_id,
+                    'nama_file' => $fileGambar->getClientName(),
+                    'url_file'  => $gambarUrlFinal,
+                    'tipe_file' => 'image/webp',
+                    'user_id'   => session()->get('user_id')
+                ]);
+            }
+        } else {
+            $gambarUrlFinal = $this->request->getPost('gambar_utama_link');
         }
 
         $dataInsert = [
@@ -99,8 +124,8 @@ class Artikel extends BaseAdminController
             'tanggal_publikasi' => date('Y-m-d H:i:s')
         ];
 
-        if ($namaGambar) {
-            $dataInsert['gambar_utama'] = 'uploads/' . tenant()->pkm_slug . '/artikel/' . $namaGambar;
+        if ($gambarUrlFinal) {
+            $dataInsert['gambar_utama'] = $gambarUrlFinal;
         }
 
         $artikel_id = $this->artikelModel->insert($dataInsert, true);
@@ -135,11 +160,17 @@ class Artikel extends BaseAdminController
 
     public function update($id)
     {
+        if ($this->request->getMethod() === 'POST' && empty($_POST) && isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 0) {
+            return redirect()->back()->withInput()->with('errors', ['Ukuran total data/file yang diunggah terlalu besar melebihi batas server (' . ini_get('post_max_size') . '). Silakan kompres ukuran gambar Anda.']);
+        }
+
         $artikel = $this->artikelModel->find($id);
         
         if (!$artikel) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Artikel tidak ditemukan');
         }
+
+        $sumberGambar = $this->request->getPost('sumber_gambar');
 
         $rules = [
             'judul'  => 'required|min_length[5]',
@@ -147,9 +178,10 @@ class Artikel extends BaseAdminController
             'status' => 'required|in_list[Draf,Ditayangkan,Diarsipkan]'
         ];
 
-        // Validasi gambar jika ada yang diupload
-        if ($this->request->getFile('gambar_utama')->isValid()) {
+        if ($sumberGambar === 'upload' && $this->request->getFile('gambar_utama')->isValid()) {
             $rules['gambar_utama'] = 'is_image[gambar_utama]|mime_in[gambar_utama,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_utama,2048]';
+        } elseif ($sumberGambar === 'link' && !empty($this->request->getPost('gambar_utama_link'))) {
+            $rules['gambar_utama_link'] = 'valid_url';
         }
 
         if (!$this->validate($rules)) {
@@ -177,23 +209,39 @@ class Artikel extends BaseAdminController
             'status'  => $this->request->getPost('status')
         ];
 
-        // Handle Upload Gambar
-        $fileGambar = $this->request->getFile('gambar_utama');
-        if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
-            $pkm_slug = tenant()->pkm_slug;
-            $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/artikel/';
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0775, true);
-            }
+        // Handle Gambar Utama
+        if ($sumberGambar === 'upload') {
+            $fileGambar = $this->request->getFile('gambar_utama');
+            if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
+                $pkm_slug = tenant()->pkm_slug;
+                $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/media/';
+                if (!is_dir($uploadPath)) {
+                    mkdir($uploadPath, 0775, true);
+                }
 
-            $namaGambar = $fileGambar->getRandomName();
-            $namaGambarWebp = pathinfo($namaGambar, PATHINFO_FILENAME) . '.webp';
-            
-            \Config\Services::image()
-                ->withFile($fileGambar->getTempName())
-                ->save($uploadPath . $namaGambarWebp, 80);
-            
-            $updateData['gambar_utama'] = 'uploads/' . $pkm_slug . '/artikel/' . $namaGambarWebp;
+                $namaGambar = $fileGambar->getRandomName();
+                $namaGambarWebp = pathinfo($namaGambar, PATHINFO_FILENAME) . '.webp';
+                
+                \Config\Services::image()
+                    ->withFile($fileGambar->getTempName())
+                    ->save($uploadPath . $namaGambarWebp, 80);
+                
+                $mediaPath = 'uploads/' . $pkm_slug . '/media/' . $namaGambarWebp;
+                $gambarUrlFinal = $mediaPath;
+                $updateData['gambar_utama'] = $gambarUrlFinal;
+
+                // Simpan ke tabel media
+                $mediaModel = new \App\Models\MediaModel();
+                $mediaModel->insert([
+                    'pkm_id'    => $pkm_id,
+                    'nama_file' => $fileGambar->getClientName(),
+                    'url_file'  => $gambarUrlFinal,
+                    'tipe_file' => 'image/webp',
+                    'user_id'   => session()->get('user_id')
+                ]);
+            }
+        } elseif ($sumberGambar === 'link' && !empty($this->request->getPost('gambar_utama_link'))) {
+            $updateData['gambar_utama'] = $this->request->getPost('gambar_utama_link');
         }
 
         $this->artikelModel->update($id, $updateData);

@@ -66,14 +66,20 @@
                         <label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Kategori</label>
                         <div class="max-h-48 overflow-y-auto space-y-2">
                             <?php 
-                                $selectedCats = old('kategori_id', $artikel_kategori ?? []);
+                                $oldVal = old('kategori_id');
+                                if ($oldVal === null) {
+                                    $selectedCats = $artikel_kategori ?? [];
+                                } else {
+                                    $selectedCats = is_array($oldVal) ? $oldVal : [];
+                                }
                             ?>
                             <?php foreach ($kategori as $kat): ?>
                                 <label class="flex items-center gap-2 cursor-pointer">
                                     <input type="checkbox" name="kategori_id[]" value="<?= $kat['kategori_id'] ?>" 
                                         <?= in_array($kat['kategori_id'], $selectedCats) ? 'checked' : '' ?>
-                                        class="rounded border-outline text-primary focus:ring-primary bg-surface-container-lowest">
-                                    <span class="font-body-md text-body-md text-on-surface"><?= esc($kat['nama']) ?></span>
+                                        class="cursor-pointer"
+                                        style="appearance: auto; accent-color: var(--tenant-primary); width: 1.15rem; height: 1.15rem;">
+                                    <span class="font-body-md text-body-md text-on-surface select-none"><?= esc($kat['nama']) ?></span>
                                 </label>
                             <?php endforeach; ?>
                         </div>
@@ -81,22 +87,40 @@
 
                     <!-- Gambar Utama -->
                     <div class="bg-surface p-4 rounded border border-surface-variant">
-                        <label for="gambar_utama" class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Gambar Utama (Sampul)</label>
+                        <label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Gambar Utama (Sampul)</label>
                         
                         <?php if (isset($artikel) && $artikel['gambar_utama']): ?>
                             <div class="mb-3">
-                                <img src="<?= base_url(esc($artikel['gambar_utama'])) ?>" alt="Current Image" class="w-full h-auto rounded shadow-sm">
+                                <img src="<?= strpos($artikel['gambar_utama'], 'http') === 0 ? esc($artikel['gambar_utama']) : base_url(esc($artikel['gambar_utama'])) ?>" alt="Current Image" class="w-full h-auto rounded shadow-sm">
                             </div>
                         <?php endif; ?>
                         
-                        <input type="file" id="gambar_utama" name="gambar_utama" accept="image/*"
-                            class="block w-full text-sm text-outline
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded file:border-0
-                                file:text-sm file:font-semibold
-                                file:bg-primary-container file:text-on-primary-container
-                                hover:file:bg-primary-fixed-dim cursor-pointer">
-                        <p class="text-[12px] text-outline mt-2">Format: JPG, PNG, WEBP. Maks 2MB.</p>
+                        <div class="flex items-center gap-4 mb-3">
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="sumber_gambar" value="upload" checked onchange="toggleGambar(this.value)" class="accent-primary cursor-pointer w-4 h-4">
+                                <span class="text-[13px] text-on-surface">Upload File</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="radio" name="sumber_gambar" value="link" onchange="toggleGambar(this.value)" class="accent-primary cursor-pointer w-4 h-4">
+                                <span class="text-[13px] text-on-surface">Masukkan Link</span>
+                            </label>
+                        </div>
+
+                        <div id="gambar_upload_container">
+                            <input type="file" id="gambar_utama" name="gambar_utama" accept="image/*"
+                                class="block w-full text-sm text-outline
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-primary-container file:text-on-primary-container
+                                    hover:file:bg-primary-fixed-dim cursor-pointer">
+                            <p class="text-[12px] text-outline mt-2">Format: JPG, PNG, WEBP. Maks 2MB.</p>
+                        </div>
+
+                        <div id="gambar_link_container" class="hidden">
+                            <input type="url" name="gambar_utama_link" placeholder="https://..." class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-3 py-2 transition-all">
+                            <p class="text-[12px] text-outline mt-2">Masukkan link / URL gambar lengkap.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -113,4 +137,16 @@
         </form>
     </div>
 </div>
+
+<script>
+function toggleGambar(val) {
+    if (val === 'upload') {
+        document.getElementById('gambar_upload_container').classList.remove('hidden');
+        document.getElementById('gambar_link_container').classList.add('hidden');
+    } else {
+        document.getElementById('gambar_upload_container').classList.add('hidden');
+        document.getElementById('gambar_link_container').classList.remove('hidden');
+    }
+}
+</script>
 <?= $this->endSection() ?>

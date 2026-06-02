@@ -1,3 +1,14 @@
+## [v1.0.3] - 2026-05-29
+### ✨ Added
+- Sistem Login otentikasi Admin (`/login`) dengan UI standar Tailwind CSS dan Material Symbols.
+- Filter Autorisasi `AuthFilter` untuk memproteksi seluruh rute `/admin` serta isolasi data (hanya dapat mengakses `pkm_slug` masing-masing atau semua untuk Admin Dinkes).
+- Navigasi dinamis di sidebar Admin sesuai hak akses peran (Role-based Access Control).
+
+### 🔄 Changed
+- Penyesuaian struktur peran (role) pada tabel `sys_users` menjadi `Admin Dinkes`, `Admin PKM`, `Editor`, dan `Penulis`.
+- Update controller dan routing untuk mendukung manajemen tenant sesuai dengan hak akses (Admin Dinkes adalah level tertinggi).
+- Mengganti nama peran (role) **Kontributor** menjadi **Penulis** pada tabel `sys_users`, controller, dan view terkait.
+
 ## [v1.0.1] - 2026-05-22
 ### 🐛 Fixed
 - Perbaikan error `HTTPException: Could not move file` pada saat upload gambar di menu Galeri, Artikel, dan Pengaturan dengan menggunakan path absolut `FCPATH`.

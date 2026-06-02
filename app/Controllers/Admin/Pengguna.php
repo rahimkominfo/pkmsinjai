@@ -22,9 +22,14 @@ class Pengguna extends BaseAdminController
         $pkm_id = tenant()->pkm_id; 
 
         if ($pkm_id === 'super') {
-            $users = $this->userModel->findAll();
+            $users = $this->userModel->select('sys_users.*, sys_peran.nama_peran as peran')
+                                     ->join('sys_peran', 'sys_peran.peran_id = sys_users.peran_id', 'left')
+                                     ->findAll();
         } else {
-            $users = $this->userModel->where('pkm_id', $pkm_id)->findAll();
+            $users = $this->userModel->select('sys_users.*, sys_peran.nama_peran as peran')
+                                     ->join('sys_peran', 'sys_peran.peran_id = sys_users.peran_id', 'left')
+                                     ->where('sys_users.pkm_id', $pkm_id)
+                                     ->findAll();
         }
 
         $data = [
@@ -37,9 +42,19 @@ class Pengguna extends BaseAdminController
 
     public function create()
     {
+        $peranModel = new \App\Models\PeranModel();
+        $roles = $peranModel->findAll();
+        
+        if (session()->get('peran') === 'Admin PKM') {
+            $roles = array_filter($roles, function($r) {
+                return $r['nama_peran'] !== 'Admin Dinkes';
+            });
+        }
+        
         $data = [
             'title' => 'Tambah Pengguna',
-            'pkms'  => $this->pkmModel->findAll()
+            'pkms'  => $this->pkmModel->findAll(),
+            'roles' => $roles
         ];
         return view('admin/pengguna/form', $data);
     }
@@ -51,8 +66,9 @@ class Pengguna extends BaseAdminController
             'username'    => 'required|alpha_numeric_space|min_length[3]|is_unique[sys_users.username]',
             'email'       => 'required|valid_email|is_unique[sys_users.email]',
             'password'    => 'required|min_length[6]',
+            'konfirmasi_password' => 'required|matches[password]',
             'nama_publik' => 'required|min_length[3]',
-            'peran'       => 'required|in_list[Admin,Editor,Kontributor]'
+            'peran_id'    => 'required|numeric'
         ];
 
         if (!$this->validate($rules)) {
@@ -67,7 +83,7 @@ class Pengguna extends BaseAdminController
             'email'       => $this->request->getPost('email'),
             'password'    => $this->request->getPost('password'),
             'nama_publik' => $this->request->getPost('nama_publik'),
-            'peran'       => $this->request->getPost('peran')
+            'peran_id'    => $this->request->getPost('peran_id')
         ]);
 
         return redirect()->to('admin/' . tenant()->pkm_slug . '/pengguna')->with('message', 'Pengguna berhasil ditambahkan.');
@@ -81,10 +97,20 @@ class Pengguna extends BaseAdminController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Pengguna tidak ditemukan');
         }
 
+        $peranModel = new \App\Models\PeranModel();
+        $roles = $peranModel->findAll();
+        
+        if (session()->get('peran') === 'Admin PKM') {
+            $roles = array_filter($roles, function($r) {
+                return $r['nama_peran'] !== 'Admin Dinkes';
+            });
+        }
+        
         $data = [
             'title' => 'Edit Pengguna',
             'user'  => $user,
-            'pkms'  => $this->pkmModel->findAll()
+            'pkms'  => $this->pkmModel->findAll(),
+            'roles' => $roles
         ];
 
         return view('admin/pengguna/form', $data);
@@ -103,11 +129,12 @@ class Pengguna extends BaseAdminController
             'username'    => "required|alpha_numeric_space|min_length[3]|is_unique[sys_users.username,user_id,{$id}]",
             'email'       => "required|valid_email|is_unique[sys_users.email,user_id,{$id}]",
             'nama_publik' => 'required|min_length[3]',
-            'peran'       => 'required|in_list[Admin,Editor,Kontributor]'
+            'peran_id'    => 'required|numeric'
         ];
 
         if ($this->request->getPost('password')) {
             $rules['password'] = 'min_length[6]';
+            $rules['konfirmasi_password'] = 'required|matches[password]';
         }
 
         if (!$this->validate($rules)) {
@@ -121,7 +148,7 @@ class Pengguna extends BaseAdminController
             'username'    => $this->request->getPost('username'),
             'email'       => $this->request->getPost('email'),
             'nama_publik' => $this->request->getPost('nama_publik'),
-            'peran'       => $this->request->getPost('peran')
+            'peran_id'    => $this->request->getPost('peran_id')
         ];
 
         if ($password = $this->request->getPost('password')) {

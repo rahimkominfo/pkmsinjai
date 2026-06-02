@@ -19,7 +19,7 @@ class UserModel extends Model
         'email',
         'password',
         'nama_publik',
-        'peran'
+        'peran_id'
     ];
 
     // Dates

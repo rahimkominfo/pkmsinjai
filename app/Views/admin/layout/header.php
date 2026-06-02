@@ -3,52 +3,130 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PKM Balangnipa Admin Dashboard</title>
+<title>Admin Dashboard</title>
 <!-- Google Fonts & Material Symbols -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS Local -->
 <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
-<style>
+    <style>
         /* Level 1 Surface Custom Shadow based on design system */
         .level-1-surface {
             box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
+        :root {
+            --tenant-primary: <?= esc(tenant()->primary_color ?? '#eaddff') ?>;
+            --tenant-on-primary: <?= esc(tenant()->on_primary_color ?? '#1f2937') ?>;
+        }
+        .sidebar-tenant {
+            background-color: var(--tenant-primary);
+        }
+        .sidebar-tenant-text {
+            color: var(--tenant-on-primary);
+        }
+        .sidebar-tenant-text-muted {
+            color: var(--tenant-on-primary);
+            opacity: 0.8;
+        }
+        .sidebar-tenant-link {
+            color: var(--tenant-on-primary);
+            opacity: 0.8;
+            border-color: transparent;
+        }
+        .sidebar-tenant-link:hover {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        .sidebar-tenant-link.active {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left-color: var(--tenant-on-primary);
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface antialiased flex h-screen overflow-hidden">
-<!-- SideNavBar (Shared Component JSON Mapping) -->
-<aside class="fixed h-screen w-sidebar_width left-0 top-0 bg-primary-container shadow-sm flex flex-col h-full py-base z-20">
+<!-- SideNavBar -->
+<aside class="fixed h-screen w-sidebar_width left-0 top-0 shadow-sm flex flex-col h-full py-base z-20 sidebar-tenant">
 <!-- Brand Header -->
 <div class="px-6 py-6 mb-4 flex items-center gap-3">
-<img alt="PKM Balangnipa Logo" class="w-10 h-10 object-contain" src="data:image/png;base64,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"/>
+<img alt="Logo" class="w-10 h-10 object-contain" src="<?= base_url('images/logo.png') ?>"/>
 <div>
-<h1 class="text-headline-sm font-headline-sm font-bold text-on-primary">PKM Balangnipa</h1>
-<p class="font-label-sm text-label-sm text-on-primary/80 mt-1 uppercase tracking-wider">Portal Berita Kesehatan</p>
+<h1 class="text-headline-sm font-headline-sm font-bold sidebar-tenant-text"><?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?></h1>
+<p class="font-label-sm text-label-sm sidebar-tenant-text-muted mt-1 uppercase tracking-wider"><?= session()->get('peran') ?></p>
 </div>
 </div>
+
 <!-- Navigation Links -->
-<nav class="flex-1 flex flex-col gap-1">
-<!-- Active Tab: Dashboard -->
-<a class="flex items-center gap-3 px-6 py-3 border-l-4 border-on-primary bg-white/10 text-on-primary font-label-sm text-label-sm transition-all duration-200 ease-in-out" href="#">
-<span class="material-symbols-outlined text-[20px]">dashboard</span>
-                Dashboard
-            </a>
-<!-- Inactive Tabs -->
-<a class="flex items-center gap-3 px-6 py-3 text-on-primary/80 hover:text-on-primary font-label-sm text-label-sm transition-colors hover:bg-white/10 transition-all duration-200 ease-in-out" href="#">
-<span class="material-symbols-outlined text-[20px]">article</span>
-                Posts
-            </a>
-<a class="flex items-center gap-3 px-6 py-3 text-on-primary/80 hover:text-on-primary font-label-sm text-label-sm transition-colors hover:bg-white/10 transition-all duration-200 ease-in-out" href="#">
-<span class="material-symbols-outlined text-[20px]">category</span>
-                Categories
-            </a>
-<a class="flex items-center gap-3 px-6 py-3 text-on-primary/80 hover:text-on-primary font-label-sm text-label-sm transition-colors hover:bg-white/10 transition-all duration-200 ease-in-out" href="#">
-<span class="material-symbols-outlined text-[20px]">group</span>
-                Users
-            </a>
+<nav class="flex-1 flex flex-col gap-1 overflow-y-auto">
+    <?php 
+    $role = session()->get('peran'); 
+    $currentURL = current_url();
+    
+    // Function to check active state
+    $isActive = function($path) use ($currentURL) {
+        return strpos($currentURL, $path) !== false ? 'active' : '';
+    };
+    ?>
+
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/dashboard') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/dashboard') ?>">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+        Dashboard
+    </a>
+
+    <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM', 'Editor', 'Penulis'])): ?>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/artikel') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel') ?>">
+        <span class="material-symbols-outlined text-[20px]">article</span>
+        Artikel
+    </a>
+    <?php endif; ?>
+
+    <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM', 'Editor'])): ?>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/kategori') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/kategori') ?>">
+        <span class="material-symbols-outlined text-[20px]">category</span>
+        Kategori
+    </a>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/galeri') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/galeri') ?>">
+        <span class="material-symbols-outlined text-[20px]">photo_library</span>
+        Galeri
+    </a>
+    <?php endif; ?>
+
+    <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM'])): ?>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/antrian') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian') ?>">
+        <span class="material-symbols-outlined text-[20px]">queue</span>
+        Antrian
+    </a>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/pengguna') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/pengguna') ?>">
+        <span class="material-symbols-outlined text-[20px]">group</span>
+        Pengguna
+    </a>
+    <?php endif; ?>
+
+    <?php if($role === 'Admin Dinkes'): ?>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/peran') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/peran') ?>">
+        <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+        Peran Pengguna
+    </a>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/pengaturan') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/pengaturan') ?>">
+        <span class="material-symbols-outlined text-[20px]">settings</span>
+        Pengaturan Sistem
+    </a>
+    <?php endif; ?>
+    
+    <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM'])): ?>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/menu') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/menu') ?>">
+        <span class="material-symbols-outlined text-[20px]">menu</span>
+        Menu Frontend
+    </a>
+    <?php endif; ?>
+    
+    <div class="mt-auto mb-4">
+        <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-colors transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link" style="color: #ef4444; opacity: 0.9;" href="<?= base_url('logout') ?>">
+            <span class="material-symbols-outlined text-[20px]">logout</span>
+            Logout
+        </a>
+    </div>
 </nav>
 </aside>

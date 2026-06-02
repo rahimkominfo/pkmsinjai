@@ -24,7 +24,7 @@
                      data-title="<?= esc($galeri['judul'], 'attr') ?>"
                      data-images="<?= esc(json_encode($galeri['images']), 'attr') ?>">
                 <div class="relative aspect-video overflow-hidden">
-                    <img alt="<?= esc($galeri['judul']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="<?= esc($galeri['sampul_url']) ?>"/>
+                    <img alt="<?= esc($galeri['judul']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="<?= strpos($galeri['sampul_url'], 'http') === 0 ? esc($galeri['sampul_url']) : base_url(esc($galeri['sampul_url'])) ?>"/>
                     <div class="absolute top-4 left-4 bg-primary text-on-primary font-caption text-caption px-2 py-1 rounded shadow">
                         <?= esc($galeri['jumlah_foto']) ?> Foto
                     </div>
@@ -136,7 +136,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const imgData = currentImages[currentIndex];
         if (!imgData) return;
         
-        modalImage.src = imgData.gambar_url;
+        let url = imgData.gambar_url;
+        if (url && !url.startsWith('http')) {
+            const baseUrl = '<?= rtrim(base_url(), '/') ?>/';
+            url = baseUrl + (url.startsWith('/') ? url.substring(1) : url);
+        }
+        
+        modalImage.src = url;
         modalCaption.textContent = imgData.caption || '';
         currentImageIndexEl.textContent = currentIndex + 1;
         

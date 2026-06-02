@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\AntrianModel;
+use App\Models\PeranModel;
 
 class Antrian extends BaseAdminController
 {
@@ -28,8 +29,17 @@ class Antrian extends BaseAdminController
 
     public function create()
     {
+        $peranModel = new PeranModel();
+        $peran = $peranModel->findAll();
+        
+        // Filter peran yang tidak relevan untuk loket antrian
+        $peran = array_filter($peran, function($p) {
+            return !in_array($p['nama_peran'], ['Admin Dinkes', 'Editor', 'Penulis']);
+        });
+
         $data = [
-            'title' => 'Tambah Antrian'
+            'title' => 'Tambah Antrian',
+            'peran' => $peran
         ];
         return view('admin/antrian/form', $data);
     }
@@ -37,6 +47,7 @@ class Antrian extends BaseAdminController
     public function store()
     {
         $rules = [
+            'peran_id'=> 'required|numeric',
             'title'   => 'required|min_length[3]',
             'loket'   => 'required',
             'nomor'   => 'required',
@@ -53,6 +64,7 @@ class Antrian extends BaseAdminController
 
         $this->antrianModel->insert([
             'pkm_id'  => $pkm_id,
+            'peran_id'=> $this->request->getPost('peran_id') ?: null,
             'title'   => $this->request->getPost('title'),
             'loket'   => $this->request->getPost('loket'),
             'nomor'   => $this->request->getPost('nomor'),
@@ -74,9 +86,18 @@ class Antrian extends BaseAdminController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data antrian tidak ditemukan');
         }
 
+        $peranModel = new PeranModel();
+        $peran = $peranModel->findAll();
+        
+        // Filter peran yang tidak relevan untuk loket antrian
+        $peran = array_filter($peran, function($p) {
+            return !in_array($p['nama_peran'], ['Admin Dinkes', 'Editor', 'Penulis']);
+        });
+        
         $data = [
             'title'   => 'Edit Antrian',
-            'antrian' => $antrian
+            'antrian' => $antrian,
+            'peran'   => $peran
         ];
 
         return view('admin/antrian/form', $data);
@@ -91,6 +112,7 @@ class Antrian extends BaseAdminController
         }
 
         $rules = [
+            'peran_id'=> 'required|numeric',
             'title'   => 'required|min_length[3]',
             'loket'   => 'required',
             'nomor'   => 'required',
@@ -104,6 +126,7 @@ class Antrian extends BaseAdminController
         }
 
         $this->antrianModel->update($id, [
+            'peran_id'=> $this->request->getPost('peran_id') ?: null,
             'title'   => $this->request->getPost('title'),
             'loket'   => $this->request->getPost('loket'),
             'nomor'   => $this->request->getPost('nomor'),
@@ -124,5 +147,86 @@ class Antrian extends BaseAdminController
         }
 
         return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Gagal menghapus antrian.');
+    }
+
+    public function reset($id)
+    {
+        $antrian = $this->antrianModel->find($id);
+        
+        if (!$antrian) {
+            return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Gagal mereset, antrian tidak ditemukan.');
+        }
+
+        $nomor = trim($antrian['nomor']);
+        // Regex extracts non-digit prefix and the digit part
+        if (preg_match('/^(.*?)(\d+)$/', $nomor, $matches)) {
+            $prefix = $matches[1];
+            $digitLength = strlen($matches[2]);
+            if ($digitLength < 3) $digitLength = 3;
+            $newNomor = $prefix . str_repeat('0', $digitLength);
+        } else {
+            // Default padding if no numbers
+            $newNomor = $nomor . '000';
+        }
+
+        $this->antrianModel->update($id, [
+            'nomor' => $newNomor,
+            'tanggal' => date('Y-m-d')
+        ]);
+
+        return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('message', "Nomor antrian {$antrian['title']} berhasil direset kembali menjadi {$newNomor} dan tanggal diupdate menjadi hari ini.");
+    }
+
+    public function updateStatus($id)
+    {
+        $antrian = $this->antrianModel->find($id);
+        
+        if (!$antrian) {
+            return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Gagal mengupdate status, antrian tidak ditemukan.');
+        }
+
+        $status = $this->request->getPost('status');
+        
+        if (in_array($status, ['menunggu', 'dilayani', 'selesai', 'batal'])) {
+            $this->antrianModel->update($id, ['status' => $status]);
+            
+            // Catat log jika status menjadi selesai
+            if ($status === 'selesai') {
+                $logAntrianModel = new \App\Models\LogAntrianModel();
+                
+                // Ambil nomor antrian saat ini dan ekstrak total pengunjung (digit)
+                $nomor = trim($antrian['nomor']);
+                $total_pengunjung = 0;
+                if (preg_match('/(\d+)$/', $nomor, $matches)) {
+                    $total_pengunjung = (int)$matches[1];
+                }
+                
+                // Cek apakah hari ini sudah ada log untuk antrian ini
+                $existingLog = $logAntrianModel->where('antrian_id', $id)
+                                               ->where('tanggal', $antrian['tanggal'])
+                                               ->first();
+                                               
+                if ($existingLog) {
+                    $logAntrianModel->update($existingLog['id'], [
+                        'nomor_terakhir' => $nomor,
+                        'total_pengunjung' => $total_pengunjung
+                    ]);
+                } else {
+                    $logAntrianModel->insert([
+                        'pkm_id' => $antrian['pkm_id'],
+                        'antrian_id' => $antrian['id'],
+                        'peran_id' => $antrian['peran_id'],
+                        'title' => $antrian['title'],
+                        'nomor_terakhir' => $nomor,
+                        'total_pengunjung' => $total_pengunjung,
+                        'tanggal' => $antrian['tanggal']
+                    ]);
+                }
+            }
+
+            return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('message', "Status antrian {$antrian['title']} berhasil diubah menjadi {$status}.");
+        }
+
+        return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Status tidak valid.');
     }
 }

@@ -15,6 +15,7 @@ class AntrianModel extends Model
     
     protected $allowedFields    = [
         'pkm_id', 
+        'peran_id',
         'title', 
         'loket', 
         'nomor', 

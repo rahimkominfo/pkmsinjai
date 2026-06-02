@@ -9,10 +9,13 @@ class Berita extends BaseTenantController
         $pkm_id = tenant()->pkm_id;
         $artikelModel = new \App\Models\ArtikelModel();
 
+        $search = $this->request->getGet('q');
+
         // simple pagination or just list all
         $data = [
             'title' => 'Berita Terkini - ' . tenant()->pkm_nama,
-            'list_berita' => $artikelModel->getPublished($pkm_id)
+            'list_berita' => $artikelModel->getPublished($pkm_id, 0, $search),
+            'searchQuery' => $search
         ];
         return view('frontend/berita/index', $data);
     }
@@ -27,10 +30,15 @@ class Berita extends BaseTenantController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
+        // Increment view count (jumlah_tayang)
+        $artikelModel->update($artikel['artikel_id'], ['jumlah_tayang' => $artikel['jumlah_tayang'] + 1]);
+        $artikel['jumlah_tayang']++;
+
         $data = [
             'title' => esc($artikel['judul']) . ' - ' . tenant()->pkm_nama,
             'artikel' => $artikel,
-            'berita_terbaru' => $artikelModel->getPublished($pkm_id, 3)
+            'berita_terbaru' => $artikelModel->getPublished($pkm_id, 3),
+            'berita_terpopuler' => $artikelModel->getPopular($pkm_id, 4)
         ];
         return view('frontend/berita/detail', $data);
     }

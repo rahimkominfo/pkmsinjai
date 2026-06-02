@@ -71,6 +71,14 @@ class Pengaturan extends BaseAdminController
             'pkm_nama'      => $nama,
             'pkm_slug'      => $slug,
             'primary_color' => $this->request->getPost('primary_color') ?: '#006c4a',
+            'on_primary_color' => $this->request->getPost('on_primary_color') ?: '#ffffff',
+            'alamat'        => $this->request->getPost('alamat'),
+            'email'         => $this->request->getPost('email'),
+            'telepon'       => $this->request->getPost('telepon'),
+            'facebook'      => $this->request->getPost('facebook'),
+            'instagram'     => $this->request->getPost('instagram'),
+            'youtube'       => $this->request->getPost('youtube'),
+            'google_maps'   => $this->request->getPost('google_maps'),
         ];
 
         $uploadPath = FCPATH . 'uploads/' . $slug . '/pkm/';
@@ -162,7 +170,15 @@ class Pengaturan extends BaseAdminController
         $updateData = [
             'pkm_nama'      => $nama,
             'pkm_slug'      => $slug,
-            'primary_color' => $this->request->getPost('primary_color')
+            'primary_color' => $this->request->getPost('primary_color'),
+            'on_primary_color' => $this->request->getPost('on_primary_color'),
+            'alamat'        => $this->request->getPost('alamat'),
+            'email'         => $this->request->getPost('email'),
+            'telepon'       => $this->request->getPost('telepon'),
+            'facebook'      => $this->request->getPost('facebook'),
+            'instagram'     => $this->request->getPost('instagram'),
+            'youtube'       => $this->request->getPost('youtube'),
+            'google_maps'   => $this->request->getPost('google_maps'),
         ];
 
         $uploadPath = FCPATH . 'uploads/' . $slug . '/pkm/';

@@ -42,8 +42,8 @@
                         </td>
                         <td class="p-3 font-body-md text-body-md text-on-surface-variant"><?= esc($user['email']) ?></td>
                         <td class="p-3">
-                            <span class="font-label-sm text-[11px] <?= $user['peran'] === 'Admin' ? 'text-primary bg-primary/10 border-primary/20' : 'text-[#d97706] bg-[#d97706]/10 border-[#d97706]/20' ?> px-2 py-1 rounded border">
-                                <?= esc($user['peran']) ?>
+                            <span class="font-label-sm text-[11px] <?= in_array($user['peran'], ['Admin Dinkes', 'Admin PKM']) ? 'text-primary bg-primary/10 border-primary/20' : 'text-[#d97706] bg-[#d97706]/10 border-[#d97706]/20' ?> px-2 py-1 rounded border">
+                                <?= esc($user['peran'] ?? '-') ?>
                             </span>
                         </td>
                         <td class="p-3 font-body-md text-body-md text-on-surface-variant"><?= date('d M Y', strtotime($user['tanggal_daftar'])) ?></td>

@@ -32,6 +32,7 @@
                 </div>
 
                 <!-- PKM / Tenant -->
+                <?php if (session()->get('peran') === 'Admin Dinkes'): ?>
                 <div>
                     <label for="pkm_id" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Asal PKM (Tenant) <span class="text-error">*</span></label>
                     <select id="pkm_id" name="pkm_id" required class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all cursor-pointer">
@@ -44,6 +45,9 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <?php else: ?>
+                    <input type="hidden" name="pkm_id" value="<?= esc(tenant()->pkm_id) ?>">
+                <?php endif; ?>
 
                 <!-- Email -->
                 <div>
@@ -61,19 +65,36 @@
 
                 <!-- Peran -->
                 <div>
-                    <label for="peran" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Peran <span class="text-error">*</span></label>
-                    <select id="peran" name="peran" required class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all cursor-pointer">
-                        <option value="Kontributor" <?= old('peran', $user['peran'] ?? '') === 'Kontributor' ? 'selected' : '' ?>>Kontributor</option>
-                        <option value="Editor" <?= old('peran', $user['peran'] ?? '') === 'Editor' ? 'selected' : '' ?>>Editor</option>
-                        <option value="Admin" <?= old('peran', $user['peran'] ?? '') === 'Admin' ? 'selected' : '' ?>>Admin</option>
+                    <label for="peran_id" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Peran <span class="text-error">*</span></label>
+                    <select id="peran_id" name="peran_id" required class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all cursor-pointer">
+                        <?php foreach($roles as $r): ?>
+                            <option value="<?= $r['peran_id'] ?>" <?= old('peran_id', $user['peran_id'] ?? '') == $r['peran_id'] ? 'selected' : '' ?>><?= esc($r['nama_peran']) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 
                 <!-- Password -->
-                <div class="md:col-span-2">
-                    <label for="password" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Password <?= isset($user) ? '<span class="text-outline-variant font-normal">(Kosongkan jika tidak ingin mengubah)</span>' : '<span class="text-error">*</span>' ?></label>
-                    <input type="password" id="password" name="password" <?= !isset($user) ? 'required' : '' ?>
-                        class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
+                <div>
+                    <label for="password" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Password <?= isset($user) ? '<span class="text-outline-variant font-normal">(Kosongkan jika tak ubah)</span>' : '<span class="text-error">*</span>' ?></label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" <?= !isset($user) ? 'required' : '' ?>
+                            class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface pl-4 pr-10 py-2 transition-all">
+                        <button type="button" onclick="togglePassword('password', 'icon-pass')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+                            <span id="icon-pass" class="material-symbols-outlined text-[20px]">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Konfirmasi Password -->
+                <div>
+                    <label for="konfirmasi_password" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Konfirmasi Password <?= !isset($user) ? '<span class="text-error">*</span>' : '<span class="text-outline-variant font-normal">(Isi jika ubah password)</span>' ?></label>
+                    <div class="relative">
+                        <input type="password" id="konfirmasi_password" name="konfirmasi_password" <?= !isset($user) ? 'required' : '' ?>
+                            class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface pl-4 pr-10 py-2 transition-all">
+                        <button type="button" onclick="togglePassword('konfirmasi_password', 'icon-confirm')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+                            <span id="icon-confirm" class="material-symbols-outlined text-[20px]">visibility_off</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -89,4 +110,18 @@
         </form>
     </div>
 </div>
+
+<script>
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility';
+    } else {
+        input.type = 'password';
+        icon.textContent = 'visibility_off';
+    }
+}
+</script>
 <?= $this->endSection() ?>

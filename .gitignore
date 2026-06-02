@@ -1,3 +1,5 @@
+node_modules
+
 #-------------------------
 # Operating Specific Junk Files
 #-------------------------
@@ -84,7 +86,7 @@ php_errors.log
 #-------------------------
 # Composer
 #-------------------------
-vendor/
+# vendor/
 
 #-------------------------
 # IDE / Development Files

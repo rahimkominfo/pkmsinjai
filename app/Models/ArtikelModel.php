@@ -41,11 +41,21 @@ class ArtikelModel extends Model
         return $data;
     }
 
-    public function getPublished($pkm_id, $limit = 0)
+    public function getPublished($pkm_id, $limit = 0, $search = null)
     {
-        $builder = $this->where('pkm_id', $pkm_id)
-                        ->where('status', 'Ditayangkan')
-                        ->orderBy('tanggal_publikasi', 'DESC');
+        $builder = $this->select('trn_artikel.*, (SELECT mst_kategori.nama FROM trn_artikel_kategori JOIN mst_kategori ON mst_kategori.kategori_id = trn_artikel_kategori.kategori_id WHERE trn_artikel_kategori.artikel_id = trn_artikel.artikel_id LIMIT 1) as nama_kategori')
+                        ->where('trn_artikel.pkm_id', $pkm_id)
+                        ->where('trn_artikel.status', 'Ditayangkan');
+                        
+        if (!empty($search)) {
+            $builder->groupStart()
+                    ->like('trn_artikel.judul', $search)
+                    ->orLike('trn_artikel.abstrak', $search)
+                    ->orLike('trn_artikel.konten', $search)
+                    ->groupEnd();
+        }
+        
+        $builder->orderBy('trn_artikel.tanggal_publikasi', 'DESC');
         
         if ($limit > 0) {
             return $builder->findAll($limit);
@@ -55,10 +65,25 @@ class ArtikelModel extends Model
 
     public function getBySlug($slug, $pkm_id)
     {
-        return $this->where('slug', $slug)
-                    ->where('pkm_id', $pkm_id)
-                    ->where('status', 'Ditayangkan')
+        return $this->select('trn_artikel.*, (SELECT mst_kategori.nama FROM trn_artikel_kategori JOIN mst_kategori ON mst_kategori.kategori_id = trn_artikel_kategori.kategori_id WHERE trn_artikel_kategori.artikel_id = trn_artikel.artikel_id LIMIT 1) as nama_kategori')
+                    ->where('trn_artikel.slug', $slug)
+                    ->where('trn_artikel.pkm_id', $pkm_id)
+                    ->where('trn_artikel.status', 'Ditayangkan')
                     ->first();
+    }
+
+    public function getPopular($pkm_id, $limit = 5)
+    {
+        $builder = $this->select('trn_artikel.*, (SELECT mst_kategori.nama FROM trn_artikel_kategori JOIN mst_kategori ON mst_kategori.kategori_id = trn_artikel_kategori.kategori_id WHERE trn_artikel_kategori.artikel_id = trn_artikel.artikel_id LIMIT 1) as nama_kategori')
+                        ->where('trn_artikel.pkm_id', $pkm_id)
+                        ->where('trn_artikel.status', 'Ditayangkan')
+                        ->orderBy('trn_artikel.jumlah_tayang', 'DESC')
+                        ->orderBy('trn_artikel.tanggal_publikasi', 'DESC');
+        
+        if ($limit > 0) {
+            return $builder->findAll($limit);
+        }
+        return $builder->findAll();
     }
 
     public function getArtikelWithAuthor($pkm_id)

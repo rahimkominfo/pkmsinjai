@@ -31,6 +31,21 @@
                         class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
                 </div>
 
+                <!-- Hak Akses Peran -->
+                <div>
+                    <label for="peran_id" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Hak Akses Petugas <span class="text-error">*</span></label>
+                    <select id="peran_id" name="peran_id" required class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all cursor-pointer">
+                        <option value="">-- Pilih Hak Akses --</option>
+                        <?php if(isset($peran)): ?>
+                            <?php foreach($peran as $p): ?>
+                                <option value="<?= $p['peran_id'] ?>" <?= old('peran_id', $antrian['peran_id'] ?? '') == $p['peran_id'] ? 'selected' : '' ?>>
+                                    <?= esc($p['nama_peran']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
+                </div>
+
                 <!-- Nomor -->
                 <div>
                     <label for="nomor" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Nomor Antrian <span class="text-error">*</span></label>

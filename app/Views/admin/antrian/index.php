@@ -56,18 +56,27 @@
                                 elseif ($row['status'] === 'selesai') $statusColor = 'text-[#166534] bg-[#dcfce3] border-[#86efac]';
                                 elseif ($row['status'] === 'batal') $statusColor = 'text-error bg-error-container border-error';
                             ?>
-                            <span class="font-label-sm text-[11px] <?= $statusColor ?> px-2 py-1 rounded border uppercase">
-                                <?= esc($row['status']) ?>
-                            </span>
+                            <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/update_status/' . $row['id']) ?>" method="POST" class="inline-block m-0">
+                                <?= csrf_field() ?>
+                                <select name="status" onchange="this.form.submit()" class="font-label-sm text-[11px] <?= $statusColor ?> px-2 py-1 rounded border uppercase cursor-pointer outline-none appearance-none pr-6 bg-no-repeat" style="background-image: url('data:image/svg+xml;utf8,<svg fill=%22currentColor%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/></svg>'); background-position: right 2px top 50%; background-size: 16px;">
+                                    <option value="menunggu" <?= $row['status'] == 'menunggu' ? 'selected' : '' ?>>MENUNGGU</option>
+                                    <option value="dilayani" <?= $row['status'] == 'dilayani' ? 'selected' : '' ?>>DILAYANI</option>
+                                    <option value="selesai" <?= $row['status'] == 'selesai' ? 'selected' : '' ?>>SELESAI</option>
+                                    <option value="batal" <?= $row['status'] == 'batal' ? 'selected' : '' ?>>BATAL</option>
+                                </select>
+                            </form>
                         </td>
                         <td class="p-3 font-body-md text-body-md text-on-surface-variant">
                             <?= date('d M Y', strtotime($row['tanggal'])) ?>
                         </td>
                         <td class="p-3 text-right">
-                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/edit/' . $row['id']) ?>" class="text-primary hover:text-primary-container transition-colors p-1" title="Edit">
+                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/reset/' . $row['id']) ?>" onclick="return confirm('Apakah Anda yakin ingin mereset nomor antrian ini ke 0?')" class="text-[#d97706] hover:text-[#b45309] transition-colors p-1" title="Reset Nomor">
+                                <span class="material-symbols-outlined text-[20px]">restart_alt</span>
+                            </a>
+                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/edit/' . $row['id']) ?>" class="text-primary hover:text-primary-container transition-colors p-1 ml-1" title="Edit">
                                 <span class="material-symbols-outlined text-[20px]">edit</span>
                             </a>
-                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/delete/' . $row['id']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus antrian ini?')" class="text-error hover:text-error-container transition-colors p-1 ml-2" title="Hapus">
+                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/delete/' . $row['id']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus antrian ini?')" class="text-error hover:text-error-container transition-colors p-1 ml-1" title="Hapus">
                                 <span class="material-symbols-outlined text-[20px]">delete</span>
                             </a>
                         </td>

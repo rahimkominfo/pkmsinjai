@@ -39,7 +39,7 @@
                     <tr class="border-b border-surface-container-low hover:bg-[#eff4ff] transition-colors">
                         <td class="p-3">
                             <?php if ($row['gambar_utama']): ?>
-                                <img src="<?= base_url(esc($row['gambar_utama'])) ?>" alt="Sampul" class="w-12 h-12 object-cover rounded shadow-sm">
+                                <img src="<?= strpos($row['gambar_utama'], 'http') === 0 ? esc($row['gambar_utama']) : base_url(esc($row['gambar_utama'])) ?>" alt="Sampul" class="w-12 h-12 object-cover rounded shadow-sm">
                             <?php else: ?>
                                 <div class="w-12 h-12 bg-surface-variant rounded flex items-center justify-center text-outline-variant">
                                     <span class="material-symbols-outlined text-[20px]">image</span>
