@@ -47,14 +47,20 @@
 </head>
 <body class="bg-background text-on-surface antialiased flex h-screen overflow-hidden">
     <!-- SideNavBar -->
-    <aside class="fixed h-screen w-sidebar_width left-0 top-0 shadow-sm flex flex-col h-full py-base z-20 sidebar-tenant">
+    <aside id="sidebar" class="fixed h-screen w-sidebar_width left-0 top-0 shadow-lg md:shadow-sm flex flex-col h-full py-base z-30 sidebar-tenant -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
         <!-- Brand Header -->
-        <div class="px-6 py-6 mb-4 flex items-center gap-3">
-            <img alt="<?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?> Logo" class="w-10 h-10 object-contain" src="<?= base_url('assets/img/logo_sinjai.png') ?>"/>
-            <div>
-                <h1 class="text-headline-sm font-headline-sm font-bold sidebar-tenant-text"><?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?></h1>
-                <p class="font-label-sm text-label-sm sidebar-tenant-text-muted mt-1 uppercase tracking-wider"><?= session()->get('peran') ?></p>
+        <div class="px-6 py-6 mb-4 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <img alt="<?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?> Logo" class="w-10 h-10 object-contain" src="<?= base_url('assets/img/logo_sinjai.png') ?>"/>
+                <div>
+                    <h1 class="text-headline-sm font-headline-sm font-bold sidebar-tenant-text"><?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?></h1>
+                    <p class="font-label-sm text-label-sm sidebar-tenant-text-muted mt-1 uppercase tracking-wider"><?= session()->get('peran') ?></p>
+                </div>
             </div>
+            <!-- Close Button for Mobile -->
+            <button id="sidebar-close" class="md:hidden text-sidebar-tenant-text opacity-70 hover:opacity-100 transition-opacity">
+                <span class="material-symbols-outlined">close</span>
+            </button>
         </div>
         <!-- Navigation Links -->
         <nav class="flex-1 flex flex-col gap-1 overflow-y-auto">
@@ -140,34 +146,70 @@
         </nav>
     </aside>
 
+    <!-- Sidebar Backdrop for Mobile -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-20 hidden transition-opacity duration-300"></div>
+
     <!-- Main Wrapper -->
-    <div class="flex-1 ml-[280px] md:ml-sidebar_width flex flex-col h-screen relative">
+    <div class="flex-1 ml-0 md:ml-sidebar_width flex flex-col h-screen relative">
         <!-- TopNavBar -->
-        <header class="bg-surface fixed top-0 w-full md:w-[calc(100%-theme(spacing.sidebar_width))] h-16 border-b border-outline-variant flex justify-between items-center px-gutter z-10">
-            <div class="flex items-center gap-6">
-                <span class="hidden md:block text-headline-sm font-headline-sm text-on-surface"><?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?></span>
+        <header class="bg-surface fixed top-0 left-0 md:left-sidebar_width right-0 h-16 border-b border-outline-variant flex justify-between items-center px-4 md:px-gutter z-10">
+            <div class="flex items-center gap-3 md:gap-6">
+                <!-- Hamburger Menu Toggle -->
+                <button id="sidebar-toggle" class="md:hidden text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <span class="hidden lg:block text-headline-sm font-headline-sm text-on-surface"><?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?></span>
                 <div class="relative group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-[20px]">search</span>
-                    <input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface w-48 md:w-64 transition-all" placeholder="Search..." type="text"/>
+                    <input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface w-40 sm:w-48 md:w-64 transition-all" placeholder="Search..." type="text"/>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 md:gap-4">
                 <button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors flex items-center justify-center">
                     <span class="material-symbols-outlined">notifications</span>
                 </button>
-                <button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors flex items-center justify-center">
-                    <span class="material-symbols-outlined">settings</span>
-                </button>
-                <div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer ml-2 hover:opacity-80 transition-opacity">
+                <div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant cursor-pointer ml-1 md:ml-2 hover:opacity-80 transition-opacity">
                     <img alt="Administrator Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANBBr6wQMkq7K0dSIy0wUJ05OB6MUm5so6M9L6b_yy4GOAYg_R2Tj7gDRNivcqqXVKLwcm5be2qB08J2rr1Sx1bQ9qtT5Eh1RaOn_DmdqkHHWaKuo-mbkW6i9QncAsql4DV6Td33UkeQFwDDa7fZGnfFJ-LBClQQFO-Bb4FFKRHv0OKKxuiVu1EPZEEE5FJlVk5Z3gXB4EvqpyGcjIRHJbKRrI9Yxr9vtsktcUQ8TiEQG0Kzrs8zmMeLhrMPtc4XuK6jsC2hhyJ4A"/>
                 </div>
             </div>
         </header>
 
         <!-- Main Content Canvas -->
-        <main class="flex-1 overflow-y-auto pt-16 px-gutter py-margin_desktop bg-background">
+        <main class="flex-1 overflow-y-auto pt-16 px-4 md:px-gutter py-margin_desktop bg-background">
             <?= $this->renderSection('content') ?>
         </main>
     </div>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebarClose = document.getElementById('sidebar-close');
+            const backdrop = document.getElementById('sidebar-backdrop');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                backdrop.classList.toggle('hidden');
+                if (!backdrop.classList.contains('hidden')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', toggleSidebar);
+            }
+
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', toggleSidebar);
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', toggleSidebar);
+            }
+        });
+    </script>
 </body>
 </html>
