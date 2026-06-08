@@ -37,7 +37,7 @@ class Peran extends BaseAdminController
     {
         $rules = [
             'nama_peran' => 'required|is_unique[sys_peran.nama_peran]',
-            'deskripsi' => 'required'
+            'deskripsi' => 'permit_empty'
         ];
 
         if (!$this->validate($rules)) {
@@ -74,7 +74,7 @@ class Peran extends BaseAdminController
         $ruleNama = $peran['nama_peran'] == $this->request->getPost('nama_peran') ? 'required' : 'required|is_unique[sys_peran.nama_peran]';
         $rules = [
             'nama_peran' => $ruleNama,
-            'deskripsi' => 'required'
+            'deskripsi' => 'permit_empty'
         ];
 
         if (!$this->validate($rules)) {

@@ -23,11 +23,16 @@ class GaleriModel extends Model
 
     public function getGaleriWithCount($pkm_id)
     {
-        return $this->select('trn_galeri.*, COUNT(trn_galeri_gambar.galeri_gambar_id) as jumlah_foto')
-                    ->join('trn_galeri_gambar', 'trn_galeri_gambar.galeri_id = trn_galeri.galeri_id', 'left')
-                    ->where('trn_galeri.pkm_id', $pkm_id)
-                    ->groupBy('trn_galeri.galeri_id')
-                    ->orderBy('trn_galeri.created_at', 'DESC')
-                    ->findAll();
+        $builder = $this->select('trn_galeri.*, COUNT(trn_galeri_gambar.galeri_gambar_id) as jumlah_foto, mst_pkm.pkm_nama')
+                        ->join('trn_galeri_gambar', 'trn_galeri_gambar.galeri_id = trn_galeri.galeri_id', 'left')
+                        ->join('mst_pkm', 'mst_pkm.pkm_id = trn_galeri.pkm_id', 'left');
+                        
+        if ($pkm_id !== 'super' && $pkm_id !== '') {
+            $builder->where('trn_galeri.pkm_id', $pkm_id);
+        }
+        
+        return $builder->groupBy('trn_galeri.galeri_id')
+                       ->orderBy('trn_galeri.created_at', 'DESC')
+                       ->findAll();
     }
 }

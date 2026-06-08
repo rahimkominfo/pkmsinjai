@@ -18,11 +18,25 @@ class Antrian extends BaseAdminController
     public function index()
     {
         $pkm_id = tenant()->pkm_id;
+        
+        $filter_pkm_id = $pkm_id;
+        $selected_pkm = $this->request->getGet('pkm_id');
 
         $data = [
             'title'   => 'Manajemen Antrian',
-            'antrian' => $this->antrianModel->where('pkm_id', $pkm_id)->orderBy('tanggal', 'DESC')->orderBy('id', 'DESC')->findAll()
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+            
+            if ($selected_pkm !== null && $selected_pkm !== '') {
+                $filter_pkm_id = $selected_pkm;
+            }
+            $data['selected_pkm'] = $filter_pkm_id;
+        }
+
+        $data['antrian'] = $this->antrianModel->getAntrianList($filter_pkm_id);
 
         return view('admin/antrian/index', $data);
     }
@@ -41,6 +55,13 @@ class Antrian extends BaseAdminController
             'title' => 'Tambah Antrian',
             'peran' => $peran
         ];
+        
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
+        
         return view('admin/antrian/form', $data);
     }
 
@@ -55,12 +76,19 @@ class Antrian extends BaseAdminController
             'status'  => 'required|in_list[menunggu,dilayani,selesai,batal]',
             'tanggal' => 'required|valid_date'
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
 
         $this->antrianModel->insert([
             'pkm_id'  => $pkm_id,
@@ -80,7 +108,12 @@ class Antrian extends BaseAdminController
 
     public function edit($id)
     {
-        $antrian = $this->antrianModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $antrian = $this->antrianModel->find($id);
+        } else {
+            $antrian = $this->antrianModel->where('pkm_id', $pkm_id)->find($id);
+        }
 
         if (!$antrian) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data antrian tidak ditemukan');
@@ -99,13 +132,23 @@ class Antrian extends BaseAdminController
             'antrian' => $antrian,
             'peran'   => $peran
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
 
         return view('admin/antrian/form', $data);
     }
 
     public function update($id)
     {
-        $antrian = $this->antrianModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $antrian = $this->antrianModel->find($id);
+        } else {
+            $antrian = $this->antrianModel->where('pkm_id', $pkm_id)->find($id);
+        }
         
         if (!$antrian) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Data antrian tidak ditemukan');
@@ -120,12 +163,21 @@ class Antrian extends BaseAdminController
             'status'  => 'required|in_list[menunggu,dilayani,selesai,batal]',
             'tanggal' => 'required|valid_date'
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
 
         $this->antrianModel->update($id, [
+            'pkm_id'  => $pkm_id,
             'peran_id'=> $this->request->getPost('peran_id') ?: null,
             'title'   => $this->request->getPost('title'),
             'loket'   => $this->request->getPost('loket'),
@@ -142,16 +194,28 @@ class Antrian extends BaseAdminController
 
     public function delete($id)
     {
-        if ($this->antrianModel->delete($id)) {
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $antrian = $this->antrianModel->find($id);
+        } else {
+            $antrian = $this->antrianModel->where('pkm_id', $pkm_id)->find($id);
+        }
+        
+        if ($antrian && $this->antrianModel->delete($id)) {
             return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('message', 'Data antrian berhasil dihapus.');
         }
 
-        return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Gagal menghapus antrian.');
+        return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Gagal menghapus antrian atau data tidak ditemukan.');
     }
 
     public function reset($id)
     {
-        $antrian = $this->antrianModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $antrian = $this->antrianModel->find($id);
+        } else {
+            $antrian = $this->antrianModel->where('pkm_id', $pkm_id)->find($id);
+        }
         
         if (!$antrian) {
             return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Gagal mereset, antrian tidak ditemukan.');
@@ -179,7 +243,12 @@ class Antrian extends BaseAdminController
 
     public function updateStatus($id)
     {
-        $antrian = $this->antrianModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $antrian = $this->antrianModel->find($id);
+        } else {
+            $antrian = $this->antrianModel->where('pkm_id', $pkm_id)->find($id);
+        }
         
         if (!$antrian) {
             return redirect()->to('admin/' . tenant()->pkm_slug . '/antrian')->with('error', 'Gagal mengupdate status, antrian tidak ditemukan.');

@@ -17,11 +17,25 @@ class Menu extends BaseAdminController
     public function index()
     {
         $pkm_id = tenant()->pkm_id;
+        
+        $filter_pkm_id = $pkm_id;
+        $selected_pkm = $this->request->getGet('pkm_id');
 
         $data = [
             'title' => 'Manajemen Menu',
-            'menus' => $this->menuModel->getMenusWithInduk($pkm_id)
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+            
+            if ($selected_pkm !== null && $selected_pkm !== '') {
+                $filter_pkm_id = $selected_pkm;
+            }
+            $data['selected_pkm'] = $filter_pkm_id;
+        }
+
+        $data['menus'] = $this->menuModel->getMenusWithInduk($filter_pkm_id);
 
         return view('admin/menu/index', $data);
     }
@@ -29,11 +43,23 @@ class Menu extends BaseAdminController
     public function create()
     {
         $pkm_id = tenant()->pkm_id;
+        
+        $parentBuilder = $this->menuModel->where('parent_id', null);
+        if ($pkm_id !== 'super') {
+            $parentBuilder->where('pkm_id', $pkm_id);
+        } else {
+            $parentBuilder->select('mst_menu.*, mst_pkm.pkm_nama')->join('mst_pkm', 'mst_pkm.pkm_id = mst_menu.pkm_id', 'left');
+        }
 
         $data = [
             'title'        => 'Tambah Menu',
-            'parent_menus' => $this->menuModel->where('pkm_id', $pkm_id)->where('parent_id', null)->findAll()
+            'parent_menus' => $parentBuilder->findAll()
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
         
         return view('admin/menu/form', $data);
     }
@@ -44,6 +70,10 @@ class Menu extends BaseAdminController
             'title' => 'required|min_length[3]',
             'url'   => 'required'
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -51,9 +81,14 @@ class Menu extends BaseAdminController
 
         $parent_id = $this->request->getPost('parent_id');
         $is_active = $this->request->getPost('is_active') ? 1 : 0;
+        
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
 
         $this->menuModel->insert([
-            'pkm_id'     => tenant()->pkm_id,
+            'pkm_id'     => $pkm_id,
             'title'      => $this->request->getPost('title'),
             'url'        => $this->request->getPost('url'),
             'sort_order' => $this->request->getPost('sort_order') ?: 0,
@@ -67,20 +102,33 @@ class Menu extends BaseAdminController
     public function edit($id)
     {
         $pkm_id = tenant()->pkm_id;
-        $menu = $this->menuModel->find($id);
+        if ($pkm_id === 'super') {
+            $menu = $this->menuModel->find($id);
+        } else {
+            $menu = $this->menuModel->where('pkm_id', $pkm_id)->find($id);
+        }
 
-        if (!$menu || $menu['pkm_id'] != $pkm_id) {
+        if (!$menu) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Menu tidak ditemukan');
+        }
+        
+        $parentBuilder = $this->menuModel->where('id !=', $id)->where('parent_id', null);
+        if ($pkm_id !== 'super') {
+            $parentBuilder->where('pkm_id', $pkm_id);
+        } else {
+            $parentBuilder->select('mst_menu.*, mst_pkm.pkm_nama')->join('mst_pkm', 'mst_pkm.pkm_id = mst_menu.pkm_id', 'left');
         }
 
         $data = [
             'title'        => 'Edit Menu',
             'menu'         => $menu,
-            'parent_menus' => $this->menuModel->where('pkm_id', $pkm_id)
-                                              ->where('id !=', $id)
-                                              ->where('parent_id', null)
-                                              ->findAll()
+            'parent_menus' => $parentBuilder->findAll()
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
 
         return view('admin/menu/form', $data);
     }
@@ -88,9 +136,13 @@ class Menu extends BaseAdminController
     public function update($id)
     {
         $pkm_id = tenant()->pkm_id;
-        $menu = $this->menuModel->find($id);
+        if ($pkm_id === 'super') {
+            $menu = $this->menuModel->find($id);
+        } else {
+            $menu = $this->menuModel->where('pkm_id', $pkm_id)->find($id);
+        }
         
-        if (!$menu || $menu['pkm_id'] != $pkm_id) {
+        if (!$menu) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Menu tidak ditemukan');
         }
 
@@ -98,6 +150,10 @@ class Menu extends BaseAdminController
             'title' => 'required|min_length[3]',
             'url'   => 'required'
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -105,8 +161,13 @@ class Menu extends BaseAdminController
 
         $parent_id = $this->request->getPost('parent_id');
         $is_active = $this->request->getPost('is_active') ? 1 : 0;
+        
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
 
         $this->menuModel->update($id, [
+            'pkm_id'     => $pkm_id,
             'title'      => $this->request->getPost('title'),
             'url'        => $this->request->getPost('url'),
             'sort_order' => $this->request->getPost('sort_order') ?: 0,
@@ -120,9 +181,13 @@ class Menu extends BaseAdminController
     public function delete($id)
     {
         $pkm_id = tenant()->pkm_id;
-        $menu = $this->menuModel->find($id);
+        if ($pkm_id === 'super') {
+            $menu = $this->menuModel->find($id);
+        } else {
+            $menu = $this->menuModel->where('pkm_id', $pkm_id)->find($id);
+        }
         
-        if (!$menu || $menu['pkm_id'] != $pkm_id) {
+        if (!$menu) {
             return redirect()->to('admin/' . tenant()->pkm_slug . '/menu')->with('error', 'Menu tidak ditemukan.');
         }
         

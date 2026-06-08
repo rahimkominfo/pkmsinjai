@@ -3,10 +3,24 @@
 <div class="max-w-container_max_width mx-auto">
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h2 class="font-headline-lg text-headline-lg text-on-surface"><?= esc($title) ?></h2>
-        <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/create') ?>" class="bg-primary text-on-primary px-4 py-2 rounded font-data-table text-data-table hover:shadow-sm hover:-translate-y-[1px] transition-all flex items-center gap-2 self-start md:self-auto">
-            <span class="material-symbols-outlined text-[18px]">add</span>
-            Tambah Antrian
-        </a>
+        <div class="flex flex-col md:flex-row gap-4 items-center self-start md:self-auto">
+            <?php if (isset($list_pkm)): ?>
+                <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian') ?>" method="GET" class="flex items-center gap-2">
+                    <select name="pkm_id" onchange="this.form.submit()" class="bg-surface text-on-surface border border-outline px-3 py-2 rounded focus:outline-none focus:border-primary font-body-md text-body-md">
+                        <option value="super">Semua PKM</option>
+                        <?php foreach ($list_pkm as $pkm): ?>
+                            <option value="<?= esc($pkm['pkm_id']) ?>" <?= (isset($selected_pkm) && $selected_pkm == $pkm['pkm_id']) ? 'selected' : '' ?>>
+                                <?= esc($pkm['pkm_nama']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
+            <?php endif; ?>
+            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian/create') ?>" class="bg-primary text-on-primary px-4 py-2 rounded font-data-table text-data-table hover:shadow-sm hover:-translate-y-[1px] transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                Tambah Antrian
+            </a>
+        </div>
     </div>
 
     <?php if (session()->getFlashdata('message')): ?>
@@ -26,6 +40,9 @@
             <thead>
                 <tr class="border-b border-surface-variant text-outline-variant font-label-sm text-label-sm uppercase tracking-wider">
                     <th class="p-3">Info Layanan</th>
+                    <?php if (tenant()->pkm_id === 'super'): ?>
+                    <th class="p-3">PKM</th>
+                    <?php endif; ?>
                     <th class="p-3">Nomor Antrian</th>
                     <th class="p-3">Status</th>
                     <th class="p-3">Tanggal</th>
@@ -45,6 +62,11 @@
                                 <div class="font-label-sm text-label-sm text-outline-variant"><?= esc($row['loket']) ?> • <?= esc($row['petugas']) ?></div>
                             </div>
                         </td>
+                        <?php if (tenant()->pkm_id === 'super'): ?>
+                        <td class="p-3 font-body-md text-body-md text-on-surface-variant">
+                            <?= esc($row['pkm_nama'] ?? 'Unknown') ?>
+                        </td>
+                        <?php endif; ?>
                         <td class="p-3 font-headline-md text-headline-md text-primary font-bold">
                             <?= esc($row['nomor']) ?>
                         </td>
@@ -84,7 +106,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="5" class="p-4 text-center font-body-md text-outline-variant">Belum ada data antrian.</td>
+                        <td colspan="<?= tenant()->pkm_id === 'super' ? '6' : '5' ?>" class="p-4 text-center font-body-md text-outline-variant">Belum ada data antrian.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

@@ -3,10 +3,24 @@
 <div class="max-w-container_max_width mx-auto">
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h2 class="font-headline-lg text-headline-lg text-on-surface"><?= esc($title) ?></h2>
-        <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel/create') ?>" class="bg-primary text-on-primary px-4 py-2 rounded font-data-table text-data-table hover:shadow-sm hover:-translate-y-[1px] transition-all flex items-center gap-2 self-start md:self-auto">
-            <span class="material-symbols-outlined text-[18px]">add</span>
-            Tambah Artikel
-        </a>
+        <div class="flex flex-col md:flex-row gap-4 items-center self-start md:self-auto">
+            <?php if (isset($list_pkm)): ?>
+                <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel') ?>" method="GET" class="flex items-center gap-2">
+                    <select name="pkm_id" onchange="this.form.submit()" class="bg-surface text-on-surface border border-outline px-3 py-2 rounded focus:outline-none focus:border-primary font-body-md text-body-md">
+                        <option value="super">Semua PKM</option>
+                        <?php foreach ($list_pkm as $pkm): ?>
+                            <option value="<?= esc($pkm['pkm_id']) ?>" <?= (isset($selected_pkm) && $selected_pkm == $pkm['pkm_id']) ? 'selected' : '' ?>>
+                                <?= esc($pkm['pkm_nama']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
+            <?php endif; ?>
+            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel/create') ?>" class="bg-primary text-on-primary px-4 py-2 rounded font-data-table text-data-table hover:shadow-sm hover:-translate-y-[1px] transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                Tambah Artikel
+            </a>
+        </div>
     </div>
 
     <?php if (session()->getFlashdata('message')): ?>
@@ -27,6 +41,9 @@
                 <tr class="border-b border-surface-variant text-outline-variant font-label-sm text-label-sm uppercase tracking-wider">
                     <th class="p-3 w-16">Gambar</th>
                     <th class="p-3">Judul Artikel</th>
+                    <?php if (tenant()->pkm_id === 'super'): ?>
+                    <th class="p-3">PKM</th>
+                    <?php endif; ?>
                     <th class="p-3">Status</th>
                     <th class="p-3">Penulis</th>
                     <th class="p-3">Tanggal Publikasi</th>
@@ -50,6 +67,11 @@
                             <div class="font-data-table text-data-table text-on-surface font-semibold max-w-xs truncate" title="<?= esc($row['judul']) ?>"><?= esc($row['judul']) ?></div>
                             <div class="font-label-sm text-label-sm text-outline-variant truncate max-w-xs" title="<?= esc($row['abstrak']) ?>"><?= esc($row['abstrak']) ?></div>
                         </td>
+                        <?php if (tenant()->pkm_id === 'super'): ?>
+                        <td class="p-3 font-body-md text-body-md text-on-surface-variant">
+                            <?= esc($row['pkm_nama'] ?? 'Unknown') ?>
+                        </td>
+                        <?php endif; ?>
                         <td class="p-3">
                             <?php 
                                 $statusColor = 'text-outline bg-surface-variant border-outline-variant'; // Arsip
@@ -78,7 +100,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="p-4 text-center font-body-md text-outline-variant">Belum ada data artikel.</td>
+                        <td colspan="<?= tenant()->pkm_id === 'super' ? '7' : '6' ?>" class="p-4 text-center font-body-md text-outline-variant">Belum ada data artikel.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

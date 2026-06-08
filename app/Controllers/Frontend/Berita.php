@@ -30,9 +30,17 @@ class Berita extends BaseTenantController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Increment view count (jumlah_tayang)
-        $artikelModel->update($artikel['artikel_id'], ['jumlah_tayang' => $artikel['jumlah_tayang'] + 1]);
-        $artikel['jumlah_tayang']++;
+        // Increment view count (jumlah_tayang) with session check
+        $session = session();
+        $viewed_articles = $session->get('viewed_articles') ?? [];
+
+        if (!in_array($artikel['artikel_id'], $viewed_articles)) {
+            $artikelModel->update($artikel['artikel_id'], ['jumlah_tayang' => $artikel['jumlah_tayang'] + 1]);
+            $artikel['jumlah_tayang']++;
+            
+            $viewed_articles[] = $artikel['artikel_id'];
+            $session->set('viewed_articles', $viewed_articles);
+        }
 
         $data = [
             'title' => esc($artikel['judul']) . ' - ' . tenant()->pkm_nama,

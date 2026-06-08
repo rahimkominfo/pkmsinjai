@@ -22,4 +22,17 @@ class MediaModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
+
+    public function getMediaList($pkm_id)
+    {
+        $builder = $this->select('mst_media.*, mst_pkm.pkm_nama')
+                        ->join('mst_pkm', 'mst_pkm.pkm_id = mst_media.pkm_id', 'left');
+                        
+        if ($pkm_id !== 'super' && $pkm_id !== '') {
+            $builder->where('mst_media.pkm_id', $pkm_id);
+        }
+        
+        return $builder->orderBy('mst_media.created_at', 'DESC')
+                       ->findAll();
+    }
 }

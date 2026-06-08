@@ -23,12 +23,17 @@ class MenuModel extends Model
 
     public function getMenusWithInduk($pkm_id)
     {
-        return $this->select('mst_menu.*, induk.title as parent_title')
-                    ->join('mst_menu as induk', 'induk.id = mst_menu.parent_id', 'left')
-                    ->where('mst_menu.pkm_id', $pkm_id)
-                    ->orderBy('mst_menu.sort_order', 'ASC')
-                    ->orderBy('mst_menu.id', 'ASC')
-                    ->findAll();
+        $builder = $this->select('mst_menu.*, induk.title as parent_title, mst_pkm.pkm_nama')
+                        ->join('mst_menu as induk', 'induk.id = mst_menu.parent_id', 'left')
+                        ->join('mst_pkm', 'mst_pkm.pkm_id = mst_menu.pkm_id', 'left');
+                        
+        if ($pkm_id !== 'super' && $pkm_id !== '') {
+            $builder->where('mst_menu.pkm_id', $pkm_id);
+        }
+        
+        return $builder->orderBy('mst_menu.sort_order', 'ASC')
+                       ->orderBy('mst_menu.id', 'ASC')
+                       ->findAll();
     }
     
     public function getActiveTree($pkm_id)

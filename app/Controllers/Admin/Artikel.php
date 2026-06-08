@@ -19,12 +19,26 @@ class Artikel extends BaseAdminController
 
     public function index()
     {
-        $pkm_id = tenant()->pkm_id; // Dummy tenant ID
-
+        $pkm_id = tenant()->pkm_id;
+        
+        $filter_pkm_id = $pkm_id;
+        $selected_pkm = $this->request->getGet('pkm_id');
+        
         $data = [
             'title'   => 'Manajemen Artikel',
-            'artikel' => $this->artikelModel->getArtikelWithAuthor($pkm_id)
         ];
+
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+            
+            if ($selected_pkm !== null && $selected_pkm !== '') {
+                $filter_pkm_id = $selected_pkm;
+            }
+            $data['selected_pkm'] = $filter_pkm_id;
+        }
+
+        $data['artikel'] = $this->artikelModel->getArtikelWithAuthor($filter_pkm_id);
 
         return view('admin/artikel/index', $data);
     }
@@ -35,8 +49,13 @@ class Artikel extends BaseAdminController
 
         $data = [
             'title'    => 'Tambah Artikel',
-            'kategori' => $this->kategoriModel->where('pkm_id', $pkm_id)->findAll()
+            'kategori' => $pkm_id === 'super' ? $this->kategoriModel->findAll() : $this->kategoriModel->where('pkm_id', $pkm_id)->findAll()
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
         
         return view('admin/artikel/form', $data);
     }
@@ -54,6 +73,10 @@ class Artikel extends BaseAdminController
             'konten' => 'required|min_length[10]',
             'status' => 'required|in_list[Draf,Ditayangkan,Diarsipkan]'
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         if ($sumberGambar === 'upload') {
             $rules['gambar_utama'] = 'uploaded[gambar_utama]|is_image[gambar_utama]|mime_in[gambar_utama,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_utama,2048]';
@@ -66,6 +89,9 @@ class Artikel extends BaseAdminController
         }
 
         $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
         $user_id = session()->get('user_id');
         
         helper('text');
@@ -84,6 +110,14 @@ class Artikel extends BaseAdminController
             $fileGambar = $this->request->getFile('gambar_utama');
             if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
                 $pkm_slug = tenant()->pkm_slug;
+                if (tenant()->pkm_id === 'super') {
+                    $pkmModel = new \App\Models\PkmModel();
+                    $selectedPkm = $pkmModel->find($pkm_id);
+                    if ($selectedPkm) {
+                        $pkm_slug = $selectedPkm['pkm_slug'];
+                    }
+                }
+                
                 $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/media/';
                 if (!is_dir($uploadPath)) {
                     mkdir($uploadPath, 0775, true);
@@ -151,9 +185,14 @@ class Artikel extends BaseAdminController
         $data = [
             'title'           => 'Edit Artikel',
             'artikel'         => $artikel,
-            'kategori'        => $this->kategoriModel->where('pkm_id', $pkm_id)->findAll(),
+            'kategori'        => $pkm_id === 'super' ? $this->kategoriModel->findAll() : $this->kategoriModel->where('pkm_id', $pkm_id)->findAll(),
             'artikel_kategori'=> array_column($this->artikelModel->getCategories($id), 'kategori_id')
         ];
+
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
 
         return view('admin/artikel/form', $data);
     }
@@ -178,6 +217,10 @@ class Artikel extends BaseAdminController
             'status' => 'required|in_list[Draf,Ditayangkan,Diarsipkan]'
         ];
 
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
+
         if ($sumberGambar === 'upload' && $this->request->getFile('gambar_utama')->isValid()) {
             $rules['gambar_utama'] = 'is_image[gambar_utama]|mime_in[gambar_utama,image/jpg,image/jpeg,image/png,image/webp]|max_size[gambar_utama,2048]';
         } elseif ($sumberGambar === 'link' && !empty($this->request->getPost('gambar_utama_link'))) {
@@ -189,6 +232,10 @@ class Artikel extends BaseAdminController
         }
 
         $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
+        
         helper('text');
         $judul = $this->request->getPost('judul');
         $slug = url_title($judul, '-', true);
@@ -208,12 +255,24 @@ class Artikel extends BaseAdminController
             'abstrak' => $this->request->getPost('abstrak'),
             'status'  => $this->request->getPost('status')
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $updateData['pkm_id'] = $pkm_id;
+        }
 
         // Handle Gambar Utama
         if ($sumberGambar === 'upload') {
             $fileGambar = $this->request->getFile('gambar_utama');
             if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
                 $pkm_slug = tenant()->pkm_slug;
+                if (tenant()->pkm_id === 'super') {
+                    $pkmModel = new \App\Models\PkmModel();
+                    $selectedPkm = $pkmModel->find($pkm_id);
+                    if ($selectedPkm) {
+                        $pkm_slug = $selectedPkm['pkm_slug'];
+                    }
+                }
+                
                 $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/media/';
                 if (!is_dir($uploadPath)) {
                     mkdir($uploadPath, 0775, true);

@@ -44,13 +44,26 @@
                     <!-- Konten -->
                     <div>
                         <label for="konten" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Isi Konten <span class="text-error">*</span></label>
-                        <textarea id="konten" name="konten" rows="15" required
+                        <textarea id="konten" name="konten" rows="15"
                             class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all"><?= old('konten', $artikel['konten'] ?? '') ?></textarea>
                     </div>
                 </div>
 
                 <!-- Kanan: Sidebar Form -->
                 <div class="space-y-6">
+                    <?php if (isset($list_pkm)): ?>
+                    <!-- PKM (Super Admin Only) -->
+                    <div class="bg-surface p-4 rounded border border-surface-variant">
+                        <label for="pkm_id" class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Pilih PKM <span class="text-error">*</span></label>
+                        <select id="pkm_id" name="pkm_id" required class="w-full bg-surface-container-lowest border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-3 py-2 cursor-pointer">
+                            <option value="" disabled <?= old('pkm_id', $artikel['pkm_id'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih PKM --</option>
+                            <?php foreach ($list_pkm as $pkm): ?>
+                                <option value="<?= esc($pkm['pkm_id']) ?>" <?= old('pkm_id', $artikel['pkm_id'] ?? '') == $pkm['pkm_id'] ? 'selected' : '' ?>><?= esc($pkm['pkm_nama']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <?php endif; ?>
+
                     <!-- Status -->
                     <div class="bg-surface p-4 rounded border border-surface-variant">
                         <label for="status" class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Status Publikasi</label>
@@ -138,6 +151,13 @@
     </div>
 </div>
 
+<style>
+.ck-editor__editable_inline {
+    min-height: 400px;
+}
+</style>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 <script>
 function toggleGambar(val) {
     if (val === 'upload') {
@@ -148,5 +168,13 @@ function toggleGambar(val) {
         document.getElementById('gambar_link_container').classList.remove('hidden');
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    ClassicEditor
+        .create(document.querySelector('#konten'))
+        .catch(error => {
+            console.error(error);
+        });
+});
 </script>
 <?= $this->endSection() ?>

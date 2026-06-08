@@ -4,6 +4,18 @@
     <div class="mb-8">
         <h2 class="font-headline-lg text-headline-lg text-on-surface"><?= esc($title) ?></h2>
         <p class="font-body-md text-on-surface-variant mt-2">Atur nomor urut antrian untuk loket atau poli yang aktif hari ini. Anda bisa mengubahnya menggunakan tombol tambah/kurang atau mengetik langsung nomornya.</p>
+        <?php if (isset($list_pkm)): ?>
+            <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian-loket') ?>" method="GET" class="mt-4 flex items-center gap-2">
+                <select name="pkm_id" onchange="this.form.submit()" class="bg-surface text-on-surface border border-outline px-3 py-2 rounded focus:outline-none focus:border-primary font-body-md text-body-md">
+                    <option value="super">Semua PKM</option>
+                    <?php foreach ($list_pkm as $pkm): ?>
+                        <option value="<?= esc($pkm['pkm_id']) ?>" <?= (isset($selected_pkm) && $selected_pkm == $pkm['pkm_id']) ? 'selected' : '' ?>>
+                            <?= esc($pkm['pkm_nama']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+        <?php endif; ?>
     </div>
 
     <?php if (session()->getFlashdata('message')): ?>
@@ -28,6 +40,9 @@
                         <div>
                             <h3 class="font-headline-sm text-on-surface line-clamp-1" title="<?= esc($row['title']) ?>"><?= esc($row['title']) ?></h3>
                             <p class="text-label-sm text-outline-variant line-clamp-1"><?= esc($row['loket']) ?> &bull; <?= esc($row['petugas']) ?></p>
+                            <?php if (tenant()->pkm_id === 'super'): ?>
+                                <span class="inline-block mt-1 text-[10px] bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded font-medium"><?= esc($row['pkm_nama'] ?? 'Unknown') ?></span>
+                            <?php endif; ?>
                         </div>
                     </div>
                     

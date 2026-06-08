@@ -88,11 +88,16 @@ class ArtikelModel extends Model
 
     public function getArtikelWithAuthor($pkm_id)
     {
-        return $this->select('trn_artikel.*, sys_users.nama_publik as penulis')
-                    ->join('sys_users', 'sys_users.user_id = trn_artikel.user_id', 'left')
-                    ->where('trn_artikel.pkm_id', $pkm_id)
-                    ->orderBy('trn_artikel.tanggal_publikasi', 'DESC')
-                    ->findAll();
+        $builder = $this->select('trn_artikel.*, sys_users.nama_publik as penulis, mst_pkm.pkm_nama')
+                        ->join('sys_users', 'sys_users.user_id = trn_artikel.user_id', 'left')
+                        ->join('mst_pkm', 'mst_pkm.pkm_id = trn_artikel.pkm_id', 'left');
+                        
+        if ($pkm_id !== 'super' && $pkm_id !== '') {
+            $builder->where('trn_artikel.pkm_id', $pkm_id);
+        }
+        
+        return $builder->orderBy('trn_artikel.tanggal_publikasi', 'DESC')
+                       ->findAll();
     }
 
     public function getCategories($artikel_id)

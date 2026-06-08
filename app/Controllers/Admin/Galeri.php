@@ -20,20 +20,41 @@ class Galeri extends BaseAdminController
     public function index()
     {
         $pkm_id = tenant()->pkm_id;
+        
+        $filter_pkm_id = $pkm_id;
+        $selected_pkm = $this->request->getGet('pkm_id');
 
         $data = [
             'title'  => 'Manajemen Galeri',
-            'galeri' => $this->galeriModel->getGaleriWithCount($pkm_id)
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+            
+            if ($selected_pkm !== null && $selected_pkm !== '') {
+                $filter_pkm_id = $selected_pkm;
+            }
+            $data['selected_pkm'] = $filter_pkm_id;
+        }
+
+        $data['galeri'] = $this->galeriModel->getGaleriWithCount($filter_pkm_id);
 
         return view('admin/galeri/index', $data);
     }
 
     public function create()
     {
+        $pkm_id = tenant()->pkm_id;
         $data = [
             'title' => 'Tambah Galeri'
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
+        
         return view('admin/galeri/form', $data);
     }
 
@@ -43,13 +64,28 @@ class Galeri extends BaseAdminController
             'judul'      => 'required|min_length[3]',
             'sampul_url' => 'uploaded[sampul_url]|is_image[sampul_url]|mime_in[sampul_url,image/jpg,image/jpeg,image/png,image/webp]|max_size[sampul_url,2048]'
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
+        
         $pkm_slug = tenant()->pkm_slug;
+        if (tenant()->pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $selectedPkm = $pkmModel->find($pkm_id);
+            if ($selectedPkm) {
+                $pkm_slug = $selectedPkm['pkm_slug'];
+            }
+        }
         
         // Ensure directory exists
         $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/galeri/';
@@ -101,7 +137,12 @@ class Galeri extends BaseAdminController
 
     public function edit($id)
     {
-        $galeri = $this->galeriModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $galeri = $this->galeriModel->find($id);
+        } else {
+            $galeri = $this->galeriModel->where('pkm_id', $pkm_id)->find($id);
+        }
 
         if (!$galeri) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Galeri tidak ditemukan');
@@ -112,13 +153,23 @@ class Galeri extends BaseAdminController
             'galeri' => $galeri,
             'foto'   => $this->gambarModel->where('galeri_id', $id)->findAll()
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+        }
 
         return view('admin/galeri/form', $data);
     }
 
     public function update($id)
     {
-        $galeri = $this->galeriModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $galeri = $this->galeriModel->find($id);
+        } else {
+            $galeri = $this->galeriModel->where('pkm_id', $pkm_id)->find($id);
+        }
         
         if (!$galeri) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Galeri tidak ditemukan');
@@ -127,6 +178,10 @@ class Galeri extends BaseAdminController
         $rules = [
             'judul' => 'required|min_length[3]'
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         // Jika upload sampul baru
         if ($this->request->getFile('sampul_url')->isValid()) {
@@ -136,13 +191,30 @@ class Galeri extends BaseAdminController
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
+        }
 
         $updateData = [
             'judul'     => $this->request->getPost('judul'),
             'deskripsi' => $this->request->getPost('deskripsi')
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $updateData['pkm_id'] = $pkm_id;
+        }
 
         $pkm_slug = tenant()->pkm_slug;
+        if (tenant()->pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $selectedPkm = $pkmModel->find($pkm_id);
+            if ($selectedPkm) {
+                $pkm_slug = $selectedPkm['pkm_slug'];
+            }
+        }
+        
         $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/galeri/';
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0775, true);
@@ -176,7 +248,7 @@ class Galeri extends BaseAdminController
                     
                     $this->gambarModel->insert([
                         'galeri_id'  => $id,
-                        'pkm_id'     => tenant()->pkm_id,
+                        'pkm_id'     => $pkm_id,
                         'gambar_url' => 'uploads/' . $pkm_slug . '/galeri/' . $newNameWebp,
                         'caption'    => null
                     ]);
@@ -189,12 +261,19 @@ class Galeri extends BaseAdminController
 
     public function delete($id)
     {
-        if ($this->galeriModel->delete($id)) {
+        $pkm_id = tenant()->pkm_id;
+        if ($pkm_id === 'super') {
+            $galeri = $this->galeriModel->find($id);
+        } else {
+            $galeri = $this->galeriModel->where('pkm_id', $pkm_id)->find($id);
+        }
+        
+        if ($galeri && $this->galeriModel->delete($id)) {
             // Note: Foto-foto tidak dihapus fisik demi history (atau bisa gunakan event model untuk menghapus file fisik).
             return redirect()->to('admin/' . tenant()->pkm_slug . '/galeri')->with('message', 'Galeri berhasil dihapus.');
         }
 
-        return redirect()->to('admin/' . tenant()->pkm_slug . '/galeri')->with('error', 'Gagal menghapus galeri.');
+        return redirect()->to('admin/' . tenant()->pkm_slug . '/galeri')->with('error', 'Gagal menghapus galeri atau data tidak ditemukan.');
     }
 
     public function delete_foto($foto_id)

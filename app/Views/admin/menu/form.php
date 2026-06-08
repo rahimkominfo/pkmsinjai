@@ -23,6 +23,18 @@
         <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/menu/' . (isset($menu) ? 'update/' . $menu['id'] : 'store')) ?>" method="POST">
             <?= csrf_field() ?>
 
+            <?php if (isset($list_pkm)): ?>
+            <div class="mb-6">
+                <label for="pkm_id" class="block font-label-md text-label-md text-on-surface mb-2">Pilih PKM <span class="text-error">*</span></label>
+                <select id="pkm_id" name="pkm_id" required class="w-full border border-outline px-4 py-3 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-surface text-on-surface font-body-lg text-body-lg cursor-pointer">
+                    <option value="" disabled <?= old('pkm_id', $menu['pkm_id'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih PKM --</option>
+                    <?php foreach ($list_pkm as $pkm): ?>
+                        <option value="<?= esc($pkm['pkm_id']) ?>" <?= old('pkm_id', $menu['pkm_id'] ?? '') == $pkm['pkm_id'] ? 'selected' : '' ?>><?= esc($pkm['pkm_nama']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <?php endif; ?>
+
             <div class="mb-6">
                 <label for="title" class="block font-label-md text-label-md text-on-surface mb-2">Judul Menu <span class="text-error">*</span></label>
                 <input type="text" id="title" name="title" value="<?= old('title', $menu['title'] ?? '') ?>" class="w-full border border-outline px-4 py-3 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-surface text-on-surface font-body-lg text-body-lg" required placeholder="Contoh: Profil">
@@ -40,7 +52,7 @@
                     <option value="">-- Pilih Induk Menu (Utama) --</option>
                     <?php foreach ($parent_menus as $p): ?>
                         <option value="<?= $p['id'] ?>" <?= old('parent_id', $menu['parent_id'] ?? '') == $p['id'] ? 'selected' : '' ?>>
-                            <?= esc($p['title']) ?>
+                            <?= esc($p['title']) ?><?= isset($p['pkm_nama']) ? ' - (' . esc($p['pkm_nama']) . ')' : '' ?>
                         </option>
                     <?php endforeach; ?>
                 </select>

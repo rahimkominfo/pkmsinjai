@@ -11,9 +11,14 @@ class AntrianCell extends Cell
         $antrianModel = new \App\Models\AntrianModel();
         
         // Fetch active queue data for today
-        $antrianData = $antrianModel->where('tanggal', date('Y-m-d'))
-                                    ->where('status', 'dilayani')
-                                    ->findAll();
+        $query = $antrianModel->where('tanggal', date('Y-m-d'))
+                              ->where('status', 'dilayani');
+                              
+        if (function_exists('tenant') && tenant() && isset(tenant()->pkm_id)) {
+            $query->where('pkm_id', tenant()->pkm_id);
+        }
+        
+        $antrianData = $query->findAll();
                                     
         foreach ($antrianData as &$item) {
             $updatedAt = strtotime($item['updated_at']);

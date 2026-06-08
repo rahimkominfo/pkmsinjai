@@ -17,10 +17,24 @@ class Media extends BaseAdminController
     {
         $pkm_id = tenant()->pkm_id;
         
+        $filter_pkm_id = $pkm_id;
+        $selected_pkm = $this->request->getGet('pkm_id');
+        
         $data = [
             'title' => 'Manajemen Media - ' . tenant()->pkm_nama,
-            'list_media' => $this->mediaModel->where('pkm_id', $pkm_id)->orderBy('created_at', 'DESC')->findAll(),
         ];
+        
+        if ($pkm_id === 'super') {
+            $pkmModel = new \App\Models\PkmModel();
+            $data['list_pkm'] = $pkmModel->findAll();
+            
+            if ($selected_pkm !== null && $selected_pkm !== '') {
+                $filter_pkm_id = $selected_pkm;
+            }
+            $data['selected_pkm'] = $filter_pkm_id;
+        }
+        
+        $data['list_media'] = $this->mediaModel->getMediaList($filter_pkm_id);
         
         return view('admin/media/index', $data);
     }
@@ -32,14 +46,30 @@ class Media extends BaseAdminController
         $rules = [
             'file_media' => 'uploaded[file_media]|max_size[file_media,10240]|mime_in[file_media,image/jpg,image/jpeg,image/png,image/webp,application/pdf]',
         ];
+        
+        if (tenant()->pkm_id === 'super') {
+            $rules['pkm_id'] = 'required';
+        }
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->with('error', 'Gagal mengunggah file. Pastikan format valid dan ukuran maksimal 10MB.');
+            return redirect()->back()->with('error', 'Gagal mengunggah file. Pastikan format valid, ukuran maksimal 10MB, dan form terisi lengkap.');
+        }
+
+        if ($pkm_id === 'super') {
+            $pkm_id = $this->request->getPost('pkm_id');
         }
 
         $file = $this->request->getFile('file_media');
         if ($file->isValid() && !$file->hasMoved()) {
             $pkm_slug = tenant()->pkm_slug;
+            if (tenant()->pkm_id === 'super') {
+                $pkmModel = new \App\Models\PkmModel();
+                $selectedPkm = $pkmModel->find($pkm_id);
+                if ($selectedPkm) {
+                    $pkm_slug = $selectedPkm['pkm_slug'];
+                }
+            }
+            
             $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/media/';
             
             if (!is_dir($uploadPath)) {
@@ -66,7 +96,12 @@ class Media extends BaseAdminController
     public function delete($id)
     {
         $pkm_id = tenant()->pkm_id;
-        $media = $this->mediaModel->where('pkm_id', $pkm_id)->find($id);
+        
+        if ($pkm_id === 'super') {
+            $media = $this->mediaModel->find($id);
+        } else {
+            $media = $this->mediaModel->where('pkm_id', $pkm_id)->find($id);
+        }
 
         if ($media) {
             $this->mediaModel->delete($id);

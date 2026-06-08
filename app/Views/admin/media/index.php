@@ -5,10 +5,24 @@
     <!-- Header Section -->
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h2 class="font-headline-lg text-headline-lg text-on-surface">Manajemen Media</h2>
-        <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="bg-primary text-on-primary px-4 py-2 rounded font-data-table text-data-table hover:shadow-sm hover:-translate-y-[1px] transition-all flex items-center gap-2 self-start md:self-auto">
-            <span class="material-symbols-outlined text-[18px]">upload</span>
-            Unggah Media
-        </button>
+        <div class="flex flex-col md:flex-row gap-4 items-center self-start md:self-auto">
+            <?php if (isset($list_pkm)): ?>
+                <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/media') ?>" method="GET" class="flex items-center gap-2">
+                    <select name="pkm_id" onchange="this.form.submit()" class="bg-surface text-on-surface border border-outline px-3 py-2 rounded focus:outline-none focus:border-primary font-body-md text-body-md">
+                        <option value="super">Semua PKM</option>
+                        <?php foreach ($list_pkm as $pkm): ?>
+                            <option value="<?= esc($pkm['pkm_id']) ?>" <?= (isset($selected_pkm) && $selected_pkm == $pkm['pkm_id']) ? 'selected' : '' ?>>
+                                <?= esc($pkm['pkm_nama']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
+            <?php endif; ?>
+            <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="bg-primary text-on-primary px-4 py-2 rounded font-data-table text-data-table hover:shadow-sm hover:-translate-y-[1px] transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">upload</span>
+                Unggah Media
+            </button>
+        </div>
     </div>
 
     <!-- Feedback Messages -->
@@ -32,6 +46,9 @@
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant w-16">#</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Pratinjau</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Info File</th>
+                        <?php if (tenant()->pkm_id === 'super'): ?>
+                        <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">PKM</th>
+                        <?php endif; ?>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">URL File</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant text-right">Aksi</th>
                     </tr>
@@ -57,6 +74,11 @@
                                         Diunggah: <?= date('d M Y, H:i', strtotime($media['created_at'])) ?>
                                     </div>
                                 </td>
+                                <?php if (tenant()->pkm_id === 'super'): ?>
+                                <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">
+                                    <?= esc($media['pkm_nama'] ?? 'Unknown') ?>
+                                </td>
+                                <?php endif; ?>
                                 <td class="px-6 py-4">
                                     <input type="text" readonly value="<?= strpos($media['url_file'], 'http') === 0 ? esc($media['url_file']) : base_url(esc($media['url_file'])) ?>" class="bg-surface-container w-full p-2 rounded text-xs border border-surface-variant cursor-text outline-none focus:border-primary" onclick="this.select()">
                                 </td>
@@ -74,7 +96,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-on-surface-variant">
+                            <td colspan="<?= tenant()->pkm_id === 'super' ? '6' : '5' ?>" class="px-6 py-8 text-center text-on-surface-variant">
                                 <span class="material-symbols-outlined text-[48px] mb-2 text-outline">perm_media</span>
                                 <p>Belum ada media yang diunggah.</p>
                             </td>
@@ -97,6 +119,17 @@
         </div>
         <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/media/store') ?>" method="post" enctype="multipart/form-data" class="flex-1 flex flex-col">
             <div class="p-6 flex-1 bg-background">
+                <?php if (isset($list_pkm)): ?>
+                <div class="mb-4">
+                    <label class="block font-label-md text-label-md text-on-surface mb-1">Pilih PKM <span class="text-error">*</span></label>
+                    <select name="pkm_id" required class="w-full bg-surface-container-lowest border border-surface-variant rounded p-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface transition-all">
+                        <option value="" disabled selected>-- Pilih PKM --</option>
+                        <?php foreach ($list_pkm as $pkm): ?>
+                            <option value="<?= esc($pkm['pkm_id']) ?>"><?= esc($pkm['pkm_nama']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
                 <div class="mb-4">
                     <label class="block font-label-md text-label-md text-on-surface mb-1">Pilih File (Max 10MB)</label>
                     <input type="file" name="file_media" required accept="image/*,application/pdf" class="w-full bg-surface-container-lowest border border-surface-variant rounded p-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface transition-all">

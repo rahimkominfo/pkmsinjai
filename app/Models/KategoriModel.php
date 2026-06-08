@@ -29,9 +29,14 @@ class KategoriModel extends Model
     // Helper untuk mengambil kategori beserta nama induknya (jika ada)
     public function getKategoriWithInduk($pkm_id)
     {
-        return $this->select('mst_kategori.*, induk.nama as nama_induk')
-                    ->join('mst_kategori as induk', 'induk.kategori_id = mst_kategori.kategori_induk_id', 'left')
-                    ->where('mst_kategori.pkm_id', $pkm_id)
-                    ->findAll();
+        $builder = $this->select('mst_kategori.*, induk.nama as nama_induk, mst_pkm.pkm_nama')
+                        ->join('mst_kategori as induk', 'induk.kategori_id = mst_kategori.kategori_induk_id', 'left')
+                        ->join('mst_pkm', 'mst_pkm.pkm_id = mst_kategori.pkm_id', 'left');
+                        
+        if ($pkm_id !== 'super' && $pkm_id !== '') {
+            $builder->where('mst_kategori.pkm_id', $pkm_id);
+        }
+        
+        return $builder->findAll();
     }
 }

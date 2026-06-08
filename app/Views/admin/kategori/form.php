@@ -24,6 +24,19 @@
             <?= csrf_field() ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <?php if (isset($list_pkm)): ?>
+                <!-- PKM (Super Admin Only) -->
+                <div class="md:col-span-2">
+                    <label for="pkm_id" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Pilih PKM <span class="text-error">*</span></label>
+                    <select id="pkm_id" name="pkm_id" required class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all cursor-pointer">
+                        <option value="" disabled <?= old('pkm_id', $kategori['pkm_id'] ?? '') === '' ? 'selected' : '' ?>>-- Pilih PKM --</option>
+                        <?php foreach ($list_pkm as $pkm): ?>
+                            <option value="<?= esc($pkm['pkm_id']) ?>" <?= old('pkm_id', $kategori['pkm_id'] ?? '') == $pkm['pkm_id'] ? 'selected' : '' ?>><?= esc($pkm['pkm_nama']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+
                 <!-- Nama Kategori -->
                 <div class="md:col-span-2">
                     <label for="nama" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Nama Kategori <span class="text-error">*</span></label>

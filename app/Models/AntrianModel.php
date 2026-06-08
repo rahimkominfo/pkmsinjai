@@ -41,4 +41,18 @@ class AntrianModel extends Model
                     ->orderBy('id', 'DESC')
                     ->findAll();
     }
+
+    public function getAntrianList($pkm_id)
+    {
+        $builder = $this->select('trn_antrian.*, mst_pkm.pkm_nama')
+                        ->join('mst_pkm', 'mst_pkm.pkm_id = trn_antrian.pkm_id', 'left');
+                        
+        if ($pkm_id !== 'super' && $pkm_id !== '') {
+            $builder->where('trn_antrian.pkm_id', $pkm_id);
+        }
+        
+        return $builder->orderBy('trn_antrian.tanggal', 'DESC')
+                       ->orderBy('trn_antrian.id', 'DESC')
+                       ->findAll();
+    }
 }
