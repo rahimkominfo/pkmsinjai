@@ -1,3 +1,20 @@
+## [v1.0.5] - 2026-06-09
+### ✨ Added
+- Fitur Teks Berjalan (*Running Text*) pada halaman utama PKM untuk pengumuman atau tips kesehatan.
+- Menu manajemen Teks Berjalan di SideNavBar Admin (`admin/(:segment)/running-text`) untuk Admin Dinkes dan Admin PKM.
+- Tabel database baru `mst_running_text` untuk menyimpan data teks berjalan per tenant.
+- Seeder `RunningTextSeeder` untuk data pengumuman awal.
+- Implementasi *Hamburger Menu* (Sidebar Mobile) pada halaman frontend untuk navigasi yang responsif di perangkat seluler.
+
+## [v1.0.4] - 2026-06-09
+### 🐛 Fixed
+- Perbaikan tampilan konten artikel pada halaman detail berita yang menampilkan tag HTML mentah. Kini HTML dirender dengan benar (seperti huruf tebal, miring, dsb).
+
+### 🔄 Changed
+- Implementasi pewarnaan dinamis pada `SideNavBar` di Dashboard Admin menggunakan kolom `primary_color` dan `on_primary_color` dari tabel `mst_pkm`.
+- Implementasi pewarnaan dinamis pada Navbar Frontend menggunakan kolom `primary_color` dan `on_primary_color` dari tabel `mst_pkm`.
+- Sinkronisasi `PkmSeeder` untuk menyertakan `on_primary_color` default (Putih) untuk seluruh tenant PKM.
+
 ## [v1.0.3] - 2026-05-29
 ### ✨ Added
 - Sistem Login otentikasi Admin (`/login`) dengan UI standar Tailwind CSS dan Material Symbols.

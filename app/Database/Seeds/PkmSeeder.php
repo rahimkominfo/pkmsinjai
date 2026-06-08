@@ -13,25 +13,28 @@ class PkmSeeder extends Seeder
 
         $data = [
             [
-                'pkm_nama'      => 'PKM Balangnipa',
-                'pkm_slug'      => 'balangnipa',
-                'primary_color' => '#006c4a',
-                'logo'          => null,
-                'header_img'    => null,
+                'pkm_nama'         => 'PKM Balangnipa',
+                'pkm_slug'         => 'balangnipa',
+                'primary_color'    => '#006c4a',
+                'on_primary_color' => '#ffffff',
+                'logo'             => null,
+                'header_img'       => null,
             ],
             [
-                'pkm_nama'      => 'PKM Panaikang',
-                'pkm_slug'      => 'panaikang',
-                'primary_color' => '#0284c7', // Sky blue example
-                'logo'          => null,
-                'header_img'    => null,
+                'pkm_nama'         => 'PKM Panaikang',
+                'pkm_slug'         => 'panaikang',
+                'primary_color'    => '#0284c7',
+                'on_primary_color' => '#ffffff',
+                'logo'             => null,
+                'header_img'       => null,
             ],
             [
-                'pkm_nama'      => 'PKM Samataring',
-                'pkm_slug'      => 'samataring',
-                'primary_color' => '#ea580c', // Orange example
-                'logo'          => null,
-                'header_img'    => null,
+                'pkm_nama'         => 'PKM Samataring',
+                'pkm_slug'         => 'samataring',
+                'primary_color'    => '#ea580c',
+                'on_primary_color' => '#ffffff',
+                'logo'             => null,
+                'header_img'       => null,
             ]
         ];
 

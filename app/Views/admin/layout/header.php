@@ -102,6 +102,10 @@
         <span class="material-symbols-outlined text-[20px]">group</span>
         Pengguna
     </a>
+    <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/running-text') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/running-text') ?>">
+        <span class="material-symbols-outlined text-[20px]">campaign</span>
+        Teks Berjalan
+    </a>
     <?php endif; ?>
 
     <?php if($role === 'Admin Dinkes'): ?>

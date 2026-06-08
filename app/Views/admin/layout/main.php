@@ -31,7 +31,7 @@
         }
         .sidebar-tenant-link {
             color: var(--tenant-on-primary);
-            opacity: 0.8;
+            opacity: 0.9;
             border-color: transparent;
         }
         .sidebar-tenant-link:hover {
@@ -58,7 +58,7 @@
                 </div>
             </div>
             <!-- Close Button for Mobile -->
-            <button id="sidebar-close" class="md:hidden text-sidebar-tenant-text opacity-70 hover:opacity-100 transition-opacity">
+            <button id="sidebar-close" class="md:hidden sidebar-tenant-text opacity-70 hover:opacity-100 transition-opacity">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
@@ -110,6 +110,10 @@
                 <span class="material-symbols-outlined text-[20px]">group</span>
                 Pengguna
             </a>
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/running-text') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/running-text') ?>">
+                <span class="material-symbols-outlined text-[20px]">campaign</span>
+                Teks Berjalan
+            </a>
             <?php endif; ?>
 
             <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM', 'Pendaftaran', 'Poli Umum', 'Poli Gigi', 'Farmasi'])): ?>
@@ -138,7 +142,7 @@
             <?php endif; ?>
             
             <div class="mt-auto mb-4">
-                <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-colors transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link" style="color: #ef4444; opacity: 0.9;" href="<?= base_url('logout') ?>">
+                <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link" href="<?= base_url('logout') ?>">
                     <span class="material-symbols-outlined text-[20px]">logout</span>
                     Logout
                 </a>

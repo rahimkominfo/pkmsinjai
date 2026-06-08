@@ -45,7 +45,7 @@
             <?php endif; ?>
             <!-- Article Body -->
             <div class="prose prose-lg max-w-none font-body-lg text-body-lg text-on-surface-variant space-y-6">
-                <?= esc($artikel['konten']) ?>
+                <?= $artikel['konten'] ?>
             </div>
             <!-- Sharing Section -->
             <div class="mt-section-gap pt-stack-lg border-t border-outline-variant">

@@ -75,6 +75,16 @@ $routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'fil
         $routes->post('update/(:num)', 'Pengguna::update/$2');
         $routes->get('delete/(:num)', 'Pengguna::delete/$2');
     });
+    // Running Text CRUD
+    $routes->group('running-text', ['filter' => 'auth:Admin Dinkes,Admin PKM'], function ($routes) {
+        $routes->get('/', 'RunningText::index');
+        $routes->get('create', 'RunningText::create');
+        $routes->post('store', 'RunningText::store');
+        $routes->get('edit/(:num)', 'RunningText::edit/$2');
+        $routes->post('update/(:num)', 'RunningText::update/$2');
+        $routes->get('delete/(:num)', 'RunningText::delete/$2');
+        $routes->get('toggle/(:num)', 'RunningText::toggle/$2');
+    });
     // Peran CRUD
     $routes->group('peran', ['filter' => 'auth:Admin Dinkes'], function ($routes) {
         $routes->get('/', 'Peran::index');
