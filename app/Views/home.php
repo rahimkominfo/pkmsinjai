@@ -30,33 +30,60 @@
             </div>
             <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white drop-shadow-sm">Portal Kesehatan Sinjai</h1>
             <p class="text-teal-50 text-lg md:text-xl max-w-2xl mx-auto mb-8 font-light">Pusat informasi dan layanan terpadu dari seluruh Pusat Kesehatan Masyarakat di wilayah Kabupaten Sinjai.</p>
+
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto relative group">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    <span class="material-symbols-outlined text-gray-400 group-focus-within:text-teal-600 transition-colors">search</span>
+                </div>
+                <input type="text" id="pkmSearch" placeholder="Cari Puskesmas (misal: Panaikang, Balangnipa...)" 
+                    class="block w-full pl-14 pr-4 py-4.5 bg-white border-0 rounded-2xl shadow-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all text-lg"
+                    autocomplete="off">
+                <div id="searchCount" class="absolute right-5 inset-y-0 flex items-center text-sm font-medium text-teal-600 opacity-0 transition-opacity">
+                    0 Puskesmas
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Cards Section -->
     <div class="max-w-7xl mx-auto px-4 -mt-10 pb-24 flex-1 w-full relative z-20">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div id="pkmGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <?php foreach($pkms as $pkm): ?>
                 <?php $primaryColor = $pkm['primary_color'] ?? '#0f766e'; ?>
-                <a href="<?= base_url($pkm['pkm_slug']) ?>" class="group block bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 transform hover:-translate-y-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                    <div class="h-2 w-full transition-colors duration-300 opacity-90" style="background-color: <?= esc($primaryColor) ?>"></div>
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-5">
-                            <div class="w-14 h-14 rounded-full flex items-center justify-center shadow-sm" style="background-color: <?= esc($primaryColor) ?>15; color: <?= esc($primaryColor) ?>;">
-                                <span class="material-symbols-outlined text-[28px]">local_hospital</span>
+                <div class="pkm-card transition-all duration-300" data-nama="<?= strtolower(esc($pkm['pkm_nama'])) ?>">
+                    <a href="<?= base_url($pkm['pkm_slug']) ?>" class="group block bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 transform hover:-translate-y-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 h-full">
+                        <div class="h-2 w-full transition-colors duration-300 opacity-90" style="background-color: <?= esc($primaryColor) ?>"></div>
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-5">
+                                <div class="w-14 h-14 rounded-full flex items-center justify-center shadow-sm" style="background-color: <?= esc($primaryColor) ?>15; color: <?= esc($primaryColor) ?>;">
+                                    <span class="material-symbols-outlined text-[28px]">local_hospital</span>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-teal-50 transition-colors">
+                                    <span class="material-symbols-outlined text-gray-400 group-hover:text-teal-600 transition-colors text-[20px]">arrow_forward</span>
+                                </div>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-teal-50 transition-colors">
-                                <span class="material-symbols-outlined text-gray-400 group-hover:text-teal-600 transition-colors text-[20px]">arrow_forward</span>
-                            </div>
+                            <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-teal-700 transition-colors"><?= esc($pkm['pkm_nama']) ?></h2>
+                            <p class="text-gray-500 text-sm line-clamp-2 leading-relaxed">Akses layanan kesehatan, informasi antrian, dan berita terkini dari <?= esc($pkm['pkm_nama']) ?>.</p>
                         </div>
-                        <h2 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-teal-700 transition-colors"><?= esc($pkm['pkm_nama']) ?></h2>
-                        <p class="text-gray-500 text-sm line-clamp-2 leading-relaxed">Akses layanan kesehatan, informasi antrian, dan berita terkini dari <?= esc($pkm['pkm_nama']) ?>.</p>
-                    </div>
-                    <div class="px-6 py-3.5 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 font-medium group-hover:bg-teal-50/50 transition-colors">
-                        <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-gray-400 group-hover:text-teal-600 transition-colors">language</span> Buka Portal</span>
-                    </div>
-                </a>
+                        <div class="px-6 py-3.5 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 font-medium group-hover:bg-teal-50/50 transition-colors mt-auto">
+                            <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-gray-400 group-hover:text-teal-600 transition-colors">language</span> Buka Portal</span>
+                        </div>
+                    </a>
+                </div>
             <?php endforeach; ?>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="hidden text-center py-20">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                <span class="material-symbols-outlined text-4xl text-gray-400">search_off</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800">Puskesmas tidak ditemukan</h3>
+            <p class="text-gray-500">Coba gunakan kata kunci pencarian yang lain.</p>
+            <button onclick="resetSearch()" class="mt-6 text-teal-600 font-medium hover:text-teal-700 flex items-center justify-center gap-1 mx-auto transition-colors">
+                <span class="material-symbols-outlined text-sm">refresh</span> Tampilkan Semua
+            </button>
         </div>
     </div>
 
@@ -64,5 +91,52 @@
     <footer class="bg-white border-t border-gray-200 text-gray-500 py-8 text-center text-sm">
         <p>&copy; <?= date('Y') ?> Dinas Kesehatan Kabupaten Sinjai. Hak Cipta Dilindungi.</p>
     </footer>
+
+    <script>
+        const searchInput = document.getElementById('pkmSearch');
+        const pkmCards = document.querySelectorAll('.pkm-card');
+        const noResults = document.getElementById('noResults');
+        const searchCount = document.getElementById('searchCount');
+        const pkmGrid = document.getElementById('pkmGrid');
+
+        function filterPkms() {
+            const query = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            pkmCards.forEach(card => {
+                const name = card.getAttribute('data-nama');
+                if (name.includes(query)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Update search results UI
+            if (query.length > 0) {
+                searchCount.innerText = `${visibleCount} Puskesmas`;
+                searchCount.classList.remove('opacity-0');
+            } else {
+                searchCount.classList.add('opacity-0');
+            }
+
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+                pkmGrid.classList.add('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                pkmGrid.classList.remove('hidden');
+            }
+        }
+
+        function resetSearch() {
+            searchInput.value = '';
+            filterPkms();
+            searchInput.focus();
+        }
+
+        searchInput.addEventListener('input', filterPkms);
+    </script>
 </body>
 </html>

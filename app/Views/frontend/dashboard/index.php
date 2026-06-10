@@ -18,7 +18,7 @@
             <div class="absolute inset-0 flex flex-col justify-end pb-16 md:pb-24">
                 <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter w-full">
                     <div class="max-w-3xl">
-                        <span class="inline-block bg-primary text-on-primary px-3 py-1 rounded-full text-label-md font-label-md mb-4 shadow-lg">Berita Utama</span>
+                        <span class="inline-block bg-primary text-on-primary px-3 py-1 rounded-full text-label-md font-label-md mb-4 shadow-lg"><?= esc($hero['nama_kategori'] ?? 'Berita') ?></span>
                         <h1 class="text-white font-headline-xl text-3xl md:text-5xl mb-4 leading-tight drop-shadow-md">
                             <?= esc($hero['judul']) ?>
                         </h1>
@@ -62,7 +62,7 @@
 
     <!-- News Grid Section -->
     <section class="mb-section-gap">
-        <h2 class="font-headline-lg text-headline-lg mb-stack-lg border-b-2 border-primary inline-block pb-2">Kabar & Edukasi Kesehatan</h2>
+        <h2 class="font-headline-lg text-headline-lg mb-stack-lg border-b-2 border-primary inline-block pb-2">Berita Terkini</h2>
         <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
             <!-- Featured News -->
             <?php if (!empty($berita_terbaru) && isset($berita_terbaru[0])): ?>
@@ -71,7 +71,7 @@
                     <div class="aspect-video w-full overflow-hidden relative">
                         <img alt="<?= esc($berita_terbaru[0]['judul']) ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="<?= strpos($berita_terbaru[0]['gambar_utama'], 'http') === 0 ? esc($berita_terbaru[0]['gambar_utama']) : base_url(esc($berita_terbaru[0]['gambar_utama'])) ?>"/>
                         <div class="absolute top-4 left-4 bg-primary text-on-primary font-label-md text-label-md px-3 py-1 rounded-full shadow-md">
-                            Terbaru
+                            <?= esc($berita_terbaru[0]['nama_kategori'] ?? 'Terbaru') ?>
                         </div>
                     </div>
                     <div class="p-6">
@@ -110,7 +110,7 @@
                 <?php endfor; ?>
                 
                 <a href="<?= base_url(tenant()->pkm_slug . '/berita') ?>" class="mt-auto py-3 px-4 w-full bg-surface-container-low hover:bg-surface-container transition-colors text-primary font-label-md text-label-md rounded border border-outline-variant/30 text-center block">
-                    Lihat Semua Berita Terkini
+                    Lihat Semua Berita
                 </a>
             </div>
         </div>

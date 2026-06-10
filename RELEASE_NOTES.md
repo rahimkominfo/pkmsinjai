@@ -1,3 +1,11 @@
+## [v1.0.6] - 2026-06-10
+### ✨ Added
+- Fitur Pencarian Puskesmas pada halaman utama portal (`/`) untuk mempermudah akses informasi antar wilayah.
+- Implementasi filter pencarian instan (client-side) menggunakan JavaScript untuk pengalaman pengguna yang lebih cepat dan responsif.
+- State "Tidak Ditemukan" dengan desain visual yang informatif saat hasil pencarian nihil.
+- Tampilan nama kategori dinamis pada *Hero Carousel* dan *Featured News* menggantikan teks statis "Berita Utama" dan "Terbaru".
+- Perubahan format *Running Text* agar menampilkan teks sesuai dengan input di database (menghapus paksaan huruf kapital).
+
 ## [v1.0.5] - 2026-06-09
 ### ✨ Added
 - Fitur Teks Berjalan (*Running Text*) pada halaman utama PKM untuk pengumuman atau tips kesehatan.

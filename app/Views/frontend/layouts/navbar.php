@@ -150,14 +150,14 @@ $runningTexts = $runningTextModel->getActive(tenant()->pkm_id);
 <div class="w-full overflow-hidden py-2 bg-surface-container-high border-b border-outline-variant">
     <div class="flex whitespace-nowrap animate-scroll-text hover:[animation-play-state:paused] cursor-default">
         <?php foreach($runningTexts as $rt): ?>
-            <span class="inline-block px-10 text-body-md font-medium text-primary uppercase tracking-wide">
+            <span class="inline-block px-10 text-body-md font-medium text-primary">
                 <?= esc($rt['teks']) ?>
             </span>
         <?php endforeach; ?>
         <!-- Duplicate for seamless loop if content is short -->
         <?php if (count($runningTexts) < 3): ?>
             <?php foreach($runningTexts as $rt): ?>
-                <span class="inline-block px-10 text-body-md font-medium text-primary uppercase tracking-wide">
+                <span class="inline-block px-10 text-body-md font-medium text-primary">
                     <?= esc($rt['teks']) ?>
                 </span>
             <?php endforeach; ?>
