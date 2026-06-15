@@ -59,7 +59,7 @@
         <!-- Peta Lokasi -->
         <div class="h-80 md:h-full min-h-[350px] rounded-2xl overflow-hidden shadow-2xl border border-white/10">
             <?php if(tenant('google_maps')): ?>
-            <iframe src="<?= esc(tenant('google_maps')) ?>" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="<?= esc(tenant('google_maps'), 'attr') ?>" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             <?php else: ?>
             <div class="w-full h-full bg-white/5 flex items-center justify-center text-white/50 font-body-md text-center px-4">
                 Peta lokasi belum diatur.<br>Silakan lengkapi URL Embed Google Maps di Pengaturan PKM.

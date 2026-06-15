@@ -164,7 +164,11 @@ class ContentSecurityPolicy extends BaseConfig
      *
      * @var list<string>|string|null
      */
-    public $frameSrc;
+    public $frameSrc = [
+        'self',
+        'https://www.google.com',
+        'https://maps.google.com',
+    ];
 
     /**
      * Restricts the origins allowed to deliver video and audio.

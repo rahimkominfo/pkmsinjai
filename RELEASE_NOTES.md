@@ -1,3 +1,9 @@
+## [v1.0.11] - 2026-06-15
+### 🐛 Fixed
+- Perbaikan masalah embed Google Maps yang tidak tampil di footer akibat pembatasan Content Security Policy (CSP).
+- Penyesuaian `frameSrc` pada konfigurasi CSP untuk mengizinkan domain `google.com` dan `maps.google.com`.
+- Peningkatan keamanan output pada URL Google Maps menggunakan context `attr` pada fungsi `esc()`.
+
 ## [v1.0.10] - 2026-06-13
 ### ✨ Added
 - Penambahan fitur edit tanggal publikasi pada form artikel (Create & Edit) di Dashboard Admin.
