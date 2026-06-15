@@ -31,7 +31,13 @@ abstract class BaseAdminController extends Controller
 
         // Boleh ada pengecualian 'super' untuk superadmin
         if ($slug === 'super') {
-            set_tenant(['pkm_id' => 'super', 'pkm_slug' => 'super', 'pkm_nama' => 'Super Administrator']);
+            set_tenant([
+                'pkm_id' => 'super', 
+                'pkm_slug' => 'super', 
+                'pkm_nama' => 'Super Administrator',
+                'primary_color' => '#1e293b', // Slate 800
+                'on_primary_color' => '#f8fafc' // Slate 50
+            ]);
             return;
         }
 

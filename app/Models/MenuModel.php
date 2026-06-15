@@ -61,4 +61,33 @@ class MenuModel extends Model
         
         return $tree;
     }
+
+    public function getAllTree($pkm_id, $exclude_id = null)
+    {
+        $builder = $this->orderBy('sort_order', 'ASC')->orderBy('id', 'ASC');
+        
+        if ($pkm_id !== 'super' && $pkm_id !== '') {
+            $builder->where('pkm_id', $pkm_id);
+        }
+
+        $menus = $builder->findAll();
+                      
+        $tree = [];
+        $items = [];
+        foreach($menus as $menu) {
+            if ($exclude_id && $menu['id'] == $exclude_id) continue;
+            $menu['children'] = [];
+            $items[$menu['id']] = $menu;
+        }
+        
+        foreach($items as $id => &$item) {
+            if ($item['parent_id'] && isset($items[$item['parent_id']])) {
+                $items[$item['parent_id']]['children'][] = &$item;
+            } else {
+                $tree[] = &$item;
+            }
+        }
+        
+        return $tree;
+    }
 }

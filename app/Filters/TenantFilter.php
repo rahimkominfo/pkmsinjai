@@ -13,24 +13,44 @@ class TenantFilter implements FilterInterface
     {
         helper('tenant');
 
-        // Jika Anda ingin menggunakan Route Filter alih-alih BaseTenantController,
-        // Anda bisa mengaktifkan filter ini di app/Config/Filters.php.
-        // Konsepnya sama: membaca segment URL, query database, set global helper.
+        $hostname = $request->getUri()->getHost();
+        $pkmModel = new PkmModel();
         
-        $slug = $request->getUri()->getSegment(1);
+        // 1. Cek apakah hostname adalah domain utama portal
+        $mainDomain = parse_url(base_url(), PHP_URL_HOST);
+        
+        $pkm = null;
 
-        if (empty($slug) || $slug === 'admin') {
-            return; // Biarkan lolos untuk admin atau halaman utama portal
+        if ($hostname === $mainDomain || $hostname === 'localhost') {
+            // Jika di domain utama, cek apakah ada segment (fallback mode)
+            $slug = $request->getUri()->getSegment(1);
+            
+            // Jika diawali dengan 'admin', ambil segment berikutnya sebagai slug tenant
+            if ($slug === 'admin') {
+                $slug = $request->getUri()->getSegment(2);
+            }
+            
+            if (empty($slug) || in_array($slug, ['login', 'logout', 'assets', 'uploads'])) {
+                return; // Biarkan lolos untuk sistem utama
+            }
+
+            $pkm = $pkmModel->where('pkm_slug', $slug)->first();
+        } else {
+            // 2. Jika bukan domain utama, cari berdasarkan kolom pkm_domain
+            $pkm = $pkmModel->where('pkm_domain', $hostname)->first();
         }
 
-        $pkmModel = new PkmModel();
-        $pkm = $pkmModel->where('pkm_slug', $slug)->first();
-
         if (!$pkm) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Tenant tidak valid.');
+            // Jika tidak ditemukan di domain utama dan bukan folder sistem, 
+            // biarkan Routes yang menangani 404 jika perlu, atau lempar exception
+            if ($hostname !== $mainDomain && $hostname !== 'localhost') {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Tenant/Domain tidak terdaftar.');
+            }
+            return;
         }
 
         set_tenant($pkm);
+        log_message('debug', 'Tenant detected in Filter: ' . $pkm['pkm_nama'] . ' with color: ' . ($pkm['primary_color'] ?? 'N/A'));
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

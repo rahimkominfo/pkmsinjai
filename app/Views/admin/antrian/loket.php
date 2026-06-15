@@ -52,14 +52,14 @@
                             <label class="block text-label-sm text-on-surface-variant mb-3 text-center uppercase tracking-wider font-semibold">Nomor Antrian</label>
                             
                             <div class="flex items-center justify-center gap-3">
-                                <button type="button" onclick="updateNumber('<?= $row['id'] ?>', -1)" class="w-12 h-12 rounded-lg bg-surface-variant hover:bg-outline-variant text-on-surface flex items-center justify-center transition-colors active:scale-95">
+                                <button type="button" data-action="decrement" data-id="<?= $row['id'] ?>" class="btn-update-antrian w-12 h-12 rounded-lg bg-surface-variant hover:bg-outline-variant text-on-surface flex items-center justify-center transition-colors active:scale-95">
                                     <span class="material-symbols-outlined text-[28px]">remove</span>
                                 </button>
                                 
                                 <input type="text" id="nomor_<?= $row['id'] ?>" name="nomor" value="<?= esc($row['nomor']) ?>" 
                                        class="w-32 h-14 text-center font-headline-lg text-headline-lg bg-surface border-2 border-surface-variant rounded-lg focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition-all shadow-inner">
                                 
-                                <button type="button" onclick="updateNumber('<?= $row['id'] ?>', 1)" class="w-12 h-12 rounded-lg bg-primary-container hover:bg-primary hover:text-on-primary text-on-primary-container flex items-center justify-center transition-colors active:scale-95">
+                                <button type="button" data-action="increment" data-id="<?= $row['id'] ?>" class="btn-update-antrian w-12 h-12 rounded-lg bg-primary-container hover:bg-primary hover:text-on-primary text-on-primary-container flex items-center justify-center transition-colors active:scale-95">
                                     <span class="material-symbols-outlined text-[28px]">add</span>
                                 </button>
                             </div>
@@ -77,46 +77,62 @@
     </div>
 </div>
 
-<script>
-/**
- * Update the queue number input value intelligently.
- * It handles raw numbers ("123") and prefixes ("A-042", "B 01").
- */
-function updateNumber(id, change) {
-    const input = document.getElementById('nomor_' + id);
-    let val = input.value.trim();
-    
-    if (!val) {
-        input.value = change > 0 ? '1' : '0';
-        return;
-    }
-    
-    // Parse format e.g., "A-042", "Poli-10", "15"
-    // Regex extracts non-digit prefix (if any) and the digit part
-    const match = val.match(/^(.*?)(\d+)$/);
-    if (match) {
-        const prefix = match[1];
-        const numStr = match[2];
-        const len = numStr.length;
-        let num = parseInt(numStr, 10);
+<script {csp-script-nonce}>
+document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * Update the queue number input value intelligently.
+     * It handles raw numbers ("123") and prefixes ("A-042", "B 01").
+     */
+    function updateNumber(id, change) {
+        const input = document.getElementById('nomor_' + id);
+        if (!input) return;
         
-        num += change;
-        if (num < 0) num = 0; // Prevent negative queues
+        let val = input.value.trim();
         
-        let newNumStr = num.toString();
-        // Maintain original leading zeros padding
-        while (newNumStr.length < len) {
-            newNumStr = '0' + newNumStr;
+        if (!val) {
+            input.value = change > 0 ? '1' : '0';
+            document.getElementById('form_' + id).submit();
+            return;
         }
         
-        input.value = prefix + newNumStr;
-    } else {
-    // Fallback if there are no numbers at the end
-        if (change > 0) input.value = val + '1';
+        // Parse format e.g., "A-042", "Poli-10", "15"
+        // Regex extracts non-digit prefix (if any) and the digit part
+        const match = val.match(/^(.*?)(\d+)$/);
+        if (match) {
+            const prefix = match[1];
+            const numStr = match[2];
+            const len = numStr.length;
+            let num = parseInt(numStr, 10);
+            
+            num += change;
+            if (num < 0) num = 0; // Prevent negative queues
+            
+            let newNumStr = num.toString();
+            // Maintain original leading zeros padding
+            while (newNumStr.length < len) {
+                newNumStr = '0' + newNumStr;
+            }
+            
+            input.value = prefix + newNumStr;
+        } else {
+            // Fallback if there are no numbers at the end
+            if (change > 0) input.value = val + '1';
+        }
+        
+        // Auto-submit the form instantly
+        document.getElementById('form_' + id).submit();
     }
-    
-    // Auto-submit the form instantly
-    document.getElementById('form_' + id).submit();
-}
+
+    // Attach event listeners to all update buttons
+    const buttons = document.querySelectorAll('.btn-update-antrian');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const action = this.getAttribute('data-action');
+            const change = action === 'increment' ? 1 : -1;
+            updateNumber(id, change);
+        });
+    });
+});
 </script>
 <?= $this->endSection() ?>

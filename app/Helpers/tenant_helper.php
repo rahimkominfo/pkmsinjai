@@ -17,10 +17,12 @@ if (!function_exists('tenant')) {
             return null;
         }
         if ($key) {
-            return $tenant[$key] ?? null;
+            if (is_array($tenant)) {
+                return $tenant[$key] ?? null;
+            }
+            return $tenant->$key ?? null;
         }
-        // Return as object so we can do tenant()->pkm_id or tenant()->pkm_nama
-        return (object) $tenant;
+        return is_object($tenant) ? $tenant : (object) $tenant;
     }
 }
 
@@ -30,5 +32,28 @@ if (!function_exists('set_tenant')) {
      */
     function set_tenant($tenantData) {
         \TenantManager::$tenant = $tenantData;
+    }
+}
+
+if (!function_exists('tenant_url')) {
+    /**
+     * Generate URL for tenant (custom domain or slug based).
+     */
+    function tenant_url($path = '') {
+        $tenant = tenant();
+        if (!$tenant) {
+            return base_url($path);
+        }
+
+        $path = ltrim($path, '/');
+
+        // Jika ada domain kustom
+        if (!empty($tenant->pkm_domain)) {
+            $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' : 'http://';
+            return $protocol . $tenant->pkm_domain . '/' . $path;
+        }
+
+        // Jika menggunakan domain utama (fallback ke slug)
+        return base_url($tenant->pkm_slug . '/' . $path);
     }
 }

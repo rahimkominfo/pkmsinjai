@@ -14,16 +14,16 @@ $routes->post('login/process', 'Auth::process');
 $routes->get('logout', 'Auth::logout');
 
 
-$routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'filter' => 'auth'], static function ($routes) {
+$routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'filter' => ['auth', 'tenant_filter']], static function ($routes) {
     $routes->get('dashboard', 'Dashboard::index');
     // Artikel CRUD
     $routes->group('artikel', ['filter' => 'auth:Admin Dinkes,Admin PKM,Editor,Penulis'], function ($routes) {
         $routes->get('/', 'Artikel::index');
         $routes->get('create', 'Artikel::create');
         $routes->post('store', 'Artikel::store');
-        $routes->get('edit/(:num)', 'Artikel::edit/$2');
-        $routes->post('update/(:num)', 'Artikel::update/$2');
-        $routes->get('delete/(:num)', 'Artikel::delete/$2');
+        $routes->get('edit/(:segment)', 'Artikel::edit/$2');
+        $routes->post('update/(:segment)', 'Artikel::update/$2');
+        $routes->get('delete/(:segment)', 'Artikel::delete/$2');
     });
     // Media CRUD
     $routes->group('media', ['filter' => 'auth:Admin Dinkes,Admin PKM,Editor,Penulis'], function ($routes) {
@@ -36,9 +36,9 @@ $routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'fil
         $routes->get('/', 'Kategori::index');
         $routes->get('create', 'Kategori::create');
         $routes->post('store', 'Kategori::store');
-        $routes->get('edit/(:num)', 'Kategori::edit/$2');
-        $routes->post('update/(:num)', 'Kategori::update/$2');
-        $routes->get('delete/(:num)', 'Kategori::delete/$2');
+        $routes->get('edit/(:segment)', 'Kategori::edit/$2');
+        $routes->post('update/(:segment)', 'Kategori::update/$2');
+        $routes->get('delete/(:segment)', 'Kategori::delete/$2');
     });
     // Galeri CRUD
     $routes->group('galeri', ['filter' => 'auth:Admin Dinkes,Admin PKM,Editor'], function ($routes) {
@@ -61,8 +61,13 @@ $routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'fil
         $routes->get('reset/(:num)', 'Antrian::reset/$2');
         $routes->get('delete/(:num)', 'Antrian::delete/$2');
     });
+    // Statistik CRUD
+    $routes->group('statistik', ['filter' => 'auth:Admin Dinkes,Admin PKM'], function ($routes) {
+        $routes->get('/', 'Statistik::index');
+        $routes->post('import', 'Statistik::import');
+    });
     // Update Antrian Loket (Pendaftaran & Poli)
-    $routes->group('antrian-loket', ['filter' => 'auth:Admin Dinkes,Admin PKM,Pendaftaran,Poli Umum,Poli Gigi,Farmasi'], function ($routes) {
+    $routes->group('antrian-loket', ['filter' => 'auth:Admin Dinkes,Admin PKM,Antrian,Pendaftaran,Poli Umum,Poli Gigi,Farmasi'], function ($routes) {
         $routes->get('/', 'AntrianLoket::index');
         $routes->post('update/(:num)', 'AntrianLoket::update/$2');
     });
@@ -71,9 +76,9 @@ $routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'fil
         $routes->get('/', 'Pengguna::index');
         $routes->get('create', 'Pengguna::create');
         $routes->post('store', 'Pengguna::store');
-        $routes->get('edit/(:num)', 'Pengguna::edit/$2');
-        $routes->post('update/(:num)', 'Pengguna::update/$2');
-        $routes->get('delete/(:num)', 'Pengguna::delete/$2');
+        $routes->get('edit/(:segment)', 'Pengguna::edit/$2');
+        $routes->post('update/(:segment)', 'Pengguna::update/$2');
+        $routes->get('delete/(:segment)', 'Pengguna::delete/$2');
     });
     // Running Text CRUD
     $routes->group('running-text', ['filter' => 'auth:Admin Dinkes,Admin PKM'], function ($routes) {
@@ -112,12 +117,57 @@ $routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'fil
         $routes->post('update/(:num)', 'Menu::update/$2');
         $routes->get('delete/(:num)', 'Menu::delete/$2');
     });
+    // Pages CRUD
+    $routes->group('pages', ['filter' => 'auth:Admin Dinkes,Admin PKM,Editor'], function ($routes) {
+        $routes->get('/', 'Pages::index');
+        $routes->get('create', 'Pages::create');
+        $routes->post('store', 'Pages::store');
+        $routes->get('edit/(:segment)', 'Pages::edit/$2');
+        $routes->post('update/(:segment)', 'Pages::update/$2');
+        $routes->get('delete/(:segment)', 'Pages::delete/$2');
+    });
+    // Flyer CRUD
+    $routes->group('flyer', ['filter' => 'auth:Admin Dinkes,Admin PKM'], function ($routes) {
+        $routes->get('/', 'Flyer::index');
+        $routes->get('create', 'Flyer::create');
+        $routes->post('store', 'Flyer::store');
+        $routes->get('edit/(:segment)', 'Flyer::edit/$2');
+        $routes->post('update/(:segment)', 'Flyer::update/$2');
+        $routes->get('delete/(:segment)', 'Flyer::delete/$2');
+    });
+    // SDM PKM CRUD
+    $routes->group('sdm-pkm', ['filter' => 'auth:Admin Dinkes,Admin PKM'], function ($routes) {
+        $routes->get('/', 'SdmPkmController::index');
+        $routes->get('create', 'SdmPkmController::create');
+        $routes->post('store', 'SdmPkmController::store');
+        $routes->get('edit/(:segment)', 'SdmPkmController::edit/$2');
+        $routes->post('update/(:segment)', 'SdmPkmController::update/$2');
+        $routes->get('delete/(:segment)', 'SdmPkmController::delete/$2');
+    });
 });
 
 // Routing Multi-Tenant PKM (Frontend)
-$routes->group('(:segment)', ['namespace' => 'App\Controllers\Frontend'], function ($routes) {
+// 1. Group untuk Domain Kustom (Tanpa prefix segment)
+$routes->group('', ['namespace' => 'App\Controllers\Frontend', 'filter' => 'tenant_filter'], function ($routes) {
+    // Jalur ini hanya aktif jika filter berhasil mendeteksi tenant via hostname
+    $routes->get('/', 'Dashboard::index');
+    $routes->get('berita', 'Berita::index');
+    $routes->get('berita/detail/(:segment)', 'Berita::detail/$1');
+    $routes->get('galeri', 'Galeri::index');
+    $routes->get('halaman/(:segment)', 'Pages::detail/$1');
+    $routes->get('sdm-pkm', 'SdmPkm::index');
+    $routes->get('display-antrian', 'DisplayAntrian::index');
+    $routes->get('api/antrian', 'DisplayAntrian::data');
+});
+
+// 2. Group untuk Domain Utama dengan Segment Slug (Fallback)
+$routes->group('(:segment)', ['namespace' => 'App\Controllers\Frontend', 'filter' => 'tenant_filter'], function ($routes) {
     $routes->get('/', 'Dashboard::index');
     $routes->get('berita', 'Berita::index');
     $routes->get('berita/detail/(:segment)', 'Berita::detail/$2');
     $routes->get('galeri', 'Galeri::index');
+    $routes->get('halaman/(:segment)', 'Pages::detail/$2');
+    $routes->get('sdm-pkm', 'SdmPkm::index');
+    $routes->get('display-antrian', 'DisplayAntrian::index');
+    $routes->get('api/antrian', 'DisplayAntrian::data');
 });

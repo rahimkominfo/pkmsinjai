@@ -16,44 +16,44 @@
             box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         :root {
-            --tenant-primary: <?= esc(tenant()->primary_color ?? '#eaddff') ?>;
-            --tenant-on-primary: <?= esc(tenant()->on_primary_color ?? '#1f2937') ?>;
+            --tenant-primary: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : '#eaddff' ?>;
+            --tenant-on-primary: <?= (!empty(tenant('on_primary_color'))) ? esc(tenant('on_primary_color')) : '#1f2937' ?>;
         }
         .sidebar-tenant {
-            background-color: var(--tenant-primary);
+            background-color: var(--tenant-primary) !important;
         }
         .sidebar-tenant-text {
-            color: var(--tenant-on-primary);
+            color: var(--tenant-on-primary) !important;
         }
         .sidebar-tenant-text-muted {
-            color: var(--tenant-on-primary);
+            color: var(--tenant-on-primary) !important;
             opacity: 0.8;
         }
         .sidebar-tenant-link {
-            color: var(--tenant-on-primary);
+            color: var(--tenant-on-primary) !important;
             opacity: 0.9;
             border-color: transparent;
         }
         .sidebar-tenant-link:hover {
             opacity: 1;
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.15) !important;
         }
         .sidebar-tenant-link.active {
             opacity: 1;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-left-color: var(--tenant-on-primary);
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            border-left-color: var(--tenant-on-primary) !important;
         }
     </style>
 </head>
 <body class="bg-background text-on-surface antialiased flex h-screen overflow-hidden">
     <!-- SideNavBar -->
-    <aside id="sidebar" class="fixed h-screen w-sidebar_width left-0 top-0 shadow-lg md:shadow-sm flex flex-col h-full py-base z-30 sidebar-tenant -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <aside id="sidebar" style="background-color: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : '#eaddff' ?> !important; color: <?= (!empty(tenant('on_primary_color'))) ? esc(tenant('on_primary_color')) : '#1f2937' ?> !important;" class="fixed h-screen w-sidebar_width left-0 top-0 shadow-lg md:shadow-sm flex flex-col h-full py-base z-30 sidebar-tenant -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
         <!-- Brand Header -->
         <div class="px-6 py-6 mb-4 flex items-center justify-between gap-3">
             <div class="flex items-center gap-3">
-                <img alt="<?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?> Logo" class="w-10 h-10 object-contain" src="<?= base_url('assets/img/logo_sinjai.png') ?>"/>
+                <img alt="<?= esc(tenant('pkm_nama') ?? 'Portal Admin') ?> Logo" class="w-10 h-10 object-contain" src="<?= base_url('assets/img/logo_sinjai.png') ?>"/>
                 <div>
-                    <h1 class="text-headline-sm font-headline-sm font-bold sidebar-tenant-text"><?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?></h1>
+                    <h1 class="text-headline-sm font-headline-sm font-bold sidebar-tenant-text"><?= esc(tenant('pkm_nama') ?? 'Portal Admin') ?></h1>
                     <p class="font-label-sm text-label-sm sidebar-tenant-text-muted mt-1 uppercase tracking-wider"><?= session()->get('peran') ?></p>
                 </div>
             </div>
@@ -74,68 +74,84 @@
             };
             ?>
 
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/dashboard') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/dashboard') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/dashboard') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/dashboard') ?>">
                 <span class="material-symbols-outlined text-[20px]">dashboard</span>
                 Dashboard
             </a>
 
             <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM', 'Editor', 'Penulis'])): ?>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/artikel') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/artikel') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/artikel') ?>">
                 <span class="material-symbols-outlined text-[20px]">article</span>
                 Artikel Berita
             </a>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/media') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/media') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/media') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/media') ?>">
                 <span class="material-symbols-outlined text-[20px]">perm_media</span>
                 Media
             </a>
             <?php endif; ?>
 
             <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM', 'Editor'])): ?>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/kategori') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/kategori') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/kategori') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/kategori') ?>">
                 <span class="material-symbols-outlined text-[20px]">category</span>
                 Kategori
             </a>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/galeri') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/galeri') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/galeri') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/galeri') ?>">
                 <span class="material-symbols-outlined text-[20px]">imagesmode</span>
                 Galeri
+            </a>
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/pages') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/pages') ?>">
+                <span class="material-symbols-outlined text-[20px]">description</span>
+                Halaman Statis
             </a>
             <?php endif; ?>
 
             <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM'])): ?>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/antrian') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/flyer') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/flyer') ?>">
+                <span class="material-symbols-outlined text-[20px]">web_stories</span>
+                Flyer
+            </a>
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/antrian') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/antrian') ?>">
                 <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
                 Antrian
             </a>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/pengguna') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/pengguna') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/statistik') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/statistik') ?>">
+                <span class="material-symbols-outlined text-[20px]">equalizer</span>
+                Statistik Penyakit
+            </a>
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/sdm-pkm') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/sdm-pkm') ?>">
+                <span class="material-symbols-outlined text-[20px]">badge</span>
+                SDM PKM
+            </a>
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/pengguna') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/pengguna') ?>">
                 <span class="material-symbols-outlined text-[20px]">group</span>
                 Pengguna
             </a>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/running-text') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/running-text') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/running-text') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/running-text') ?>">
                 <span class="material-symbols-outlined text-[20px]">campaign</span>
                 Teks Berjalan
             </a>
             <?php endif; ?>
 
-            <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM', 'Pendaftaran', 'Poli Umum', 'Poli Gigi', 'Farmasi'])): ?>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/antrian-loket') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/antrian-loket') ?>">
+            <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM', 'Antrian', 'Pendaftaran', 'Poli Umum', 'Poli Gigi', 'Farmasi'])): ?>
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/antrian-loket') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/antrian-loket') ?>">
                 <span class="material-symbols-outlined text-[20px]">queue</span>
                 Update Antrian
             </a>
             <?php endif; ?>
 
             <?php if($role === 'Admin Dinkes'): ?>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/peran') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/peran') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/peran') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/peran') ?>">
                 <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                 Peran Pengguna
             </a>
             <?php endif; ?>
             
             <?php if(in_array($role, ['Admin Dinkes', 'Admin PKM'])): ?>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/pengaturan') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/pengaturan') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/pengaturan') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/pengaturan') ?>">
                 <span class="material-symbols-outlined text-[20px]">settings</span>
                 Pengaturan
             </a>
-            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant()->pkm_slug.'/menu') ?>" href="<?= base_url('admin/' . tenant()->pkm_slug . '/menu') ?>">
+            <a class="flex items-center gap-3 px-6 py-3 font-label-sm text-label-sm transition-all duration-200 ease-in-out border-l-4 sidebar-tenant-link <?= $isActive('admin/'.tenant('pkm_slug').'/menu') ?>" href="<?= base_url('admin/' . tenant('pkm_slug') . '/menu') ?>">
                 <span class="material-symbols-outlined text-[20px]">menu_open</span>
                 Pengaturan Menu
             </a>
@@ -162,7 +178,7 @@
                 <button id="sidebar-toggle" class="md:hidden text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors flex items-center justify-center">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
-                <span class="hidden lg:block text-headline-sm font-headline-sm text-on-surface"><?= esc(tenant()->pkm_nama ?? 'Portal Admin') ?></span>
+                <span class="hidden lg:block text-headline-sm font-headline-sm text-on-surface"><?= esc(tenant('pkm_nama') ?? 'Portal Admin') ?></span>
                 <div class="relative group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-[20px]">search</span>
                     <input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface w-40 sm:w-48 md:w-64 transition-all" placeholder="Search..." type="text"/>

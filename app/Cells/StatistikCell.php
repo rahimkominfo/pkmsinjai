@@ -3,25 +3,73 @@
 namespace App\Cells;
 
 use CodeIgniter\View\Cells\Cell;
+use App\Models\StatistikPenyakitModel;
 
 class StatistikCell extends Cell
 {
     public function render(): string
     {
-        // In a real application, you would fetch this data from a Model
+        $model = new StatistikPenyakitModel();
+        
+        // Get tenant information from helper (as set by filter)
+        $pkm = tenant();
+        $pkm_id = $pkm->pkm_id ?? null;
+        
+        // Get selected period from GET request
+        $selected_periode = service('request')->getGet('periode');
+        
+        $query = $model->where('pkm_id', $pkm_id);
+        
+        if ($selected_periode) {
+            $parts = explode('|', $selected_periode);
+            if (count($parts) === 2) {
+                $query->where('periode_awal', $parts[0])
+                      ->where('periode_akhir', $parts[1]);
+            }
+        }
+
+        // Fetch top 10 diseases for the current PKM, ordered by total
+        $penyakit_data = $query->orderBy('total', 'DESC')
+                             ->limit(10)
+                             ->findAll();
+
+        // Get available periods for filter
+        $list_periode = $model->select('periode_awal, periode_akhir')
+                             ->where('pkm_id', $pkm_id)
+                             ->groupBy('periode_awal, periode_akhir')
+                             ->orderBy('periode_awal', 'DESC')
+                             ->findAll();
+
+        $penyakit = [];
+        $max_jumlah = 0;
+        
+        foreach ($penyakit_data as $item) {
+            if ($item['total'] > $max_jumlah) {
+                $max_jumlah = $item['total'];
+            }
+        }
+
+        foreach ($penyakit_data as $item) {
+            $penyakit[] = [
+                'kode' => $item['kode_diagnosa'],
+                'nama' => $item['diagnosa'],
+                'jumlah' => $item['total'],
+                'percent' => ($max_jumlah > 0) ? (($item['total'] / $max_jumlah) * 100) . '%' : '0%'
+            ];
+        }
+
+        // Fallback data if no data found
+        if (empty($penyakit)) {
+            $penyakit = [
+                ['kode' => '-', 'nama' => 'No Data', 'jumlah' => 0, 'percent' => '0%'],
+            ];
+        }
+
         $data = [
-            'penyakit' => [
-                ['kode' => 'K05', 'nama' => 'Gingivitis dan penyakit periodontal', 'jumlah' => 11, 'percent' => '91.6%'],
-                ['kode' => 'I10', 'nama' => 'Hipertensi esensial (primer)', 'jumlah' => 9, 'percent' => '75%'],
-                ['kode' => 'E78.0', 'nama' => 'Hiperkolesterolemia murni', 'jumlah' => 5, 'percent' => '41.6%'],
-                ['kode' => 'E11', 'nama' => 'Diabetes melitus tipe 2', 'jumlah' => 4, 'percent' => '33.3%'],
-                ['kode' => 'K00', 'nama' => 'Gangguan perkembangan dan erupsi gigi', 'jumlah' => 4, 'percent' => '33.3%'],
-                ['kode' => 'J03', 'nama' => 'Tonsilitis akut', 'jumlah' => 4, 'percent' => '33.3%'],
-                ['kode' => 'E79.0', 'nama' => 'Hiperurisemia tanpa tanda artritis inflamasi', 'jumlah' => 4, 'percent' => '33.3%'],
-                ['kode' => 'J00', 'nama' => 'Nasofaringitis akut [common cold]', 'jumlah' => 3, 'percent' => '25%'],
-                ['kode' => 'M10', 'nama' => 'Gout', 'jumlah' => 2, 'percent' => '16.6%'],
-                ['kode' => 'K02', 'nama' => 'Karies gigi', 'jumlah' => 2, 'percent' => '16.6%'],
-            ]
+            'penyakit' => $penyakit,
+            'max_jumlah' => $max_jumlah,
+            'list_periode' => $list_periode,
+            'selected_periode' => $selected_periode
         ];
 
         return $this->view('statistik', $data);

@@ -67,10 +67,10 @@
                         <?php endif; ?>
                         <td class="p-3 font-body-md text-body-md text-on-surface-variant"><?= date('d M Y', strtotime($row['created_at'])) ?></td>
                         <td class="p-3 text-right">
-                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/kategori/edit/' . $row['kategori_id']) ?>" class="text-primary hover:text-primary-container transition-colors p-1" title="Edit">
+                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/kategori/edit/' . $row['kategori_uuid']) ?>" class="text-primary hover:text-primary-container transition-colors p-1" title="Edit">
                                 <span class="material-symbols-outlined text-[20px]">edit</span>
                             </a>
-                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/kategori/delete/' . $row['kategori_id']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')" class="text-error hover:text-error-container transition-colors p-1 ml-2" title="Hapus">
+                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/kategori/delete/' . $row['kategori_uuid']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')" class="text-error hover:text-error-container transition-colors p-1 ml-2" title="Hapus">
                                 <span class="material-symbols-outlined text-[20px]">delete</span>
                             </a>
                         </td>

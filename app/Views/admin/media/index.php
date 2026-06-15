@@ -118,6 +118,7 @@
             </button>
         </div>
         <form action="<?= base_url('admin/' . tenant()->pkm_slug . '/media/store') ?>" method="post" enctype="multipart/form-data" class="flex-1 flex flex-col">
+            <?= csrf_field() ?>
             <div class="p-6 flex-1 bg-background">
                 <?php if (isset($list_pkm)): ?>
                 <div class="mb-4">

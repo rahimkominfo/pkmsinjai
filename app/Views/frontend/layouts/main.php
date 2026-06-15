@@ -14,8 +14,8 @@
 
     <style>
       :root {
-        --tenant-primary: <?= esc(tenant()->primary_color ?? '#006c4a') ?>;
-        --tenant-on-primary: <?= esc(tenant()->on_primary_color ?? '#ffffff') ?>;
+        --tenant-primary: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : '#006c4a' ?>;
+        --tenant-on-primary: <?= (!empty(tenant('on_primary_color'))) ? esc(tenant('on_primary_color')) : '#ffffff' ?>;
       }
       @keyframes pulse-green {
         0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
@@ -23,11 +23,18 @@
         100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
       }
       @keyframes scroll-text {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
+        0% { transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-100%, 0, 0); }
       }
       .animate-scroll-text {
-        animation: scroll-text 20s linear infinite;
+        display: inline-block;
+        white-space: nowrap;
+        padding-left: 100%;
+        animation: scroll-text 30s linear infinite;
+        will-change: transform;
+      }
+      .animate-scroll-text:hover {
+        animation-play-state: paused;
       }
       .animate-pulse-green {
         animation: pulse-green 2s infinite;

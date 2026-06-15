@@ -89,10 +89,10 @@
                             <?= date('d M Y, H:i', strtotime($row['tanggal_publikasi'])) ?>
                         </td>
                         <td class="p-3 text-right">
-                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel/edit/' . $row['artikel_id']) ?>" class="text-primary hover:text-primary-container transition-colors p-1" title="Edit">
+                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel/edit/' . $row['artikel_uuid']) ?>" class="text-primary hover:text-primary-container transition-colors p-1" title="Edit">
                                 <span class="material-symbols-outlined text-[20px]">edit</span>
                             </a>
-                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel/delete/' . $row['artikel_id']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')" class="text-error hover:text-error-container transition-colors p-1 ml-2" title="Hapus">
+                            <a href="<?= base_url('admin/' . tenant()->pkm_slug . '/artikel/delete/' . $row['artikel_uuid']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')" class="text-error hover:text-error-container transition-colors p-1 ml-2" title="Hapus">
                                 <span class="material-symbols-outlined text-[20px]">delete</span>
                             </a>
                         </td>

@@ -44,16 +44,9 @@ class Menu extends BaseAdminController
     {
         $pkm_id = tenant()->pkm_id;
         
-        $parentBuilder = $this->menuModel->where('parent_id', null);
-        if ($pkm_id !== 'super') {
-            $parentBuilder->where('pkm_id', $pkm_id);
-        } else {
-            $parentBuilder->select('mst_menu.*, mst_pkm.pkm_nama')->join('mst_pkm', 'mst_pkm.pkm_id = mst_menu.pkm_id', 'left');
-        }
-
         $data = [
             'title'        => 'Tambah Menu',
-            'parent_menus' => $parentBuilder->findAll()
+            'parent_menus' => $this->menuModel->getAllTree($pkm_id)
         ];
         
         if ($pkm_id === 'super') {
@@ -112,17 +105,10 @@ class Menu extends BaseAdminController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Menu tidak ditemukan');
         }
         
-        $parentBuilder = $this->menuModel->where('id !=', $id)->where('parent_id', null);
-        if ($pkm_id !== 'super') {
-            $parentBuilder->where('pkm_id', $pkm_id);
-        } else {
-            $parentBuilder->select('mst_menu.*, mst_pkm.pkm_nama')->join('mst_pkm', 'mst_pkm.pkm_id = mst_menu.pkm_id', 'left');
-        }
-
         $data = [
             'title'        => 'Edit Menu',
             'menu'         => $menu,
-            'parent_menus' => $parentBuilder->findAll()
+            'parent_menus' => $this->menuModel->getAllTree($pkm_id, $id)
         ];
         
         if ($pkm_id === 'super') {

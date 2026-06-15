@@ -62,7 +62,9 @@
                             <?= esc($row['pkm_nama'] ?? 'Unknown') ?>
                         </td>
                         <?php endif; ?>
-                        <td class="p-3 font-body-md text-body-md text-on-surface-variant"><?= esc($row['url']) ?></td>
+                        <td class="p-3 font-body-md text-body-md text-on-surface-variant" title="<?= esc($row['url']) ?>">
+                            <?= strlen($row['url']) > 25 ? esc(substr($row['url'], 0, 25)) . '...' : esc($row['url']) ?>
+                        </td>
                         <td class="p-3 font-body-md text-body-md text-on-surface-variant">
                             <?= $row['parent_title'] ? esc($row['parent_title']) : '<span class="text-outline-variant italic">Utama</span>' ?>
                         </td>

@@ -59,14 +59,22 @@ class ContentSecurityPolicy extends BaseConfig
      *
      * @var list<string>|string
      */
-    public $scriptSrc = 'self';
+    public $scriptSrc = [
+        'self',
+        'unsafe-inline',
+        'https://cdn.ckeditor.com',
+    ];
 
     /**
      * Specifies valid sources for JavaScript <script> elements.
      *
      * @var list<string>|string
      */
-    public array|string $scriptSrcElem = 'self';
+    public array|string $scriptSrcElem = [
+        'self',
+        'unsafe-inline',
+        'https://cdn.ckeditor.com',
+    ];
 
     /**
      * Specifies valid sources for JavaScript inline event
@@ -74,21 +82,32 @@ class ContentSecurityPolicy extends BaseConfig
      *
      * @var list<string>|string
      */
-    public array|string $scriptSrcAttr = 'self';
+    public array|string $scriptSrcAttr = [
+        'self',
+        'unsafe-inline',
+    ];
 
     /**
      * Lists allowed stylesheets' URLs.
      *
      * @var list<string>|string
      */
-    public $styleSrc = 'self';
+    public $styleSrc = [
+        'self',
+        'unsafe-inline',
+        'https://fonts.googleapis.com',
+    ];
 
     /**
      * Specifies valid sources for stylesheets <link> elements.
      *
      * @var list<string>|string
      */
-    public array|string $styleSrcElem = 'self';
+    public array|string $styleSrcElem = [
+        'self',
+        'unsafe-inline',
+        'https://fonts.googleapis.com',
+    ];
 
     /**
      * Specifies valid sources for stylesheets inline
@@ -96,45 +115,31 @@ class ContentSecurityPolicy extends BaseConfig
      *
      * @var list<string>|string
      */
-    public array|string $styleSrcAttr = 'self';
+    public array|string $styleSrcAttr = [
+        'self',
+        'unsafe-inline',
+    ];
 
     /**
      * Defines the origins from which images can be loaded.
      *
      * @var list<string>|string
      */
-    public $imageSrc = 'self';
-
-    /**
-     * Restricts the URLs that can appear in a page's `<base>` element.
-     *
-     * Will default to self if not overridden
-     *
-     * @var list<string>|string|null
-     */
-    public $baseURI;
-
-    /**
-     * Lists the URLs for workers and embedded frame contents
-     *
-     * @var list<string>|string
-     */
-    public $childSrc = 'self';
-
-    /**
-     * Limits the origins that you can connect to (via XHR,
-     * WebSockets, and EventSource).
-     *
-     * @var list<string>|string
-     */
-    public $connectSrc = 'self';
+    public $imageSrc = [
+        'self',
+        'data:',
+        '*',
+    ];
 
     /**
      * Specifies the origins that can serve web fonts.
      *
      * @var list<string>|string
      */
-    public $fontSrc;
+    public $fontSrc = [
+        'self',
+        'https://fonts.gstatic.com',
+    ];
 
     /**
      * Lists valid endpoints for submission from `<form>` tags.

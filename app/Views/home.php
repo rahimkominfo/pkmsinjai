@@ -92,7 +92,7 @@
         <p>&copy; <?= date('Y') ?> Dinas Kesehatan Kabupaten Sinjai. Hak Cipta Dilindungi.</p>
     </footer>
 
-    <script>
+    <script {csp-script-nonce}>
         const searchInput = document.getElementById('pkmSearch');
         const pkmCards = document.querySelectorAll('.pkm-card');
         const noResults = document.getElementById('noResults');
@@ -105,7 +105,7 @@
 
             pkmCards.forEach(card => {
                 const name = card.getAttribute('data-nama');
-                if (name.includes(query)) {
+                if (name && name.includes(query)) {
                     card.style.display = 'block';
                     visibleCount++;
                 } else {

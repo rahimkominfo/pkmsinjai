@@ -50,11 +50,24 @@
                 <label for="parent_id" class="block font-label-md text-label-md text-on-surface mb-2">Induk Menu (Opsional)</label>
                 <select id="parent_id" name="parent_id" class="w-full border border-outline px-4 py-3 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-surface text-on-surface font-body-lg text-body-lg">
                     <option value="">-- Pilih Induk Menu (Utama) --</option>
-                    <?php foreach ($parent_menus as $p): ?>
-                        <option value="<?= $p['id'] ?>" <?= old('parent_id', $menu['parent_id'] ?? '') == $p['id'] ? 'selected' : '' ?>>
-                            <?= esc($p['title']) ?><?= isset($p['pkm_nama']) ? ' - (' . esc($p['pkm_nama']) . ')' : '' ?>
-                        </option>
-                    <?php endforeach; ?>
+                    <?php 
+                    $renderOptions = function($items, $level = 0, $selectedId = null) use (&$renderOptions) {
+                        foreach ($items as $item) {
+                            $prefix = str_repeat('-- ', $level);
+                            $selected = ($selectedId == $item['id']) ? 'selected' : '';
+                            echo '<option value="' . $item['id'] . '" ' . $selected . '>';
+                            echo $prefix . esc($item['title']);
+                            if (isset($item['pkm_nama'])) {
+                                echo ' - (' . esc($item['pkm_nama']) . ')';
+                            }
+                            echo '</option>';
+                            if (!empty($item['children'])) {
+                                $renderOptions($item['children'], $level + 1, $selectedId);
+                            }
+                        }
+                    };
+                    $renderOptions($parent_menus, 0, old('parent_id', $menu['parent_id'] ?? ''));
+                    ?>
                 </select>
                 <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Pilih induk jika ini adalah sub-menu.</p>
             </div>

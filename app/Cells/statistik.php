@@ -6,20 +6,18 @@
             <p class="text-on-surface-variant font-body-md text-body-md">Data Jumlah Pasien Terdiagnosa</p>
         </div>
         <div class="flex items-center gap-3">
-            <select class="form-select bg-surface border border-outline-variant rounded-md text-label-md font-label-md py-2 pl-3 pr-8 focus:border-primary focus:ring-1 focus:ring-primary">
-                <option value="mingguan">Mingguan</option>
-                <option value="bulanan">Bulanan</option>
-            </select>
-            <div class="relative group">
-                <button class="bg-surface-container-low hover:bg-surface-container text-primary border border-primary/20 px-4 py-2 rounded-md font-label-md text-label-md flex items-center gap-2 transition-colors">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">download</span>
-                    Export Data
-                </button>
-                <div class="absolute right-0 mt-2 w-32 bg-surface-container-lowest rounded-md shadow-lg border border-outline-variant opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
-                    <a class="block px-4 py-2 text-label-md font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition-colors" href="#">PDF</a>
-                    <a class="block px-4 py-2 text-label-md font-label-md text-on-surface hover:bg-surface-container-low hover:text-primary transition-colors" href="#">Excel</a>
-                </div>
-            </div>
+            <form action="" method="get">
+                <select name="periode" onchange="this.form.submit()" class="form-select bg-surface border border-outline-variant rounded-md text-label-md font-label-md py-2 pl-3 pr-8 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                    <option value="">Seluruh Periode</option>
+                    <?php foreach ($list_periode as $p): ?>
+                        <?php 
+                        $val = $p['periode_awal'] . '|' . $p['periode_akhir'];
+                        $label = date('d/m/Y', strtotime($p['periode_awal'])) . ' - ' . date('d/m/Y', strtotime($p['periode_akhir']));
+                        ?>
+                        <option value="<?= $val ?>" <?= $selected_periode == $val ? 'selected' : '' ?>><?= $label ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
         </div>
     </div>
     <!-- Bar Chart -->
@@ -34,7 +32,11 @@
         </div>
         <!-- Y-axis labels -->
         <div class="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between text-caption font-caption text-on-surface-variant -ml-6 py-1">
-            <span>12</span><span>9</span><span>6</span><span>3</span><span>0</span>
+            <span><?= $max_jumlah ?></span>
+            <span><?= round($max_jumlah * 0.75) ?></span>
+            <span><?= round($max_jumlah * 0.5) ?></span>
+            <span><?= round($max_jumlah * 0.25) ?></span>
+            <span>0</span>
         </div>
         <!-- Bars -->
         <?php foreach ($penyakit as $item): ?>

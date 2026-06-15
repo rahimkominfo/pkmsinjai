@@ -44,8 +44,8 @@ class AntrianLoket extends BaseAdminController
             $builder = $builder->where('trn_antrian.pkm_id', $filter_pkm_id);
         }
         
-        // Jika bukan admin, hanya bisa melihat antrian sesuai perannya
-        if (!in_array($role, ['Admin Dinkes', 'Admin PKM'])) {
+        // Jika bukan admin atau peran Antrian, hanya bisa melihat antrian sesuai perannya
+        if (!in_array($role, ['Admin Dinkes', 'Admin PKM', 'Antrian'])) {
             $builder = $builder->where('trn_antrian.peran_id', $peran_id);
         }
         
@@ -77,7 +77,7 @@ class AntrianLoket extends BaseAdminController
             $builder = $builder->where('pkm_id', $pkm_id);
         }
         
-        if (!in_array($role, ['Admin Dinkes', 'Admin PKM'])) {
+        if (!in_array($role, ['Admin Dinkes', 'Admin PKM', 'Antrian'])) {
             $builder = $builder->where('peran_id', $peran_id);
         }
         

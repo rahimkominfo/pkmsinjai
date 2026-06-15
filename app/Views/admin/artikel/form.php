@@ -20,7 +20,7 @@
     <?php endif; ?>
 
     <div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-[24px] level-1-surface">
-        <form action="<?= isset($artikel) ? base_url('admin/' . tenant()->pkm_slug . '/artikel/update/' . $artikel['artikel_id']) : base_url('admin/' . tenant()->pkm_slug . '/artikel/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="<?= isset($artikel) ? base_url('admin/' . tenant()->pkm_slug . '/artikel/update/' . $artikel['artikel_uuid']) : base_url('admin/' . tenant()->pkm_slug . '/artikel/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
             <?= csrf_field() ?>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -29,7 +29,7 @@
                     <!-- Judul -->
                     <div>
                         <label for="judul" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Judul Artikel <span class="text-error">*</span></label>
-                        <input type="text" id="judul" name="judul" value="<?= old('judul', $artikel['judul'] ?? '') ?>" required
+                        <input type="text" id="judul" name="judul" value="<?= esc(old('judul', $artikel['judul'] ?? '')) ?>" required
                             class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all">
                     </div>
 
@@ -37,7 +37,7 @@
                     <div>
                         <label for="abstrak" class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Abstrak Singkat</label>
                         <textarea id="abstrak" name="abstrak" rows="3"
-                            class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all"><?= old('abstrak', $artikel['abstrak'] ?? '') ?></textarea>
+                            class="w-full bg-surface border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-4 py-2 transition-all"><?= esc(old('abstrak', $artikel['abstrak'] ?? '')) ?></textarea>
                         <p class="text-[12px] text-outline mt-1">Muncul di daftar berita atau halaman depan.</p>
                     </div>
 
@@ -72,6 +72,15 @@
                             <option value="Ditayangkan" <?= old('status', $artikel['status'] ?? '') === 'Ditayangkan' ? 'selected' : '' ?>>Ditayangkan</option>
                             <option value="Diarsipkan" <?= old('status', $artikel['status'] ?? '') === 'Diarsipkan' ? 'selected' : '' ?>>Diarsipkan</option>
                         </select>
+                    </div>
+
+                    <!-- Tanggal Publikasi -->
+                    <div class="bg-surface p-4 rounded border border-surface-variant">
+                        <label for="tanggal_publikasi" class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Tanggal Publikasi</label>
+                        <input type="datetime-local" id="tanggal_publikasi" name="tanggal_publikasi" 
+                            value="<?= old('tanggal_publikasi', isset($artikel['tanggal_publikasi']) ? date('Y-m-d\TH:i', strtotime($artikel['tanggal_publikasi'])) : date('Y-m-d\TH:i')) ?>"
+                            class="w-full bg-surface-container-lowest border border-surface-variant rounded focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md text-on-surface px-3 py-2 transition-all">
+                        <p class="text-[11px] text-outline mt-1">Biarkan default jika ingin dipublikasikan sekarang.</p>
                     </div>
 
                     <!-- Kategori -->
@@ -151,14 +160,78 @@
     </div>
 </div>
 
-<style>
+<style {csp-style-nonce}>
+/* Override Tailwind's base svg display:block which breaks CKEditor UI */
+.ck.ck-reset_all svg, .ck-body-wrapper svg {
+    display: inline !important;
+}
+
+/* Base CKEditor UI styling */
 .ck-editor__editable_inline {
     min-height: 400px;
+    background-color: var(--surface-container-lowest, #ffffff) !important;
+    border-bottom-left-radius: 0.375rem !important;
+    border-bottom-right-radius: 0.375rem !important;
+    color: var(--on-surface-variant, #333) !important;
+    border: 1px solid var(--outline-variant, #ccc) !important;
+    border-top: none !important;
 }
+.ck.ck-toolbar {
+    border-top-left-radius: 0.375rem !important;
+    border-top-right-radius: 0.375rem !important;
+    background-color: var(--surface-container-low, #f3f4f6) !important;
+    border: 1px solid var(--outline-variant, #ccc) !important;
+}
+
+/* Mengembalikan gaya dasar konten yang di-reset oleh Tailwind (hanya berlaku di dalam editor) */
+.ck-content ul {
+    list-style-type: disc !important;
+    padding-left: 2em !important;
+    margin-bottom: 1em !important;
+}
+.ck-content ol {
+    list-style-type: decimal !important;
+    padding-left: 2em !important;
+    margin-bottom: 1em !important;
+}
+.ck-content li {
+    display: list-item !important;
+    margin-bottom: 0.25em !important;
+}
+.ck-content h2 { font-size: 1.5em !important; font-weight: bold !important; margin-top: 1em !important; margin-bottom: 0.5em !important; }
+.ck-content h3 { font-size: 1.25em !important; font-weight: bold !important; margin-top: 1em !important; margin-bottom: 0.5em !important; }
+.ck-content h4 { font-size: 1.1em !important; font-weight: bold !important; margin-top: 1em !important; margin-bottom: 0.5em !important; }
+.ck-content blockquote {
+    border-left: 4px solid #ccc !important;
+    padding-left: 1em !important;
+    margin-left: 0 !important;
+    font-style: italic !important;
+    color: #555 !important;
+}
+.ck-content a { color: #2563eb !important; text-decoration: underline !important; }
+.ck-content p { margin-bottom: 1em !important; }
 </style>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-<script>
+<style id="csp-nonce-source" {csp-style-nonce}></style>
+<script {csp-script-nonce}>
+(function() {
+    var styleTag = document.getElementById('csp-nonce-source');
+    if (styleTag && styleTag.nonce) {
+        var cspNonce = styleTag.nonce;
+        var originalCreateElement = document.createElement;
+        document.createElement = function(tagName) {
+            var el = originalCreateElement.apply(this, arguments);
+            if (tagName.toLowerCase() === 'style') {
+                el.setAttribute('nonce', cspNonce);
+            }
+            return el;
+        };
+    }
+})();
+</script>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js" {csp-script-nonce}></script>
+<script {csp-script-nonce}>
 function toggleGambar(val) {
     if (val === 'upload') {
         document.getElementById('gambar_upload_container').classList.remove('hidden');

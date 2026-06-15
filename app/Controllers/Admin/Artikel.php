@@ -69,9 +69,10 @@ class Artikel extends BaseAdminController
         $sumberGambar = $this->request->getPost('sumber_gambar');
 
         $rules = [
-            'judul'  => 'required|min_length[5]',
-            'konten' => 'required|min_length[10]',
-            'status' => 'required|in_list[Draf,Ditayangkan,Diarsipkan]'
+            'judul'             => 'required|min_length[5]',
+            'konten'            => 'required|min_length[10]',
+            'status'            => 'required|in_list[Draf,Ditayangkan,Diarsipkan]',
+            'tanggal_publikasi' => 'permit_empty|valid_date[Y-m-d\TH:i]'
         ];
         
         if (tenant()->pkm_id === 'super') {
@@ -147,6 +148,11 @@ class Artikel extends BaseAdminController
             $gambarUrlFinal = $this->request->getPost('gambar_utama_link');
         }
 
+        $tglPublikasi = $this->request->getPost('tanggal_publikasi');
+        if (!empty($tglPublikasi)) {
+            $tglPublikasi = str_replace('T', ' ', $tglPublikasi) . ':00';
+        }
+
         $dataInsert = [
             'pkm_id'            => $pkm_id,
             'judul'             => $judul,
@@ -155,7 +161,7 @@ class Artikel extends BaseAdminController
             'abstrak'           => $this->request->getPost('abstrak'),
             'user_id'           => $user_id,
             'status'            => $this->request->getPost('status'),
-            'tanggal_publikasi' => date('Y-m-d H:i:s')
+            'tanggal_publikasi' => $tglPublikasi ?: date('Y-m-d H:i:s')
         ];
 
         if ($gambarUrlFinal) {
@@ -173,15 +179,22 @@ class Artikel extends BaseAdminController
         return redirect()->to('admin/' . tenant()->pkm_slug . '/artikel')->with('message', 'Artikel berhasil ditambahkan.');
     }
 
-    public function edit($id)
+    public function edit($uuid)
     {
         $pkm_id = tenant()->pkm_id;
-        $artikel = $this->artikelModel->find($id);
+        $query = $this->artikelModel->where('artikel_uuid', $uuid);
+        
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
+        }
+        
+        $artikel = $query->first();
 
         if (!$artikel) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Artikel tidak ditemukan');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Artikel tidak ditemukan atau Anda tidak memiliki akses.');
         }
 
+        $id = $artikel['artikel_id'];
         $data = [
             'title'           => 'Edit Artikel',
             'artikel'         => $artikel,
@@ -197,27 +210,36 @@ class Artikel extends BaseAdminController
         return view('admin/artikel/form', $data);
     }
 
-    public function update($id)
+    public function update($uuid)
     {
         if ($this->request->getMethod() === 'POST' && empty($_POST) && isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 0) {
             return redirect()->back()->withInput()->with('errors', ['Ukuran total data/file yang diunggah terlalu besar melebihi batas server (' . ini_get('post_max_size') . '). Silakan kompres ukuran gambar Anda.']);
         }
 
-        $artikel = $this->artikelModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        $query = $this->artikelModel->where('artikel_uuid', $uuid);
+        
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
+        }
+        
+        $artikel = $query->first();
         
         if (!$artikel) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Artikel tidak ditemukan');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Artikel tidak ditemukan atau Anda tidak memiliki akses.');
         }
 
+        $id = $artikel['artikel_id'];
         $sumberGambar = $this->request->getPost('sumber_gambar');
 
         $rules = [
-            'judul'  => 'required|min_length[5]',
-            'konten' => 'required|min_length[10]',
-            'status' => 'required|in_list[Draf,Ditayangkan,Diarsipkan]'
+            'judul'             => 'required|min_length[5]',
+            'konten'            => 'required|min_length[10]',
+            'status'            => 'required|in_list[Draf,Ditayangkan,Diarsipkan]',
+            'tanggal_publikasi' => 'permit_empty|valid_date[Y-m-d\TH:i]'
         ];
 
-        if (tenant()->pkm_id === 'super') {
+        if ($pkm_id === 'super') {
             $rules['pkm_id'] = 'required';
         }
 
@@ -231,9 +253,9 @@ class Artikel extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $pkm_id = tenant()->pkm_id;
+        $target_pkm_id = $pkm_id;
         if ($pkm_id === 'super') {
-            $pkm_id = $this->request->getPost('pkm_id');
+            $target_pkm_id = $this->request->getPost('pkm_id');
         }
         
         helper('text');
@@ -248,16 +270,22 @@ class Artikel extends BaseAdminController
             }
         }
 
+        $tglPublikasi = $this->request->getPost('tanggal_publikasi');
+        if (!empty($tglPublikasi)) {
+            $tglPublikasi = str_replace('T', ' ', $tglPublikasi) . ':00';
+        }
+
         $updateData = [
-            'judul'   => $judul,
-            'slug'    => $slug,
-            'konten'  => $this->request->getPost('konten'),
-            'abstrak' => $this->request->getPost('abstrak'),
-            'status'  => $this->request->getPost('status')
+            'judul'             => $judul,
+            'slug'              => $slug,
+            'konten'            => $this->request->getPost('konten'),
+            'abstrak'           => $this->request->getPost('abstrak'),
+            'status'            => $this->request->getPost('status'),
+            'tanggal_publikasi' => $tglPublikasi ?: date('Y-m-d H:i:s')
         ];
         
-        if (tenant()->pkm_id === 'super') {
-            $updateData['pkm_id'] = $pkm_id;
+        if ($pkm_id === 'super') {
+            $updateData['pkm_id'] = $target_pkm_id;
         }
 
         // Handle Gambar Utama
@@ -265,9 +293,9 @@ class Artikel extends BaseAdminController
             $fileGambar = $this->request->getFile('gambar_utama');
             if ($fileGambar && $fileGambar->isValid() && !$fileGambar->hasMoved()) {
                 $pkm_slug = tenant()->pkm_slug;
-                if (tenant()->pkm_id === 'super') {
+                if ($pkm_id === 'super') {
                     $pkmModel = new \App\Models\PkmModel();
-                    $selectedPkm = $pkmModel->find($pkm_id);
+                    $selectedPkm = $pkmModel->find($target_pkm_id);
                     if ($selectedPkm) {
                         $pkm_slug = $selectedPkm['pkm_slug'];
                     }
@@ -292,7 +320,7 @@ class Artikel extends BaseAdminController
                 // Simpan ke tabel media
                 $mediaModel = new \App\Models\MediaModel();
                 $mediaModel->insert([
-                    'pkm_id'    => $pkm_id,
+                    'pkm_id'    => $target_pkm_id,
                     'nama_file' => $fileGambar->getClientName(),
                     'url_file'  => $gambarUrlFinal,
                     'tipe_file' => 'image/webp',
@@ -307,17 +335,26 @@ class Artikel extends BaseAdminController
 
         // Handle Kategori
         $kategori_ids = $this->request->getPost('kategori_id'); // array
-        $this->artikelModel->syncCategories($id, $pkm_id, empty($kategori_ids) ? [] : $kategori_ids);
+        $this->artikelModel->syncCategories($id, $target_pkm_id, empty($kategori_ids) ? [] : $kategori_ids);
 
         return redirect()->to('admin/' . tenant()->pkm_slug . '/artikel')->with('message', 'Artikel berhasil diupdate.');
     }
 
-    public function delete($id)
+    public function delete($uuid)
     {
-        if ($this->artikelModel->delete($id)) {
+        $pkm_id = tenant()->pkm_id;
+        $query = $this->artikelModel->where('artikel_uuid', $uuid);
+        
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
+        }
+        
+        $artikel = $query->first();
+
+        if ($artikel && $this->artikelModel->delete($artikel['artikel_id'])) {
             return redirect()->to('admin/' . tenant()->pkm_slug . '/artikel')->with('message', 'Artikel berhasil dihapus.');
         }
 
-        return redirect()->to('admin/' . tenant()->pkm_slug . '/artikel')->with('error', 'Gagal menghapus artikel.');
+        return redirect()->to('admin/' . tenant()->pkm_slug . '/artikel')->with('error', 'Gagal menghapus artikel atau Anda tidak memiliki akses.');
     }
 }

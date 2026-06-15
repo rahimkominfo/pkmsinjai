@@ -2,57 +2,94 @@
 
 <?= $this->section('content') ?>
 
+<!-- PKM Hero Banner (Responsive) -->
+<?php if (!empty(tenant('header_img'))): ?>
+<section class="relative h-[250px] md:h-[450px] w-full overflow-hidden">
+    <picture>
+        <!-- Mobile Image -->
+        <?php if (!empty(tenant('header_img_mobile'))): ?>
+            <source media="(max-width: 767px)" srcset="<?= base_url(tenant('header_img_mobile')) ?>">
+        <?php endif; ?>
+        <!-- Desktop Image (Default) -->
+        <img src="<?= base_url(tenant('header_img')) ?>" alt="<?= esc(tenant('pkm_nama')) ?>" class="w-full h-full object-cover">
+    </picture>
+    
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter w-full pb-8 md:pb-12">
+            <h1 class="text-white font-headline-xl text-3xl md:text-6xl drop-shadow-lg mb-2 leading-tight"><?= esc(tenant('pkm_nama')) ?></h1>
+            <?php if (!empty(tenant('pkm_motto'))): ?>
+                <p class="text-white/90 text-base md:text-xl font-light tracking-wide italic drop-shadow-md">"<?= esc(tenant('pkm_motto')) ?>"</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- Status Antrian Section (View Cell) -->
 <?= view_cell('App\Cells\AntrianCell::render') ?>
 
-<!-- Hero Carousel Section -->
-<section class="relative h-[450px] md:h-[600px] w-full overflow-hidden bg-surface-dim" id="hero-carousel">
-    <!-- Carousel Slides -->
-    <?php if (!empty($hero_artikel)): ?>
-        <?php foreach ($hero_artikel as $index => $hero): ?>
-        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out carousel-slide <?= $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' ?>">
-            <img alt="<?= esc($hero['judul']) ?>" class="w-full h-full object-cover" src="<?= strpos($hero['gambar_utama'], 'http') === 0 ? esc($hero['gambar_utama']) : base_url(esc($hero['gambar_utama'])) ?>"/>
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-            <!-- Content Overlay -->
-            <div class="absolute inset-0 flex flex-col justify-end pb-16 md:pb-24">
-                <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter w-full">
-                    <div class="max-w-3xl">
-                        <span class="inline-block bg-primary text-on-primary px-3 py-1 rounded-full text-label-md font-label-md mb-4 shadow-lg"><?= esc($hero['nama_kategori'] ?? 'Berita') ?></span>
-                        <h1 class="text-white font-headline-xl text-3xl md:text-5xl mb-4 leading-tight drop-shadow-md">
-                            <?= esc($hero['judul']) ?>
-                        </h1>
-                        <p class="text-white/90 font-body-lg text-lg hidden md:block mb-6 line-clamp-2 drop-shadow-sm">
-                            <?= esc($hero['abstrak']) ?>
-                        </p>
-                        <a href="<?= base_url(tenant()->pkm_slug . '/berita/detail/' . esc($hero['slug'])) ?>" class="inline-block bg-white text-primary px-6 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors shadow-md">
-                            Baca Selengkapnya
-                        </a>
+<!-- Hero & Flyer Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-gutter mt-6 mb-8">
+    <div class="flex flex-col lg:flex-row gap-6 h-auto lg:h-[500px] xl:h-[550px]">
+        <!-- Hero Carousel -->
+        <div class="flex-1 relative h-[400px] lg:h-full rounded-2xl overflow-hidden shadow-lg bg-surface-dim group" id="hero-carousel">
+            <!-- Carousel Slides -->
+            <?php if (!empty($hero_artikel)): ?>
+                <?php foreach ($hero_artikel as $index => $hero): ?>
+                <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out carousel-slide <?= $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' ?>">
+                    <img alt="<?= esc($hero['judul']) ?>" class="w-full h-full object-cover" src="<?= strpos($hero['gambar_utama'], 'http') === 0 ? esc($hero['gambar_utama']) : base_url(esc($hero['gambar_utama'])) ?>"/>
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    <!-- Content Overlay -->
+                    <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-10 lg:p-12">
+                        <div class="max-w-3xl">
+                            <span class="inline-block bg-primary text-on-primary px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase mb-3 md:mb-4 shadow-md"><?= esc($hero['nama_kategori'] ?? 'Berita') ?></span>
+                            <h1 class="text-white font-headline-lg text-2xl md:text-4xl lg:text-5xl mb-3 md:mb-4 leading-tight drop-shadow-md line-clamp-3">
+                                <?= esc($hero['judul']) ?>
+                            </h1>
+                            <p class="text-white/90 font-body-md md:font-body-lg text-base md:text-lg hidden md:block mb-6 line-clamp-2 drop-shadow-sm">
+                                <?= esc($hero['abstrak']) ?>
+                            </p>
+                            <a href="<?= base_url(tenant()->pkm_slug . '/berita/detail/' . esc($hero['slug'])) ?>" class="inline-block bg-white text-primary px-5 py-2.5 md:px-6 md:py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors shadow-md">
+                                Baca Selengkapnya
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
-    <!-- Navigation Arrows -->
-    <?php if (!empty($hero_artikel) && count($hero_artikel) > 1): ?>
-    <div class="absolute inset-0 flex items-center justify-between px-4 md:px-8 z-20 pointer-events-none">
-        <button onclick="prevSlide()" class="pointer-events-auto w-12 h-12 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md text-white transition-all">
-            <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button onclick="nextSlide()" class="pointer-events-auto w-12 h-12 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-md text-white transition-all">
-            <span class="material-symbols-outlined">chevron_right</span>
-        </button>
+            <!-- Navigation Arrows -->
+            <?php if (!empty($hero_artikel) && count($hero_artikel) > 1): ?>
+            <div class="absolute inset-0 flex items-center justify-between px-4 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button onclick="prevSlide()" class="pointer-events-auto w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-md text-white transition-all">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button onclick="nextSlide()" class="pointer-events-auto w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-md text-white transition-all">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+            
+            <!-- Carousel Indicators -->
+            <div class="absolute bottom-6 right-6 lg:bottom-12 lg:right-12 z-20 flex gap-2">
+                <?php foreach ($hero_artikel as $index => $hero): ?>
+                    <button onclick="goToSlide(<?= $index ?>)" class="carousel-dot w-2 h-2 md:w-3 md:h-3 rounded-full transition-all <?= $index === 0 ? 'bg-primary scale-125' : 'bg-white/50 hover:bg-white/80' ?>"></button>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+        </div>
+
+        <!-- PKM Flyer Utama -->
+        <?php if (!empty(tenant()->pkm_flyer)): ?>
+        <div class="w-full lg:w-[320px] xl:w-[400px] h-[400px] lg:h-full rounded-2xl overflow-hidden shadow-lg relative group shrink-0 bg-surface-container-low border-4 border-surface">
+            <img src="<?= strpos(tenant()->pkm_flyer, 'http') === 0 ? esc(tenant()->pkm_flyer) : base_url(esc(tenant()->pkm_flyer)) ?>" 
+                 alt="Flyer Promosi Utama" 
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                 onerror="this.onerror=null; this.parentElement.style.display='none';">
+        </div>
+        <?php endif; ?>
     </div>
-    
-    <!-- Carousel Indicators -->
-    <div class="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-2">
-        <?php foreach ($hero_artikel as $index => $hero): ?>
-            <button onclick="goToSlide(<?= $index ?>)" class="carousel-dot w-3 h-3 rounded-full transition-all <?= $index === 0 ? 'bg-primary scale-125' : 'bg-white/50 hover:bg-white/80' ?>"></button>
-        <?php endforeach; ?>
-    </div>
-    <?php endif; ?>
 </section>
 
 <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter pt-12 pb-section-gap">
@@ -116,6 +153,46 @@
         </div>
     </section>
 
+    <!-- Media Promosi Kesehatan Section -->
+    <section class="mb-section-gap">
+        <div class="mb-stack-lg">
+            <h2 class="font-headline-lg text-headline-lg border-b-2 border-primary inline-block pb-2">Media Promosi Kesehatan</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php if(!empty($flyer_promosi)): ?>
+                <?php foreach($flyer_promosi as $flyer): ?>
+                    <a href="<?= base_url(tenant()->pkm_slug . '/flayer/' . esc($flyer['uuid'])) ?>" class="group relative block aspect-[3/4] bg-surface rounded-xl overflow-hidden border-4 border-surface shadow-lg hover:shadow-xl transition-all duration-300">
+                        <!-- Image Container -->
+                        <div class="w-full h-full overflow-hidden bg-surface-container-low">
+                            <img src="<?= strpos($flyer['gambar_url'], 'http') === 0 ? esc($flyer['gambar_url']) : base_url(esc($flyer['gambar_url'])) ?>" 
+                                 alt="<?= esc($flyer['judul']) ?>" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                 onerror="this.onerror=null;this.src='<?= base_url('assets/img/placeholder.jpg') ?>';" />
+                        </div>
+                        
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                            <div class="p-6 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <?php if(!empty($flyer['label'])): ?>
+                                    <span class="inline-block bg-primary text-on-primary text-[11px] font-bold tracking-wider uppercase px-2 py-1 rounded mb-2 shadow-sm"><?= esc($flyer['label']) ?></span>
+                                <?php endif; ?>
+                                <h3 class="text-white font-headline-sm text-headline-sm font-bold line-clamp-2 drop-shadow-md">
+                                    <?= esc($flyer['judul']) ?>
+                                </h3>
+                            </div>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 bg-surface-container-lowest rounded-xl border-2 border-dashed border-outline-variant">
+                    <span class="material-symbols-outlined text-[48px] text-outline mb-2">web_stories</span>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant">Belum ada media promosi kesehatan yang dipublikasikan.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+
     <!-- Gallery Section -->
     <section class="mb-section-gap">
         <div class="flex justify-between items-end mb-stack-lg">
@@ -151,9 +228,65 @@
             <?php endif; ?>
         </div>
     </section>
+
+    <!-- Link Terkait Section -->
+    <section class="mb-section-gap">
+        <div class="flex justify-between items-end mb-stack-lg">
+            <h2 class="font-headline-lg text-headline-lg border-b-2 border-primary inline-block pb-2">Link Terkait</h2>
+            <div class="hidden md:flex gap-2">
+                <button id="btn-prev-link" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-highest text-on-surface transition-colors shadow-sm" aria-label="Previous">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button id="btn-next-link" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-highest text-on-surface transition-colors shadow-sm" aria-label="Next">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </div>
+
+        <?php
+        $link_terkait = [
+            ['nama' => 'BPJS Kesehatan', 'url' => 'https://www.bpjs-kesehatan.go.id', 'logo' => 'assets/link_terkait/bpjs.png'],
+            ['nama' => 'Satu Sehat', 'url' => 'https://satusehat.kemkes.go.id/', 'logo' => 'assets/link_terkait/satu_sehat.jpeg'],
+            ['nama' => 'Dinas Kesehatan', 'url' => 'https://dinkes.sinjaikab.go.id/', 'logo' => 'assets/link_terkait/dinkes.png'],
+            ['nama' => 'Humas Sinjai', 'url' => 'https://humas.sinjaikab.go.id/v1/', 'logo' => 'assets/link_terkait/humas.png'],
+            ['nama' => 'Sinjaikab', 'url' => 'https://sinjaikab.go.id/web/', 'logo' => 'assets/link_terkait/sinjai.png'],
+        ];
+        ?>
+
+        <div class="relative group" id="link-carousel-container">
+            
+            <div id="link-carousel" class="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth">
+                <?php foreach ($link_terkait as $index => $link): ?>
+                <!-- Card -->
+                <div class="snap-start shrink-0 w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)]">
+                    <div class="bg-white/60 backdrop-blur-md rounded-[20px] p-6 border border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.15)] hover:-translate-y-1 hover:scale-[1.03] transition-all duration-300 flex flex-col items-center text-center h-full group/card relative overflow-hidden">
+                        <!-- Glassmorphism gradient accent -->
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover/card:bg-primary/20 transition-colors"></div>
+                        
+                        <div class="w-20 h-20 md:w-24 md:h-24 mb-4 bg-white rounded-full p-2 shadow-sm flex items-center justify-center overflow-hidden border border-outline-variant/30 z-10">
+                            <img src="<?= base_url(esc($link['logo'])) ?>" alt="<?= esc($link['nama']) ?>" class="w-full h-full object-contain mix-blend-multiply group-hover/card:scale-110 transition-transform duration-300">
+                        </div>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-4 line-clamp-2 z-10"><?= esc($link['nama']) ?></h3>
+                        <a href="<?= esc($link['url']) ?>" target="_blank" rel="noopener noreferrer" class="mt-auto px-5 py-2.5 bg-surface-container text-primary hover:bg-primary hover:text-on-primary rounded-full font-label-md text-label-md transition-colors flex items-center gap-2 shadow-sm hover:shadow-md z-10">
+                            Kunjungi Website
+                            <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                        </a>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <!-- Indicators -->
+            <div class="flex justify-center gap-2 mt-2" id="link-dots">
+                <?php foreach ($link_terkait as $index => $link): ?>
+                <button class="link-dot w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300 <?= $index === 0 ? 'bg-primary w-6' : 'bg-outline-variant hover:bg-primary/50' ?>" aria-label="Go to slide <?= $index + 1 ?>" data-index="<?= $index ?>"></button>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
 </div>
 
-<script>
+<script {csp-script-nonce}>
     let currentSlide = 0;
     const slides = document.querySelectorAll('.carousel-slide');
     const dots = document.querySelectorAll('.carousel-dot');
@@ -247,7 +380,7 @@
     </div>
 </div>
 
-<script>
+<script {csp-script-nonce}>
     let currentGalleryPhotos = [];
     let currentPhotoIndex = 0;
     const galleryModal = document.getElementById('gallery-modal');
@@ -322,6 +455,130 @@
             }
         }
     });
+</script>
+
+<script {csp-script-nonce}>
+function initLinkCarousel() {
+    const linkCarousel = document.getElementById('link-carousel');
+    if (!linkCarousel) return;
+
+    const linkContainer = document.getElementById('link-carousel-container');
+    const linkDots = document.querySelectorAll('.link-dot');
+    const btnNext = document.getElementById('btn-next-link');
+    const btnPrev = document.getElementById('btn-prev-link');
+    
+    const totalLinks = <?= count($link_terkait ?? []) ?>;
+    let currentLinkIndex = 0;
+    let linkAutoplayInterval;
+
+    function updateLinkDots(index) {
+        linkDots.forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.remove('bg-outline-variant', 'w-2', 'md:w-2.5');
+                dot.classList.add('bg-primary', 'w-6');
+            } else {
+                dot.classList.remove('bg-primary', 'w-6');
+                dot.classList.add('bg-outline-variant', 'w-2', 'md:w-2.5');
+            }
+        });
+    }
+
+    function getCardWidth() {
+        const cardElement = linkCarousel.children[0];
+        if (!cardElement) return 0;
+        const style = window.getComputedStyle(linkCarousel);
+        const gap = parseFloat(style.gap) || parseFloat(style.columnGap) || 0;
+        return cardElement.offsetWidth + gap;
+    }
+
+    function scrollToLinkIndex(index) {
+        const itemWidth = getCardWidth();
+        if (itemWidth === 0) return;
+        
+        linkCarousel.scrollTo({
+            left: index * itemWidth,
+            behavior: 'smooth'
+        });
+        
+        currentLinkIndex = index;
+        updateLinkDots(index);
+    }
+
+    function nextLinkSlide() {
+        const containerWidth = linkCarousel.offsetWidth;
+        const cardElement = linkCarousel.children[0];
+        if (!cardElement) return;
+        const itemsPerView = Math.round(containerWidth / cardElement.offsetWidth) || 1;
+        
+        if (currentLinkIndex >= totalLinks - itemsPerView) {
+            currentLinkIndex = 0; // Loop back
+        } else {
+            currentLinkIndex++;
+        }
+        scrollToLinkIndex(currentLinkIndex);
+    }
+
+    function prevLinkSlide() {
+        if (currentLinkIndex <= 0) {
+            const containerWidth = linkCarousel.offsetWidth;
+            const cardElement = linkCarousel.children[0];
+            if (!cardElement) return;
+            const itemsPerView = Math.round(containerWidth / cardElement.offsetWidth) || 1;
+            currentLinkIndex = Math.max(0, totalLinks - itemsPerView);
+        } else {
+            currentLinkIndex--;
+        }
+        scrollToLinkIndex(currentLinkIndex);
+    }
+
+    function pauseLinkCarousel() {
+        clearInterval(linkAutoplayInterval);
+    }
+
+    function resumeLinkCarousel() {
+        pauseLinkCarousel(); // clear existing first
+        linkAutoplayInterval = setInterval(nextLinkSlide, 4000); // 4 seconds autoplay
+    }
+
+    // Attach Event Listeners
+    if (btnNext) btnNext.addEventListener('click', nextLinkSlide);
+    if (btnPrev) btnPrev.addEventListener('click', prevLinkSlide);
+
+    linkDots.forEach((dot) => {
+        dot.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            scrollToLinkIndex(index);
+        });
+    });
+
+    if (linkContainer) {
+        linkContainer.addEventListener('mouseenter', pauseLinkCarousel);
+        linkContainer.addEventListener('mouseleave', resumeLinkCarousel);
+        linkContainer.addEventListener('touchstart', pauseLinkCarousel, {passive: true});
+        linkContainer.addEventListener('touchend', resumeLinkCarousel, {passive: true});
+    }
+
+    linkCarousel.addEventListener('scroll', () => {
+        const scrollLeft = linkCarousel.scrollLeft;
+        const itemWidth = getCardWidth();
+        if (itemWidth === 0) return;
+        
+        const newIndex = Math.round(scrollLeft / itemWidth);
+        if (newIndex !== currentLinkIndex && newIndex < totalLinks && newIndex >= 0) {
+            currentLinkIndex = newIndex;
+            updateLinkDots(currentLinkIndex);
+        }
+    }, { passive: true });
+
+    // Start autoplay
+    resumeLinkCarousel();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLinkCarousel);
+} else {
+    initLinkCarousel();
+}
 </script>
 
 <?= $this->endSection() ?>

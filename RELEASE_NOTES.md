@@ -1,3 +1,39 @@
+## [v1.0.10] - 2026-06-13
+### ✨ Added
+- Penambahan fitur edit tanggal publikasi pada form artikel (Create & Edit) di Dashboard Admin.
+- Validasi format tanggal publikasi untuk memastikan kompatibilitas dengan database MySQL.
+
+## [v1.0.9] - 2026-06-12
+### ✨ Added
+- Fitur CRUD Halaman Statis (Pages) untuk membuat halaman informasi khusus per tenant.
+- Penambahan menu "Halaman Statis" pada SideNavBar di Dashboard Admin.
+- Tabel database `mst_pages` untuk menyimpan data halaman statis dengan dukungan `UUID` untuk URL.
+- Penambahan form input gambar header/banner khusus mobile (`header_img_mobile`) pada halaman Pengaturan Identitas PKM.
+- Implementasi upload, konversi WebP, dan penyimpanan aset banner mobile per tenant.
+- Penyesuaian UI form pengaturan untuk membedakan banner desktop (landscape) dan mobile (portrait/square).
+- Fitur filter periode pada tabel "Data Terimport" di halaman Statistik Penyakit untuk mempermudah audit data per laporan.
+- Implementasi filter periode dinamis pada Grafik Penyakit Terbanyak di halaman Frontend untuk menyaring data berdasarkan laporan yang tersedia.
+- Penyederhanaan UI Grafik Penyakit dengan menghapus tombol Export Data pada sisi publik.
+- Pembaruan sistem manajemen menu: Mendukung hierarki menu tak terbatas (nested menus) dengan pilihan induk yang lebih fleksibel.
+- Implementasi perenderan menu rekursif pada Navbar Frontend untuk mendukung tampilan sub-menu bertingkat (multi-level dropdown) baik di desktop maupun mobile.
+
+## [v1.0.8] - 2026-06-11
+### 🛡️ Security
+- Implementasi penguatan keamanan global: Mengaktifkan CSRF Protection, XSS Filtering (invalidchars), Honeypot, dan Secure Headers secara global.
+- Aktivasi Content Security Policy (CSP) untuk mencegah serangan injection dan cross-site scripting (XSS).
+- Mitigasi celah keamanan IDOR (Insecure Direct Object Reference) pada modul Artikel, Kategori, dan Pengguna dengan verifikasi kepemilikan data (tenant isolation) yang lebih ketat.
+- Migrasi URL administratif dari berbasis ID numerik ke berbasis UUID sesuai standar keamanan `GEMINI.md`.
+- Penambahan fungsi escaping `esc()` pada seluruh input form untuk mencegah eksekusi skrip berbahaya.
+- Pengaktifan fitur CSRF Token Randomization untuk perlindungan tambahan.
+
+## [v1.0.7] - 2026-06-11
+### ✨ Added
+- Fitur Import Statistik Penyakit dari file Excel (`.xlsx`, `.xls`) di Dashboard Admin.
+- Menu "Statistik Penyakit" pada SideNavBar Admin untuk manajemen data laporan penyakit tahunan/bulanan.
+- Tabel database `trn_statistik_penyakit` untuk menyimpan data diagnosa penyakit per tenant.
+- Integrasi `StatistikCell` di Frontend untuk menampilkan grafik 10 penyakit terbanyak secara dinamis dari database.
+- Dukungan library `phpoffice/phpspreadsheet` untuk pemrosesan file Excel.
+
 ## [v1.0.6] - 2026-06-10
 ### ✨ Added
 - Fitur Pencarian Puskesmas pada halaman utama portal (`/`) untuk mempermudah akses informasi antar wilayah.

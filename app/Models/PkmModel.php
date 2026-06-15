@@ -17,17 +17,21 @@ class PkmModel extends Model
         'pkm_uuid', 
         'pkm_nama', 
         'pkm_slug', 
+        'pkm_domain',
         'primary_color',
         'on_primary_color',
         'logo', 
         'header_img',
+        'header_img_mobile',
+        'pkm_motto',
         'alamat',
         'email',
         'telepon',
         'facebook',
         'instagram',
         'youtube',
-        'google_maps'
+        'google_maps',
+        'pkm_flyer'
     ];
 
     // Dates

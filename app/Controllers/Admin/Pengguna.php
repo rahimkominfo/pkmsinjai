@@ -89,12 +89,19 @@ class Pengguna extends BaseAdminController
         return redirect()->to('admin/' . tenant()->pkm_slug . '/pengguna')->with('message', 'Pengguna berhasil ditambahkan.');
     }
 
-    public function edit($id)
+    public function edit($uuid)
     {
-        $user = $this->userModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        $query = $this->userModel->where('user_uuid', $uuid);
+
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
+        }
+
+        $user = $query->first();
 
         if (!$user) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Pengguna tidak ditemukan');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Pengguna tidak ditemukan atau Anda tidak memiliki akses.');
         }
 
         $peranModel = new \App\Models\PeranModel();
@@ -116,14 +123,22 @@ class Pengguna extends BaseAdminController
         return view('admin/pengguna/form', $data);
     }
 
-    public function update($id)
+    public function update($uuid)
     {
-        $user = $this->userModel->find($id);
-        
-        if (!$user) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Pengguna tidak ditemukan');
+        $pkm_id = tenant()->pkm_id;
+        $query = $this->userModel->where('user_uuid', $uuid);
+
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
         }
 
+        $user = $query->first();
+        
+        if (!$user) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Pengguna tidak ditemukan atau Anda tidak memiliki akses.');
+        }
+
+        $id = $user['user_id'];
         $rules = [
             'pkm_id'      => 'required',
             'username'    => "required|alpha_numeric_space|min_length[3]|is_unique[sys_users.username,user_id,{$id}]",
@@ -141,10 +156,10 @@ class Pengguna extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $pkm_id = $this->request->getPost('pkm_id');
+        $target_pkm_id = $this->request->getPost('pkm_id');
 
         $updateData = [
-            'pkm_id'      => $pkm_id === 'super' ? null : $pkm_id,
+            'pkm_id'      => $target_pkm_id === 'super' ? null : $target_pkm_id,
             'username'    => $this->request->getPost('username'),
             'email'       => $this->request->getPost('email'),
             'nama_publik' => $this->request->getPost('nama_publik'),
@@ -160,12 +175,21 @@ class Pengguna extends BaseAdminController
         return redirect()->to('admin/' . tenant()->pkm_slug . '/pengguna')->with('message', 'Pengguna berhasil diupdate.');
     }
 
-    public function delete($id)
+    public function delete($uuid)
     {
-        if ($this->userModel->delete($id)) {
+        $pkm_id = tenant()->pkm_id;
+        $query = $this->userModel->where('user_uuid', $uuid);
+
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
+        }
+
+        $user = $query->first();
+
+        if ($user && $this->userModel->delete($user['user_id'])) {
             return redirect()->to('admin/' . tenant()->pkm_slug . '/pengguna')->with('message', 'Pengguna berhasil dihapus.');
         }
 
-        return redirect()->to('admin/' . tenant()->pkm_slug . '/pengguna')->with('error', 'Gagal menghapus pengguna.');
+        return redirect()->to('admin/' . tenant()->pkm_slug . '/pengguna')->with('error', 'Gagal menghapus pengguna atau Anda tidak memiliki akses.');
     }
 }

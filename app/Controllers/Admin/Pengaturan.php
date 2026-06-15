@@ -54,6 +54,10 @@ class Pengaturan extends BaseAdminController
             $rules['header_img'] = 'is_image[header_img]|mime_in[header_img,image/jpg,image/jpeg,image/png,image/webp]|max_size[header_img,2048]';
         }
 
+        if ($this->request->getFile('header_img_mobile')->isValid()) {
+            $rules['header_img_mobile'] = 'is_image[header_img_mobile]|mime_in[header_img_mobile,image/jpg,image/jpeg,image/png,image/webp]|max_size[header_img_mobile,1024]';
+        }
+
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -79,6 +83,7 @@ class Pengaturan extends BaseAdminController
             'instagram'     => $this->request->getPost('instagram'),
             'youtube'       => $this->request->getPost('youtube'),
             'google_maps'   => $this->request->getPost('google_maps'),
+            'pkm_flyer'     => $this->request->getPost('pkm_flyer'),
         ];
 
         $uploadPath = FCPATH . 'uploads/' . $slug . '/pkm/';
@@ -109,6 +114,18 @@ class Pengaturan extends BaseAdminController
                 ->save($uploadPath . $namaHeaderWebp, 80);
             
             $insertData['header_img'] = 'uploads/' . $slug . '/pkm/' . $namaHeaderWebp;
+        }
+
+        $fileHeaderMobile = $this->request->getFile('header_img_mobile');
+        if ($fileHeaderMobile && $fileHeaderMobile->isValid() && !$fileHeaderMobile->hasMoved()) {
+            $namaHeaderMobile = $fileHeaderMobile->getRandomName();
+            $namaHeaderMobileWebp = pathinfo($namaHeaderMobile, PATHINFO_FILENAME) . '.webp';
+            
+            \Config\Services::image()
+                ->withFile($fileHeaderMobile->getTempName())
+                ->save($uploadPath . $namaHeaderMobileWebp, 80);
+            
+            $insertData['header_img_mobile'] = 'uploads/' . $slug . '/pkm/' . $namaHeaderMobileWebp;
         }
 
         $this->pkmModel->insert($insertData);
@@ -152,6 +169,10 @@ class Pengaturan extends BaseAdminController
             $rules['header_img'] = 'is_image[header_img]|mime_in[header_img,image/jpg,image/jpeg,image/png,image/webp]|max_size[header_img,2048]';
         }
 
+        if ($this->request->getFile('header_img_mobile')->isValid()) {
+            $rules['header_img_mobile'] = 'is_image[header_img_mobile]|mime_in[header_img_mobile,image/jpg,image/jpeg,image/png,image/webp]|max_size[header_img_mobile,1024]';
+        }
+
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -179,6 +200,7 @@ class Pengaturan extends BaseAdminController
             'instagram'     => $this->request->getPost('instagram'),
             'youtube'       => $this->request->getPost('youtube'),
             'google_maps'   => $this->request->getPost('google_maps'),
+            'pkm_flyer'     => $this->request->getPost('pkm_flyer'),
         ];
 
         $uploadPath = FCPATH . 'uploads/' . $slug . '/pkm/';
@@ -209,6 +231,18 @@ class Pengaturan extends BaseAdminController
                 ->save($uploadPath . $namaHeaderWebp, 80);
             
             $updateData['header_img'] = 'uploads/' . $slug . '/pkm/' . $namaHeaderWebp;
+        }
+
+        $fileHeaderMobile = $this->request->getFile('header_img_mobile');
+        if ($fileHeaderMobile && $fileHeaderMobile->isValid() && !$fileHeaderMobile->hasMoved()) {
+            $namaHeaderMobile = $fileHeaderMobile->getRandomName();
+            $namaHeaderMobileWebp = pathinfo($namaHeaderMobile, PATHINFO_FILENAME) . '.webp';
+            
+            \Config\Services::image()
+                ->withFile($fileHeaderMobile->getTempName())
+                ->save($uploadPath . $namaHeaderMobileWebp, 80);
+            
+            $updateData['header_img_mobile'] = 'uploads/' . $slug . '/pkm/' . $namaHeaderMobileWebp;
         }
 
         $this->pkmModel->update($id, $updateData);

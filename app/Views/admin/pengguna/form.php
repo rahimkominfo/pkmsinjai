@@ -19,8 +19,8 @@
         </div>
     <?php endif; ?>
 
-    <div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-[24px] level-1-surface max-w-3xl">
-        <form action="<?= isset($user) ? base_url('admin/' . tenant()->pkm_slug . '/pengguna/update/' . $user['user_id']) : base_url('admin/' . tenant()->pkm_slug . '/pengguna/store') ?>" method="POST" class="space-y-6">
+    <div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-[24px] level-1-surface max-w-2xl">
+        <form action="<?= isset($user) ? base_url('admin/' . tenant()->pkm_slug . '/pengguna/update/' . $user['user_uuid']) : base_url('admin/' . tenant()->pkm_slug . '/pengguna/store') ?>" method="POST" class="space-y-6">
             <?= csrf_field() ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -60,7 +60,7 @@ class Kategori extends BaseAdminController
     public function store()
     {
         $rules = [
-            'nama' => 'required|min_length[3]|is_unique[mst_kategori.nama]'
+            'nama' => 'required|min_length[3]'
         ];
         
         if (tenant()->pkm_id === 'super') {
@@ -78,10 +78,16 @@ class Kategori extends BaseAdminController
 
         helper('text');
         $nama = $this->request->getPost('nama');
+        
+        // Cek nama unik per PKM
+        if ($this->kategoriModel->where('pkm_id', $pkm_id)->where('nama', $nama)->countAllResults() > 0) {
+            return redirect()->back()->withInput()->with('errors', ['nama' => 'The nama field must contain a unique value.']);
+        }
+
         $slug = url_title($nama, '-', true);
         
-        // Ensure unique slug
-        $count = $this->kategoriModel->where('slug', $slug)->countAllResults();
+        // Ensure unique slug per PKM
+        $count = $this->kategoriModel->where('slug', $slug)->where('pkm_id', $pkm_id)->countAllResults();
         if ($count > 0) {
             $slug = $slug . '-' . time();
         }
@@ -98,15 +104,22 @@ class Kategori extends BaseAdminController
         return redirect()->to('admin/' . tenant()->pkm_slug . '/kategori')->with('message', 'Kategori berhasil ditambahkan.');
     }
 
-    public function edit($id)
+    public function edit($uuid)
     {
         $pkm_id = tenant()->pkm_id;
-        $kategori = $this->kategoriModel->find($id);
+        $query = $this->kategoriModel->where('kategori_uuid', $uuid);
+        
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
+        }
+        
+        $kategori = $query->first();
 
         if (!$kategori) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Kategori tidak ditemukan');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Kategori tidak ditemukan atau Anda tidak memiliki akses.');
         }
 
+        $id = $kategori['kategori_id'];
         $parent_query = $this->kategoriModel->where('kategori_id !=', $id);
         if ($pkm_id !== 'super') {
             $parent_query->where('pkm_id', $pkm_id);
@@ -126,19 +139,27 @@ class Kategori extends BaseAdminController
         return view('admin/kategori/form', $data);
     }
 
-    public function update($id)
+    public function update($uuid)
     {
-        $kategori = $this->kategoriModel->find($id);
+        $pkm_id = tenant()->pkm_id;
+        $query = $this->kategoriModel->where('kategori_uuid', $uuid);
+        
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
+        }
+        
+        $kategori = $query->first();
         
         if (!$kategori) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Kategori tidak ditemukan');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Kategori tidak ditemukan atau Anda tidak memiliki akses.');
         }
 
+        $id = $kategori['kategori_id'];
         $rules = [
-            'nama' => "required|min_length[3]|is_unique[mst_kategori.nama,kategori_id,{$id}]"
+            'nama' => "required|min_length[3]"
         ];
         
-        if (tenant()->pkm_id === 'super') {
+        if ($pkm_id === 'super') {
             $rules['pkm_id'] = 'required';
         }
 
@@ -146,18 +167,24 @@ class Kategori extends BaseAdminController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
         
-        $pkm_id = tenant()->pkm_id;
+        $target_pkm_id = $pkm_id;
         if ($pkm_id === 'super') {
-            $pkm_id = $this->request->getPost('pkm_id');
+            $target_pkm_id = $this->request->getPost('pkm_id');
         }
 
         helper('text');
         $nama = $this->request->getPost('nama');
+        
+        // Cek nama unik per PKM saat update
+        if ($this->kategoriModel->where('pkm_id', $target_pkm_id)->where('nama', $nama)->where('kategori_id !=', $id)->countAllResults() > 0) {
+            return redirect()->back()->withInput()->with('errors', ['nama' => 'The nama field must contain a unique value.']);
+        }
+
         $slug = url_title($nama, '-', true);
         
-        // Ensure unique slug (if changed)
+        // Ensure unique slug (if changed) per PKM
         if ($slug !== $kategori['slug']) {
-            $count = $this->kategoriModel->where('slug', $slug)->countAllResults();
+            $count = $this->kategoriModel->where('slug', $slug)->where('pkm_id', $target_pkm_id)->countAllResults();
             if ($count > 0) {
                 $slug = $slug . '-' . time();
             }
@@ -171,8 +198,8 @@ class Kategori extends BaseAdminController
             'kategori_induk_id' => empty($kategori_induk_id) ? null : $kategori_induk_id
         ];
         
-        if (tenant()->pkm_id === 'super') {
-            $updateData['pkm_id'] = $pkm_id;
+        if ($pkm_id === 'super') {
+            $updateData['pkm_id'] = $target_pkm_id;
         }
 
         $this->kategoriModel->update($id, $updateData);
@@ -180,20 +207,21 @@ class Kategori extends BaseAdminController
         return redirect()->to('admin/' . tenant()->pkm_slug . '/kategori')->with('message', 'Kategori berhasil diupdate.');
     }
 
-    public function delete($id)
+    public function delete($uuid)
     {
         $pkm_id = tenant()->pkm_id;
+        $query = $this->kategoriModel->where('kategori_uuid', $uuid);
         
-        if ($pkm_id === 'super') {
-            $kategori = $this->kategoriModel->find($id);
-        } else {
-            $kategori = $this->kategoriModel->where('pkm_id', $pkm_id)->find($id);
+        if ($pkm_id !== 'super') {
+            $query->where('pkm_id', $pkm_id);
         }
+        
+        $kategori = $query->first();
 
-        if ($kategori && $this->kategoriModel->delete($id)) {
+        if ($kategori && $this->kategoriModel->delete($kategori['kategori_id'])) {
             return redirect()->to('admin/' . tenant()->pkm_slug . '/kategori')->with('message', 'Kategori berhasil dihapus.');
         }
 
-        return redirect()->to('admin/' . tenant()->pkm_slug . '/kategori')->with('error', 'Gagal menghapus kategori atau data tidak ditemukan.');
+        return redirect()->to('admin/' . tenant()->pkm_slug . '/kategori')->with('error', 'Gagal menghapus kategori atau data tidak ditemukan/tidak memiliki akses.');
     }
 }
