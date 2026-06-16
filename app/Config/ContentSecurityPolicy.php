@@ -96,6 +96,7 @@ class ContentSecurityPolicy extends BaseConfig
         'self',
         'unsafe-inline',
         'https://fonts.googleapis.com',
+        'https://cdn.ckeditor.com',
     ];
 
     /**
@@ -107,6 +108,7 @@ class ContentSecurityPolicy extends BaseConfig
         'self',
         'unsafe-inline',
         'https://fonts.googleapis.com',
+        'https://cdn.ckeditor.com',
     ];
 
     /**

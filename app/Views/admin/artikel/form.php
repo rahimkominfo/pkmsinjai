@@ -230,7 +230,8 @@
 })();
 </script>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js" {csp-script-nonce}></script>
+<link rel="stylesheet" href="<?= base_url('assets/ckeditor/ckeditor5.css') ?>" {csp-style-nonce}>
+<script src="<?= base_url('assets/ckeditor/ckeditor5.umd.js') ?>" {csp-script-nonce}></script>
 <script {csp-script-nonce}>
 function toggleGambar(val) {
     if (val === 'upload') {
@@ -243,8 +244,56 @@ function toggleGambar(val) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    const {
+        ClassicEditor,
+        Essentials,
+        Paragraph,
+        Bold,
+        Italic,
+        Image,
+        ImageInsert,
+        ImageToolbar,
+        ImageCaption,
+        ImageStyle,
+        Alignment,
+        SourceEditing,
+        Heading,
+        List,
+        Link,
+        BlockQuote
+    } = CKEDITOR;
+
     ClassicEditor
-        .create(document.querySelector('#konten'))
+        .create(document.querySelector('#konten'), {
+            licenseKey: 'GPL',
+            plugins: [
+                Essentials, Paragraph, Bold, Italic,
+                Image, ImageInsert, ImageToolbar, ImageCaption, ImageStyle,
+                Alignment, SourceEditing, Heading, List, Link, BlockQuote
+            ],
+            toolbar: [
+                'undo', 'redo', '|',
+                'sourceEditing', '|',
+                'heading', '|',
+                'bold', 'italic', '|',
+                'alignment', '|',
+                'bulletedList', 'numberedList', '|',
+                'link', 'insertImage', 'blockQuote'
+            ],
+            image: {
+                toolbar: [
+                    'imageStyle:inline',
+                    'imageStyle:block',
+                    'imageStyle:side',
+                    '|',
+                    'toggleImageCaption',
+                    'imageTextAlternative'
+                ],
+                insert: {
+                    type: 'auto'
+                }
+            }
+        })
         .catch(error => {
             console.error(error);
         });
