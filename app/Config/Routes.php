@@ -30,6 +30,7 @@ $routes->group('admin/(:segment)', ['namespace' => 'App\Controllers\Admin', 'fil
         $routes->get('/', 'Media::index');
         $routes->post('store', 'Media::store');
         $routes->get('delete/(:num)', 'Media::delete/$2');
+        $routes->post('upload-ckeditor', 'Media::uploadCKEditor');
     });
     // Kategori CRUD
     $routes->group('kategori', ['filter' => 'auth:Admin Dinkes,Admin PKM,Editor'], function ($routes) {

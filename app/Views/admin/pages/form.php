@@ -161,10 +161,11 @@ document.addEventListener("DOMContentLoaded", function() {
         Bold,
         Italic,
         Image,
-        ImageInsert,
         ImageToolbar,
         ImageCaption,
         ImageStyle,
+        ImageUpload,
+        SimpleUploadAdapter,
         Alignment,
         SourceEditing,
         Heading,
@@ -178,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function() {
             licenseKey: 'GPL',
             plugins: [
                 Essentials, Paragraph, Bold, Italic,
-                Image, ImageInsert, ImageToolbar, ImageCaption, ImageStyle,
+                Image, ImageToolbar, ImageCaption, ImageStyle, ImageUpload, SimpleUploadAdapter,
                 Alignment, SourceEditing, Heading, List, Link, BlockQuote
             ],
             toolbar: [
@@ -188,8 +189,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 'bold', 'italic', '|',
                 'alignment', '|',
                 'bulletedList', 'numberedList', '|',
-                'link', 'insertImage', 'blockQuote'
+                'link', 'uploadImage', 'blockQuote'
             ],
+            simpleUpload: {
+                uploadUrl: '<?= base_url('admin/' . tenant()->pkm_slug . '/media/upload-ckeditor') ?>',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[id="csrf-token"]').getAttribute('content'),
+                }
+            },
             image: {
                 toolbar: [
                     'imageStyle:inline',
@@ -198,10 +205,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     '|',
                     'toggleImageCaption',
                     'imageTextAlternative'
-                ],
-                insert: {
-                    type: 'auto'
-                }
+                ]
             }
         })
         .catch(error => {

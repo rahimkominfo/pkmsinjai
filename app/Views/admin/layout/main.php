@@ -4,6 +4,8 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title><?= esc($title ?? 'PKM Balangnipa Admin Dashboard') ?></title>
+    <!-- CSRF Token -->
+    <meta name="<?= csrf_token() ?>" content="<?= csrf_hash() ?>" id="csrf-token">
     <!-- Google Fonts & Material Symbols -->
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>

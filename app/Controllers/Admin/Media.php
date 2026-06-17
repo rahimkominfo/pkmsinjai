@@ -110,4 +110,65 @@ class Media extends BaseAdminController
 
         return redirect()->back()->with('error', 'Media tidak ditemukan.');
     }
+
+    /**
+     * Handle Image Upload from CKEditor 5 SimpleUploadAdapter
+     */
+    public function uploadCKEditor()
+    {
+        $validationRules = [
+            'upload' => [
+                'rules' => 'uploaded[upload]|is_image[upload]|mime_in[upload,image/jpg,image/jpeg,image/png,image/webp]|max_size[upload,5120]',
+                'errors' => [
+                    'uploaded' => 'Tidak ada file yang diunggah.',
+                    'is_image' => 'File yang diunggah bukan gambar.',
+                    'mime_in'  => 'Format file tidak diizinkan. Gunakan JPG, PNG, atau WebP.',
+                    'max_size' => 'Ukuran file terlalu besar. Maksimal 5MB.'
+                ]
+            ]
+        ];
+
+        if (!$this->validate($validationRules)) {
+            return $this->response->setJSON([
+                'error' => [
+                    'message' => $this->validator->getError('upload')
+                ]
+            ]);
+        }
+
+        $file = $this->request->getFile('upload');
+
+        if ($file->isValid() && !$file->hasMoved()) {
+            $pkm_slug = tenant()->pkm_slug;
+            
+            // Simpan di folder media pkm masing-masing
+            $uploadPath = FCPATH . 'uploads/' . $pkm_slug . '/media/';
+            
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0775, true);
+            }
+
+            $newName = $file->getRandomName();
+            $file->move($uploadPath, $newName);
+
+            // Simpan info ke database media
+            $this->mediaModel->insert([
+                'pkm_id'    => tenant()->pkm_id === 'super' ? 0 : tenant()->pkm_id, // Handle super admin logic if needed
+                'nama_file' => $file->getClientName(),
+                'tipe_file' => $file->getClientMimeType(),
+                'url_file'  => 'uploads/' . $pkm_slug . '/media/' . $newName,
+                'user_id'   => session()->get('user_id')
+            ]);
+
+            return $this->response->setJSON([
+                'url' => base_url('uploads/' . $pkm_slug . '/media/' . $newName)
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'error' => [
+                'message' => 'Gagal mengunggah file.'
+            ]
+        ]);
+    }
 }
