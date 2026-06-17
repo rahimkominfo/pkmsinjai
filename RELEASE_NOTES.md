@@ -1,3 +1,7 @@
+## [v1.0.13] - 2026-06-17
+### 🔄 Changed
+- Perubahan validasi "Judul Halaman" dan "Slug" pada modul Halaman Statis (Pages) agar bersifat unik per PKM (tenant-scoped), bukan lagi unik secara global. Hal ini memungkinkan antar PKM memiliki judul halaman yang sama (misal: "Profil").
+
 ## [v1.0.12] - 2026-06-17
 ### 🐛 Fixed
 - Perbaikan error 404 (Route not found) pada halaman detail Media Promosi Kesehatan (Flyer).

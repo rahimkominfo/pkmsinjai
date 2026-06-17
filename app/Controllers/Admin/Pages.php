@@ -65,7 +65,7 @@ class Pages extends BaseAdminController
         }
 
         $rules = [
-            'judul'  => 'required|min_length[3]|is_unique[mst_pages.judul]',
+            'judul'  => 'required|min_length[3]',
             'konten' => 'required',
             'status' => 'required|in_list[Draf,Diterbitkan]'
         ];
@@ -85,10 +85,16 @@ class Pages extends BaseAdminController
 
         helper('text');
         $judul = $this->request->getPost('judul');
+
+        // Cek judul unik per PKM
+        if ($this->pagesModel->where('pkm_id', $pkm_id)->where('judul', $judul)->countAllResults() > 0) {
+            return redirect()->back()->withInput()->with('errors', ['judul' => 'The judul field must contain a unique value for this PKM.']);
+        }
+
         $slug = url_title($judul, '-', true);
         
-        // Ensure unique slug
-        $count = $this->pagesModel->where('slug', $slug)->countAllResults();
+        // Ensure unique slug per PKM
+        $count = $this->pagesModel->where('slug', $slug)->where('pkm_id', $pkm_id)->countAllResults();
         if ($count > 0) {
             $slug = $slug . '-' . time();
         }
@@ -156,7 +162,7 @@ class Pages extends BaseAdminController
 
         $id = $page['page_id'];
         $rules = [
-            'judul'  => "required|min_length[3]|is_unique[mst_pages.judul,page_id,{$id}]",
+            'judul'  => "required|min_length[3]",
             'konten' => 'required',
             'status' => 'required|in_list[Draf,Diterbitkan]'
         ];
@@ -176,11 +182,17 @@ class Pages extends BaseAdminController
 
         helper('text');
         $judul = $this->request->getPost('judul');
+
+        // Cek judul unik per PKM saat update
+        if ($this->pagesModel->where('pkm_id', $target_pkm_id)->where('judul', $judul)->where('page_id !=', $id)->countAllResults() > 0) {
+            return redirect()->back()->withInput()->with('errors', ['judul' => 'The judul field must contain a unique value for this PKM.']);
+        }
+
         $slug = url_title($judul, '-', true);
         
-        // Ensure unique slug (if changed)
-        if ($slug !== $page['slug']) {
-            $count = $this->pagesModel->where('slug', $slug)->countAllResults();
+        // Ensure unique slug (if changed) per PKM
+        if ($slug !== $page['slug'] || $target_pkm_id != $page['pkm_id']) {
+            $count = $this->pagesModel->where('slug', $slug)->where('pkm_id', $target_pkm_id)->where('page_id !=', $id)->countAllResults();
             if ($count > 0) {
                 $slug = $slug . '-' . time();
             }
