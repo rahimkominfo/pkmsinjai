@@ -2,6 +2,11 @@
 
 <?= $this->section('content') ?>
 
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
 <!-- PKM Hero Banner (Responsive) -->
 <?php if (!empty(tenant('header_img'))): ?>
 <section class="relative h-[250px] md:h-[450px] w-full overflow-hidden">
@@ -155,38 +160,56 @@
 
     <!-- Media Promosi Kesehatan Section -->
     <section class="mb-section-gap">
-        <div class="mb-stack-lg">
-            <h2 class="font-headline-lg text-headline-lg border-b-2 border-primary inline-block pb-2">Media Promosi Kesehatan</h2>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-stack-lg">
+            <div class="flex-1">
+                <h2 class="font-headline-lg text-headline-lg border-b-2 border-primary inline-block pb-2">Media Promosi Kesehatan</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="<?= tenant_url('flayer') ?>" class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-lg text-label-lg hover:bg-primary-container hover:text-on-primary-container transition-all shadow-sm flex items-center gap-2 group">
+                    Lihat Semua Flyer
+                    <span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
+                </a>
+                <div class="flex items-center gap-2">
+                    <button id="prev-flyer" class="w-11 h-11 rounded-full border border-outline-variant text-primary hover:bg-primary hover:text-on-primary hover:border-primary transition-all flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button id="next-flyer" class="w-11 h-11 rounded-full border border-outline-variant text-primary hover:bg-primary hover:text-on-primary hover:border-primary transition-all flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="flyer-carousel" class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 pb-6 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
             <?php if(!empty($flyer_promosi)): ?>
                 <?php foreach($flyer_promosi as $flyer): ?>
-                    <a href="<?= base_url(tenant()->pkm_slug . '/flayer/' . esc($flyer['uuid'])) ?>" class="group relative block aspect-[3/4] bg-surface rounded-xl overflow-hidden border-4 border-surface shadow-lg hover:shadow-xl transition-all duration-300">
-                        <!-- Image Container -->
-                        <div class="w-full h-full overflow-hidden bg-surface-container-low">
-                            <img src="<?= strpos($flyer['gambar_url'], 'http') === 0 ? esc($flyer['gambar_url']) : base_url(esc($flyer['gambar_url'])) ?>" 
-                                 alt="<?= esc($flyer['judul']) ?>" 
-                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                 onerror="this.onerror=null;this.src='<?= base_url('assets/img/placeholder.jpg') ?>';" />
-                        </div>
-                        
-                        <!-- Gradient Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                            <div class="p-6 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                <?php if(!empty($flyer['label'])): ?>
-                                    <span class="inline-block bg-primary text-on-primary text-[11px] font-bold tracking-wider uppercase px-2 py-1 rounded mb-2 shadow-sm"><?= esc($flyer['label']) ?></span>
-                                <?php endif; ?>
-                                <h3 class="text-white font-headline-sm text-headline-sm font-bold line-clamp-2 drop-shadow-md">
-                                    <?= esc($flyer['judul']) ?>
-                                </h3>
+                    <div class="flex-none w-[280px] md:w-[320px] snap-start">
+                        <a href="<?= tenant_url('flayer/' . esc($flyer['uuid'])) ?>" class="group relative block aspect-[3/4] bg-surface rounded-2xl overflow-hidden border-4 border-surface shadow-lg hover:shadow-xl transition-all duration-300">
+                            <!-- Image Container -->
+                            <div class="w-full h-full overflow-hidden bg-surface-container-low">
+                                <img src="<?= strpos($flyer['gambar_url'], 'http') === 0 ? esc($flyer['gambar_url']) : base_url(esc($flyer['gambar_url'])) ?>" 
+                                     alt="<?= esc($flyer['judul']) ?>" 
+                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                     onerror="this.onerror=null;this.src='<?= base_url('assets/img/placeholder.jpg') ?>';" />
                             </div>
-                        </div>
-                    </a>
+                            
+                            <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                                <div class="p-6 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                    <?php if(!empty($flyer['label'])): ?>
+                                        <span class="inline-block bg-primary text-on-primary text-[11px] font-bold tracking-wider uppercase px-2 py-1 rounded mb-2 shadow-sm"><?= esc($flyer['label']) ?></span>
+                                    <?php endif; ?>
+                                    <h3 class="text-white font-headline-sm text-headline-sm font-bold line-clamp-2 drop-shadow-md">
+                                        <?= esc($flyer['judul']) ?>
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 bg-surface-container-lowest rounded-xl border-2 border-dashed border-outline-variant">
-                    <span class="material-symbols-outlined text-[48px] text-outline mb-2">web_stories</span>
+                <div class="w-full text-center py-16 bg-surface-container-lowest rounded-2xl border-2 border-dashed border-outline-variant">
+                    <span class="material-symbols-outlined text-[56px] text-outline mb-3">web_stories</span>
                     <p class="font-body-lg text-body-lg text-on-surface-variant">Belum ada media promosi kesehatan yang dipublikasikan.</p>
                 </div>
             <?php endif; ?>
@@ -458,6 +481,54 @@
 </script>
 
 <script {csp-script-nonce}>
+function initFlyerCarousel() {
+    const flyerCarousel = document.getElementById('flyer-carousel');
+    if (!flyerCarousel) return;
+
+    const btnNext = document.getElementById('next-flyer');
+    const btnPrev = document.getElementById('prev-flyer');
+
+    function getCardWidth() {
+        const cardElement = flyerCarousel.children[0];
+        if (!cardElement) return 0;
+        const style = window.getComputedStyle(flyerCarousel);
+        const gap = parseFloat(style.gap) || parseFloat(style.columnGap) || 0;
+        return cardElement.offsetWidth + gap;
+    }
+
+    function updateButtons() {
+        const scrollLeft = flyerCarousel.scrollLeft;
+        const maxScroll = flyerCarousel.scrollWidth - flyerCarousel.clientWidth;
+        
+        if (btnPrev) btnPrev.disabled = scrollLeft <= 0;
+        if (btnNext) btnNext.disabled = scrollLeft >= maxScroll - 5;
+    }
+
+    if (btnNext) {
+        btnNext.addEventListener('click', () => {
+            flyerCarousel.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
+        });
+    }
+
+    if (btnPrev) {
+        btnPrev.addEventListener('click', () => {
+            flyerCarousel.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
+        });
+    }
+
+    flyerCarousel.addEventListener('scroll', updateButtons, { passive: true });
+    window.addEventListener('resize', updateButtons);
+    
+    // Initial check
+    setTimeout(updateButtons, 100);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFlyerCarousel);
+} else {
+    initFlyerCarousel();
+}
+
 function initLinkCarousel() {
     const linkCarousel = document.getElementById('link-carousel');
     if (!linkCarousel) return;
