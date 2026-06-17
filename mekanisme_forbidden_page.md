@@ -1,72 +1,71 @@
 # Mekanisme & Analisis Error 403 Forbidden pada Create/Edit Halaman
 
-Dokumen ini menjelaskan penyebab dan solusi terkait munculnya pesan **403 Forbidden** saat mencoba menyimpan atau membuat halaman baru (`admin/(:segment)/pages/create` atau `edit`) setelah aplikasi di-deploy ke cPanel, terutama saat memasukkan gambar melalui URL.
+Dokumen ini menjelaskan penyebab teknis dan solusi terkait munculnya pesan **403 Forbidden** saat menyimpan konten yang mengandung gambar di lingkungan cPanel (Hosting).
 
-## 1. Analisis Penyebab Utama
+## 1. Gejala Error
+Saat menekan tombol **Simpan**, muncul pesan:
+> **Forbidden**
+> You don't have permission to access this resource.
+> *Additionally, a 403 Forbidden error was encountered while trying to use an ErrorDocument to handle the request.*
 
-Munculnya error 403 Forbidden di lingkungan *shared hosting* (cPanel) biasanya disebabkan oleh faktor-faktor keamanan berikut:
+## 2. Analisis Penyebab Utama (Root Cause)
 
-### A. ModSecurity & Filter Payload URL (Kasus "Insert via URL")
-ModSecurity adalah Web Application Firewall (WAF) yang sangat sensitif terhadap isi data yang dikirim melalui form (POST).
-- **Kasus Spesifik (Insert via URL)**: Saat Anda menggunakan fitur CKEditor untuk memasukkan gambar menggunakan link luar (URL), data yang dikirim ke server mengandung string seperti `<img src="https://external-site.com/image.jpg">`.
-- **Mengapa Diblokir?**:
-    1. **Remote File Inclusion (RFI)**: Firewall mencurigai adanya upaya menyisipkan file dari server luar yang bisa membahayakan sistem.
-    2. **Protocol Filtering**: Banyak aturan ModSecurity (seperti rule dari *OWASP Core Rule Set*) yang secara otomatis memblokir permintaan POST jika mengandung protokol `http://` atau `https://` di dalam field teks, karena dianggap sebagai indikasi serangan **SSRF (Server-Side Request Forgery)** atau **Link Injection**.
-- **Gejala**: Error 403 muncul tepat saat menekan tombol "Simpan" karena request tersebut dicegat oleh firewall cPanel sebelum sempat diproses oleh skrip PHP CodeIgniter Anda.
-
-### B. Proteksi XSS (Cross-Site Scripting)
-Input dari CKEditor berupa tag HTML mentah (`<p>`, `<div>`, `<table>`). WAF seringkali menganggap pengiriman tag HTML melalui form sebagai upaya serangan untuk menyuntikkan skrip berbahaya.
-
-### C. Mismatch CSRF (Cross-Site Request Forgery)
-- **Mengapa Terjadi?**: Jika konfigurasi `app.baseURL` di `.env` tidak sesuai (misal: menggunakan `http` padahal hosting pakai `https`), token CSRF akan dianggap tidak valid.
-- **Gejala**: Muncul pesan "The action you requested is not allowed" atau langsung 403.
+### A. ModSecurity (Web Application Firewall)
+Penyebab paling umum di cPanel adalah **ModSecurity**. Firewall ini memeriksa setiap data POST yang dikirim ke server.
+- **Deteksi Payload HTML**: Konten CKEditor dikirim dalam bentuk tag HTML (`<img src="...">`, `<table>`, dll). ModSecurity sering menganggap tag HTML di dalam field teks sebagai serangan **Cross-Site Scripting (XSS)**.
+- **Filter Protokol (URL)**: Jika Anda memasukkan gambar via URL luar, data mengandung string `http://` atau `https://`. Firewall mencurigai ini sebagai upaya **Server-Side Request Forgery (SSRF)** atau **Remote File Inclusion (RFI)**.
+- **Base64 Data (Image Paste)**: Jika Anda menyalin-tempel (paste) gambar langsung ke editor, CKEditor sering mengubahnya menjadi string Base64 yang sangat panjang (`data:image/png;base64,...`). String panjang dan acak ini sering memicu rule **Obfuscated Code Injection** atau melebihi batas **SecRequestBodyLimit**.
 
 ---
 
-## 2. Mengapa di Localhost Berjalan, Tapi di Server Error?
+## 3. Solusi Tanpa Menonaktifkan ModSecurity (Advanced)
 
-### A. Ketiadaan Firewall di Localhost
-Di lingkungan pengembangan (XAMPP/Laragon), ModSecurity biasanya tidak terpasang. Server menerima apapun yang Anda kirim, termasuk tag HTML dan URL eksternal.
+Jika Anda tidak ingin menonaktifkan ModSecurity, gunakan pendekatan "Data Obfuscation" (Penyamaran Data) agar payload tidak terbaca sebagai ancaman oleh firewall:
 
-### B. Reputasi IP & Whitelisting cPanel
-Server cPanel memiliki fitur **CSF (ConfigServer Security & Firewall)**. 
-- Jika Anda sering login ke cPanel dari satu laptop, IP Anda mungkin masuk dalam *temporary whitelist*.
-- Laptop atau koneksi internet lain (IP baru) akan diperiksa secara ketat oleh setiap *rule* keamanan yang aktif.
+### Solusi 1: Base64 Encoding Payload (Paling Ampuh)
+Cara ini menyamarkan seluruh konten HTML menjadi string acak sebelum dikirim lewat POST.
+1.  **Sisi Klien (JavaScript)**: Sebelum form di-submit, ambil data dari CKEditor, ubah ke Base64, dan masukkan ke hidden input.
+    ```javascript
+    // Contoh logic
+    const content = editor.getData();
+    const base64Content = btoa(unescape(encodeURIComponent(content)));
+    document.getElementById('hidden_content_input').value = base64Content;
+    ```
+2.  **Sisi Server (PHP/Controller)**: Decode kembali string tersebut sebelum disimpan ke database.
+    ```php
+    $rawContent = $this->request->getPost('content');
+    $decodedContent = base64_decode($rawContent);
+    ```
+*Hasilnya: Firewall hanya melihat string acak (misal: `YmVyYXRhcnlh...`) dan tidak akan memblokirnya karena tidak ada tag HTML.*
 
----
+### Solusi 2: Menggunakan JSON AJAX Request
+Beberapa firewall memiliki aturan yang lebih longgar untuk request dengan `Content-Type: application/json` dibandingkan `application/x-www-form-urlencoded`.
+- Ubah proses simpan menggunakan `fetch()` atau `axios` dengan payload JSON.
 
-## 3. Langkah-Langkah Solusi
+### Solusi 3: Konversi Karakter Spesial (HTML Entities)
+Ubah karakter `<` dan `>` menjadi entitas sebelum dikirim.
+- Client: `content.replace(/</g, "&lt;").replace(/>/g, "&gt;")`
+- Server: `htmlspecialchars_decode($content)`
 
-### Solusi 1: Whitelist/Nonaktifkan ModSecurity (Solusi Paling Ampuh)
-Karena masalah ini berada di level server (bukan di kode CI4), Anda harus menyesuaikan keamanan server:
-1.  **Melalui cPanel**: Cari menu **ModSecurity**, lalu coba matikan (*Disable*) untuk domain tersebut. Jika setelah dimatikan fitur "Insert via URL" berfungsi, maka dipastikan ModSecurity adalah penyebabnya.
-2.  **Hubungi Provider Hosting**: Kirim tiket dukungan dan minta mereka melakukan *whitelist* terhadap Rule ID yang terpicu saat Anda menyimpan halaman. Anda bisa melihat ID tersebut di menu **Errors** pada cPanel.
-
-### Solusi 2: Gunakan Fitur Upload, Bukan Link URL
-Untuk menghindari blokir firewall terhadap string `http://`, disarankan untuk **mengunduh gambar dan mengunggahnya langsung** ke server (Upload via CKEditor) daripada menggunakan link URL luar. Dengan mengunggah file, payload POST tidak akan mengandung protokol URL eksternal yang mencurigakan.
-
-### Solusi 3: Perbaikan Konfigurasi .env
-Pastikan domain sudah benar dan menggunakan protokol yang tepat:
-```env
-app.baseURL = 'https://nama-domain-anda.com/'
-```
-
-### Solusi 4: Pengaturan .htaccess (Opsional)
-Jika diizinkan oleh provider, tambahkan ini di `public/.htaccess`:
-```apache
-<IfModule mod_security.c>
-  SecFilterEngine Off
-  SecFilterScanPOST Off
-</IfModule>
-```
-*Catatan: Banyak provider hosting menonaktifkan kemampuan user untuk mengubah setting ini demi keamanan.*
+### Solusi 4: Optimalisasi Konfigurasi CKEditor (Upload Adapter)
+Jangan biarkan gambar masuk sebagai tag `<img>` dengan sumber eksternal atau Base64.
+- Pastikan fitur **Simple Upload Adapter** aktif.
+- Gambar yang di-drag/paste akan langsung diunggah ke server sebagai file binary (Multipart), bukan sebagai string teks di dalam konten. Request Multipart biasanya memiliki limit yang lebih besar dan aturan yang berbeda di ModSecurity.
 
 ---
 
-## 4. Kesimpulan & Rekomendasi
-Pesan **Forbidden** saat memasukkan URL gambar adalah mekanisme pertahanan server terhadap potensi serangan **RFI/SSRF**. 
+## 4. Langkah-Langkah Perbaikan di Sisi Server (Hosting)
 
-**Rekomendasi Utama**:
-1. Gunakan fitur **Upload Gambar** daripada "Insert via URL".
-2. Jika harus menggunakan URL, mintalah pihak hosting untuk melakukan *whitelist* terhadap endpoint `admin/*/pages/create` dan `admin/*/pages/edit`.
-3. Pastikan `app.baseURL` selalu sinkron dengan URL yang diakses di browser.
+Jika solusi kode di atas terlalu rumit, lakukan hal berikut di cPanel:
+
+1.  **Cek Log Error**: Cari menu **Errors** di cPanel. Catat **Rule ID** yang muncul (misal: `[id "941100"]`).
+2.  **Whitelist via .htaccess**: Jika diizinkan, tambahkan pengecualian ID tersebut di `.htaccess`:
+    ```apache
+    <IfModule mod_security.c>
+      SecRuleRemoveById 941100
+    </IfModule>
+    ```
+3.  **Hubungi Provider**: Kirimkan Rule ID tersebut dan minta mereka melakukan whitelist khusus untuk user Anda atau endpoint tertentu.
+
+## 5. Kesimpulan
+Error 403 ini terjadi karena **Firewall Server gagal membedakan antara konten artikel yang sah dengan upaya serangan injeksi**. Menggunakan metode **Base64 Encoding** adalah solusi terbaik untuk aplikasi CMS yang berjalan di shared hosting yang sangat ketat.

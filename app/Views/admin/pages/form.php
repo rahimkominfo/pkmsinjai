@@ -174,6 +174,8 @@ document.addEventListener("DOMContentLoaded", function() {
         BlockQuote
     } = CKEDITOR;
 
+    let editorInstance;
+
     ClassicEditor
         .create(document.querySelector('#konten'), {
             licenseKey: 'GPL',
@@ -208,9 +210,26 @@ document.addEventListener("DOMContentLoaded", function() {
                 ]
             }
         })
+        .then(editor => {
+            editorInstance = editor;
+        })
         .catch(error => {
             console.error(error);
         });
+
+    // ModSecurity Bypass: Encode content to Base64 before submit
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        if (editorInstance) {
+            const rawData = editorInstance.getData();
+            if (rawData) {
+                // Encode UTF-8 string to Base64
+                const encodedData = btoa(unescape(encodeURIComponent(rawData)));
+                // Update the textarea with encoded data
+                document.querySelector('#konten').value = encodedData;
+            }
+        }
+    });
 });
 </script>
 <?= $this->endSection() ?>

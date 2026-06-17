@@ -57,6 +57,13 @@ class Pages extends BaseAdminController
 
     public function store()
     {
+        $rawKonten = $this->request->getPost('konten');
+        // Decode base64 if it is obfuscated to bypass ModSecurity
+        if ($this->isBase64($rawKonten)) {
+            $rawKonten = base64_decode($rawKonten);
+            $_POST['konten'] = $rawKonten; // Set back to POST for validation
+        }
+
         $rules = [
             'judul'  => 'required|min_length[3]|is_unique[mst_pages.judul]',
             'konten' => 'required',
@@ -90,7 +97,7 @@ class Pages extends BaseAdminController
             'pkm_id' => $pkm_id,
             'judul'  => $judul,
             'slug'   => $slug,
-            'konten' => $this->request->getPost('konten'),
+            'konten' => $rawKonten,
             'status' => $this->request->getPost('status')
         ]);
 
@@ -140,6 +147,13 @@ class Pages extends BaseAdminController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Halaman statis tidak ditemukan atau Anda tidak memiliki akses.');
         }
 
+        $rawKonten = $this->request->getPost('konten');
+        // Decode base64 if it is obfuscated to bypass ModSecurity
+        if ($this->isBase64($rawKonten)) {
+            $rawKonten = base64_decode($rawKonten);
+            $_POST['konten'] = $rawKonten; // Set back to POST for validation
+        }
+
         $id = $page['page_id'];
         $rules = [
             'judul'  => "required|min_length[3]|is_unique[mst_pages.judul,page_id,{$id}]",
@@ -175,7 +189,7 @@ class Pages extends BaseAdminController
         $updateData = [
             'judul'  => $judul,
             'slug'   => $slug,
-            'konten' => $this->request->getPost('konten'),
+            'konten' => $rawKonten,
             'status' => $this->request->getPost('status')
         ];
         
@@ -186,6 +200,13 @@ class Pages extends BaseAdminController
         $this->pagesModel->update($id, $updateData);
 
         return redirect()->to('admin/' . tenant()->pkm_slug . '/pages')->with('message', 'Halaman statis berhasil diupdate.');
+    }
+
+    private function isBase64($string)
+    {
+        if (!is_string($string)) return false;
+        if (base64_encode(base64_decode($string, true)) === $string) return true;
+        return false;
     }
 
     public function delete($uuid)
