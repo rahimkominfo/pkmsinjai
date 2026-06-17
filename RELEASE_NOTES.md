@@ -1,3 +1,12 @@
+## [v1.0.12] - 2026-06-17
+### 🐛 Fixed
+- Perbaikan error 404 (Route not found) pada halaman detail Media Promosi Kesehatan (Flyer).
+- Penambahan routing frontend untuk `flayer` dan `flayer/(:segment)` guna menangani akses list dan detail media promosi per tenant.
+- Implementasi `Flyer` controller pada namespace `App\Controllers\Frontend` untuk manajemen tampilan media promosi kesehatan secara dinamis.
+- Pembuatan halaman index "Media Promosi Kesehatan" yang menampilkan seluruh flyer aktif dalam grid layout.
+- Pembuatan view detail flyer yang responsif dengan fitur berbagi (Web Share API) dan pembersihan UI (menghapus widget info PKM).
+- Sinkronisasi link "Lihat Semua Media" untuk mengarah ke halaman index flyer.
+
 ## [v1.0.11] - 2026-06-15
 ### 🐛 Fixed
 - Perbaikan masalah embed Google Maps yang tidak tampil di footer akibat pembatasan Content Security Policy (CSP).

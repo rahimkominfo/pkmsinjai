@@ -154,6 +154,8 @@ $routes->group('', ['namespace' => 'App\Controllers\Frontend', 'filter' => 'tena
     $routes->get('berita', 'Berita::index');
     $routes->get('berita/detail/(:segment)', 'Berita::detail/$1');
     $routes->get('galeri', 'Galeri::index');
+    $routes->get('flayer', 'Flyer::index');
+    $routes->get('flayer/(:segment)', 'Flyer::detail/$1');
     $routes->get('halaman/(:segment)', 'Pages::detail/$1');
     $routes->get('sdm-pkm', 'SdmPkm::index');
     $routes->get('display-antrian', 'DisplayAntrian::index');
@@ -166,6 +168,8 @@ $routes->group('(:segment)', ['namespace' => 'App\Controllers\Frontend', 'filter
     $routes->get('berita', 'Berita::index');
     $routes->get('berita/detail/(:segment)', 'Berita::detail/$2');
     $routes->get('galeri', 'Galeri::index');
+    $routes->get('flayer', 'Flyer::index');
+    $routes->get('flayer/(:segment)', 'Flyer::detail/$2');
     $routes->get('halaman/(:segment)', 'Pages::detail/$2');
     $routes->get('sdm-pkm', 'SdmPkm::index');
     $routes->get('display-antrian', 'DisplayAntrian::index');
