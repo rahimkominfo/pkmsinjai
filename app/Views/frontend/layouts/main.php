@@ -12,7 +12,7 @@
     <!-- Tailwind CSS (PostCSS Output) -->
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
 
-    <style>
+    <style {csp-style-nonce}>
       :root {
         --tenant-primary: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : '#006c4a' ?>;
         --tenant-on-primary: <?= (!empty(tenant('on_primary_color'))) ? esc(tenant('on_primary_color')) : '#ffffff' ?>;
@@ -41,7 +41,7 @@
       }
     </style>
 </head>
-<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden relative w-full">
 
     <!-- Navbar -->
     <?= $this->include('frontend/layouts/navbar') ?>
@@ -55,34 +55,48 @@
     <?= $this->include('frontend/layouts/footer') ?>
 
     <!-- Scripts -->
-    <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const menuClose = document.getElementById('menuClose');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const menuBackdrop = document.getElementById('menuBackdrop');
-        const menuContent = document.getElementById('menuContent');
+    <script {csp-script-nonce}>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const menuClose = document.getElementById('menuClose');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuBackdrop = document.getElementById('menuBackdrop');
+            const menuContent = document.getElementById('menuContent');
 
-        function openMenu() {
-            mobileMenu.classList.remove('hidden');
-            setTimeout(() => {
+            function openMenu() {
+                console.log('Hamburger menu clicked: opening');
+                mobileMenu.classList.remove('hidden');
+                
+                // Force a browser reflow so the transition applies
+                void mobileMenu.offsetWidth;
+                
+                menuBackdrop.classList.remove('opacity-0');
                 menuBackdrop.classList.add('opacity-100');
+                
                 menuContent.classList.remove('translate-x-full');
-            }, 10);
-            document.body.style.overflow = 'hidden';
-        }
+                menuContent.classList.add('translate-x-0');
+                
+                document.body.style.overflow = 'hidden';
+            }
 
-        function closeMenu() {
-            menuBackdrop.classList.remove('opacity-100');
-            menuContent.classList.add('translate-x-full');
-            setTimeout(() => {
-                mobileMenu.classList.add('hidden');
-            }, 300);
-            document.body.style.overflow = '';
-        }
+            function closeMenu() {
+                console.log('Hamburger menu clicked: closing');
+                menuBackdrop.classList.remove('opacity-100');
+                menuBackdrop.classList.add('opacity-0');
+                
+                menuContent.classList.remove('translate-x-0');
+                menuContent.classList.add('translate-x-full');
+                
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+                document.body.style.overflow = '';
+            }
 
-        if (menuToggle) menuToggle.addEventListener('click', openMenu);
-        if (menuClose) menuClose.addEventListener('click', closeMenu);
-        if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
+            if (menuToggle) menuToggle.addEventListener('click', openMenu);
+            if (menuClose) menuClose.addEventListener('click', closeMenu);
+            if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
+        });
     </script>
     <?= $this->renderSection('scripts') ?>
 </body>
