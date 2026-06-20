@@ -211,54 +211,28 @@ $runningTexts = $runningTextModel->getActive(tenant('pkm_id'));
         visibility: visible !important;
         opacity: 1 !important;
     }
-    .marquee-container {
-        width: 100%;
-        overflow: hidden;
-        background-color: var(--surface-container-high);
-        border-bottom: 1px solid var(--outline-variant);
-        padding: 12px 0;
-        position: relative;
-    }
     .marquee-wrapper {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        width: max-content;
         animation: marquee-scroll 40s linear infinite !important;
-    }
-    .marquee-group {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        flex-shrink: 0;
-    }
-    .marquee-item {
-        padding: 0 60px;
-        font-weight: 600;
-        white-space: nowrap;
-        display: inline-block;
-        font-size: 14px;
     }
     @keyframes marquee-scroll {
         0% { transform: translate3d(0, 0, 0); }
         100% { transform: translate3d(-50%, 0, 0); }
     }
 </style>
-<div class="marquee-container">
-    <div class="marquee-wrapper">
+<div class="marquee-container w-full overflow-hidden bg-surface-container-high border-b border-outline-variant py-3 relative">
+    <div class="marquee-wrapper flex flex-row flex-nowrap w-max">
         <!-- Grup Pertama -->
-        <div class="marquee-group">
+        <div class="marquee-group flex flex-row flex-nowrap items-center shrink-0">
             <?php foreach($runningTexts as $rt): ?>
-                <div class="marquee-item" style="color: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : 'var(--tenant-primary)' ?>;">
+                <div class="marquee-item px-[60px] font-semibold whitespace-nowrap inline-block text-[14px]" style="color: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : 'var(--tenant-primary)' ?>;">
                     <?= esc($rt['teks']) ?>
                 </div>
             <?php endforeach; ?>
         </div>
         <!-- Grup Kedua (Looping) -->
-        <div class="marquee-group">
+        <div class="marquee-group flex flex-row flex-nowrap items-center shrink-0">
             <?php foreach($runningTexts as $rt): ?>
-                <div class="marquee-item" style="color: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : 'var(--tenant-primary)' ?>;">
+                <div class="marquee-item px-[60px] font-semibold whitespace-nowrap inline-block text-[14px]" style="color: <?= (!empty(tenant('primary_color'))) ? esc(tenant('primary_color')) : 'var(--tenant-primary)' ?>;">
                     <?= esc($rt['teks']) ?>
                 </div>
             <?php endforeach; ?>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="overflow-x-hidden max-w-[100vw]">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -41,7 +41,7 @@
       }
     </style>
 </head>
-<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden relative w-full">
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden relative w-full max-w-[100vw]">
 
     <!-- Navbar -->
     <?= $this->include('frontend/layouts/navbar') ?>
